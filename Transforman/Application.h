@@ -1,4 +1,5 @@
 #pragma once
+#include "Geometry.h"
 
 /// <summary>
 /// アプリケーション全体を管理する

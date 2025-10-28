@@ -3,12 +3,12 @@
 /// <summary>
 /// 2Dベクトルクラス
 /// </summary>
-class Vector2
+struct Vector2
 {
 	float x, y;
 	float Length()const;//ベクトルの大きさ
 	void Normalize();//ベクトルの大きさを1にする
-	Vector2 Normalized()const;///大きさを１にしたベクトルを返す
+	Vector2 Normalized() const;///大きさを１にしたベクトルを返す
 	Vector2 operator-()const;///ベクトルを反転したベクトルを返す
 	//演算子オーバーロード
 	void operator+=(const Vector2& val);///加算
