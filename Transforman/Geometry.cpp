@@ -1,6 +1,7 @@
 #include "Geometry.h"
 #include <DxLib.h>
 #include <cmath>
+#include "SceneController.h"
 
 /// <summary>
 /// ベクトルの大きさを計算する
