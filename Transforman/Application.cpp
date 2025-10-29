@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "DxLib.h"
 #include "Input.h"
+#include "SceneController.h"
 
 constexpr int screen_width = 1280;
 constexpr int screen_height = 720;
@@ -33,17 +34,22 @@ void Application::Run()
 {
 	SetDrawScreen(DX_SCREEN_BACK);
 	Input input;//入力のためのオブジェクト
-
+	SceneController controller;//シーンを管理するオブジェクト
 	while (ProcessMessage() != -1)
 	{
 		ClearDrawScreen();
 		input.Update();//入力状態の更新
 
 		//シーンの更新
-
+		controller.Update(input);
 		//シーンの描画
-
+		controller.Draw();
 		ScreenFlip();
+		//ESCキーが押されたらウィンドウを閉じる
+		if (CheckHitKey(KEY_INPUT_ESCAPE))
+		{
+			break;
+		}
 	}
 }
 
