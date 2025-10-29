@@ -4,6 +4,8 @@
 class TitleScene : public Scene
 {
 public:
+	int m_frame;//フェード用のフレーム
+
 	TitleScene(SceneController&);
 	void Update(Input&) override;
 	void Draw() override;
