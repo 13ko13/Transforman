@@ -1,7 +1,10 @@
 #pragma once
 #include "Scene.h"
+#include <memory>
 
+//プロトタイプ宣言
 class Input;
+class Player;
 class GameScene : public Scene
 {
 public:
@@ -10,7 +13,6 @@ public:
 	void Draw()override;
 
 private:
-	//プレイヤー情報
-
+	std::shared_ptr<Player> m_pPlayer;
 };
 

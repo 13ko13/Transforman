@@ -2,6 +2,7 @@
 
 class Input;
 class SceneController;	//シーンコントローラーのプロトタイプ宣言
+
 /// <summary>
 /// シーン基底クラス
 /// </summary>

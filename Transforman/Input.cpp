@@ -1,5 +1,6 @@
 #include "Input.h"
 #include "DxLib.h"
+#include "Fade.h"
 
 Input::Input() :
 	m_inputData{},
