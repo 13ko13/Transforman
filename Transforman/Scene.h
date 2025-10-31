@@ -23,4 +23,3 @@ public:
 	/// </summary>
 	virtual void Draw() abstract;
 };
-
