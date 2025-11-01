@@ -1,5 +1,16 @@
 #pragma once
 #include "Object.h"
+
+enum class State
+{
+	Idle,
+	Shot,
+	Jumpm,
+	BigShot,
+	Cutter,
+	Bomb
+};
+
 class Player : public Object
 {
 public:
