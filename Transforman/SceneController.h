@@ -7,11 +7,6 @@ class Scene;
 class Input;
 class SceneController
 {
-private:
-	//スタックに積まれているシーンを管理
-	//一番最後に積まれたシーンのUpdateのみ実行される
-	std::list<std::shared_ptr<Scene>> m_scenes;
-
 public:
 	/// <summary>
 	/// シーンの切り替え
@@ -31,6 +26,11 @@ public:
 	void PopScene();
 
 	/// <summary>
+	/// シーンの初期化を行う
+	/// </summary>
+	void Init();
+
+	/// <summary>
 	/// 内部に持ってるシーンのUpdateを呼び出す
 	/// </summary>
 	/// <param name="input"></param>
@@ -40,4 +40,9 @@ public:
 	/// 内部に持ってるシーンのDrawを呼び出す
 	/// </summary>
 	void Draw();
+
+private:
+	//スタックに積まれているシーンを管理
+	//一番最後に積まれたシーンのUpdateのみ実行される
+	std::list<std::shared_ptr<Scene>> m_scenes;
 };

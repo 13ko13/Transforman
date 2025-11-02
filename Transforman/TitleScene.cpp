@@ -3,6 +3,8 @@
 #include "Input.h"
 #include "SceneController.h"
 #include "Application.h"
+#include "GameScene.h"
+#include <assert.h>
 
 //フェードにかかるフレーム数
 constexpr int fade_interval = 60;
@@ -12,6 +14,7 @@ TitleScene::TitleScene(SceneController& controller) :
 {
 	//タイトルロゴハンドルに画像のハンドルを渡す
 	m_titleLogoH = LoadGraph(L"img/title/title_logo.png");
+	assert(m_titleLogoH >= 1);	//Nullチェック
 
 	//updateとdrawの関数ポインタにFadeInUpdateと
 	//FadeDrawを参照させる
@@ -20,6 +23,11 @@ TitleScene::TitleScene(SceneController& controller) :
 
 	//frameにfadeにかかる秒数を代入
 	m_frame = fade_interval;
+}
+
+TitleScene::~TitleScene()
+{
+	m_controller.Init();
 }
 
 void TitleScene::FadeInUpdate(Input&)
@@ -56,7 +64,7 @@ void TitleScene::FadeOutUpdate(Input&)
 	if (++m_frame >= fade_interval)
 	{
 		//ゲームシーンに切り替える
-		m_controller.ChangeScene(std::make_shared<Scene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
 		//ちゃんとreturnする
 		return;//大事
 	}
@@ -67,7 +75,7 @@ void TitleScene::FadeDraw()
 	//ウィンドウサイズを変数に保存
 	const auto& wsize = Application::GetInstance().GetWindowSize();
 	//ロゴを表示
-	DrawRotaGraph(wsize.w / 2, wsize.h / 2, 1.0f, 0.0f, m_titleLogoH, true);
+	DrawRotaGraph(wsize.w / 2, wsize.h / 2, 0.5, 0.0f, m_titleLogoH, true);
 	//値の範囲をいったん0.0～1.0にしておくといろいろと扱いやすくなる
 	auto rate = static_cast<float>(m_frame) / static_cast<float>(fade_interval);
 	//aブレンド
@@ -83,7 +91,12 @@ void TitleScene::NormalDraw()
 	//ウィンドウサイズを変数に保存
 	const auto wsize = Application::GetInstance().GetWindowSize();
 	//ロゴを表示
-	DrawRotaGraph(wsize.w / 2, wsize.h / 2, 1.0f, 0.0f, m_titleLogoH, true);
+	DrawRotaGraph(wsize.w / 2, wsize.h / 2, 0.5, 0.0f, m_titleLogoH, true);
+}
+
+void TitleScene::Init()
+{
+
 }
 
 void TitleScene::Update(Input& input)

@@ -145,6 +145,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneController.cpp" />
     <ClCompile Include="StringFunctions.cpp" />
@@ -153,11 +154,13 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Fade.h" />
+    <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneController.h" />
     <ClInclude Include="StringFunctions.h" />

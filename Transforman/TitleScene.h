@@ -7,6 +7,8 @@ public:
 	int m_frame;//フェード用のフレーム
 
 	TitleScene(SceneController&);
+	~TitleScene();
+	void Init() override;
 	void Update(Input&) override;
 	void Draw() override;
 

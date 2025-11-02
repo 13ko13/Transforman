@@ -2,13 +2,12 @@
 #include "DxLib.h"
 #include "Input.h"
 #include "SceneController.h"
-
-constexpr int screen_width = 1280;
-constexpr int screen_height = 720;
-constexpr int color_bit = 32;
+#include <memory>
+#include "TitleScene.h"
+#include "GameConstants.h"
 
 Application::Application():
-	m_windowSize{screen_width,screen_height}
+	m_windowSize{Graphic::screen_width,Graphic::screen_height}
 {
 
 }
@@ -27,7 +26,16 @@ Application& Application::GetInstance()
 
 bool Application::Init()
 {
-	return false;
+	SetGraphMode(m_windowSize.w, m_windowSize.h, Graphic::color_bit);
+	//ウィンドwモード設定
+	ChangeWindowMode(true);
+	//ゲーム名
+	SetWindowText(L"TransforMan");
+	if (DxLib_Init() == -1)
+	{
+		return false;
+	}
+	return true;
 }
 
 void Application::Run()
@@ -35,6 +43,9 @@ void Application::Run()
 	SetDrawScreen(DX_SCREEN_BACK);
 	Input input;//入力のためのオブジェクト
 	SceneController controller;//シーンを管理するオブジェクト
+	controller.ChangeScene(std::make_shared<TitleScene>(controller));
+	controller.Init();
+
 	while (ProcessMessage() != -1)
 	{
 		ClearDrawScreen();

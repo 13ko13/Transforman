@@ -14,6 +14,8 @@ protected:
 public:
 	Scene(SceneController& controller);
 
+	virtual void Init() abstract;
+
 	/// <summary>
 	/// シーンの更新処理
 	/// </summary>

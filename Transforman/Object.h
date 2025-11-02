@@ -4,7 +4,7 @@
 class Object
 {
 public:
-	Object(const Vector2& pos,const const Vector2& dir);
+	Object(const Vector2& pos,const Vector2& dir);
 	virtual ~Object();
 
 	virtual void Init() abstract;

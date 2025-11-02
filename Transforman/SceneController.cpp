@@ -31,6 +31,12 @@ void SceneController::PopScene()
 	m_scenes.pop_back();
 }
 
+void SceneController::Init()
+{
+	//––”ö‚Ì—v‘f‚É‘Î‚µ‚ÄInit‚·‚é
+	m_scenes.back()->Init();
+}
+
 void SceneController::Update(Input& input)
 {
 	//––”ö‚Ì—v‘f‚É‘Î‚µ‚ÄUpdate‚·‚é
