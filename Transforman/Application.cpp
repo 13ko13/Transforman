@@ -48,6 +48,8 @@ void Application::Run()
 
 	while (ProcessMessage() != -1)
 	{
+		auto startTime = GetNowHiPerformanceCount();
+
 		ClearDrawScreen();
 		input.Update();//“ü—Íó‘Ô‚ÌXV
 
@@ -60,6 +62,11 @@ void Application::Run()
 		if (CheckHitKey(KEY_INPUT_ESCAPE))
 		{
 			break;
+		}
+
+		while (GetNowHiPerformanceCount() - startTime < 16667)
+		{
+
 		}
 	}
 }

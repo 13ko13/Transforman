@@ -12,9 +12,9 @@ void GameScene::Init()
 	m_pPlayer->Init();
 }
 
-void GameScene::Update(Input&)
+void GameScene::Update(Input& input)
 {
-	m_pPlayer->Update();
+	m_pPlayer->Update(input);
 }
 
 void GameScene::Draw()

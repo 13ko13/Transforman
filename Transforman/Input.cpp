@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "DxLib.h"
 #include "Fade.h"
+#include "GameConstants.h"
 
 Input::Input() :
 	m_inputData{},
@@ -8,18 +9,26 @@ Input::Input() :
 	m_inputTable{}
 {
 	//イベント名を添え時にして、右辺値に実際の入力種別と押されたボタンの配列を置く
-	m_inputTable["ok"] = { {PeripheralType::keyboard,KEY_INPUT_RETURN},
-							{PeripheralType::pad1,PAD_INPUT_L } };
-	m_inputTable["shot"] = { {PeripheralType::keyboard,KEY_INPUT_Z},
-							{PeripheralType::pad1,PAD_INPUT_X} };
-	m_inputTable["up"] = { {PeripheralType::keyboard,KEY_INPUT_UP},
-							{PeripheralType::pad1,KEY_INPUT_UP } };
-	m_inputTable["down"] = { {PeripheralType::keyboard,KEY_INPUT_DOWN},
-							{PeripheralType::pad1,KEY_INPUT_DOWN } };
-	m_inputTable["left"] = { {PeripheralType::keyboard,KEY_INPUT_LEFT},
-								{PeripheralType::pad1,KEY_INPUT_LEFT } };
-	m_inputTable["right"] = { {PeripheralType::keyboard,KEY_INPUT_RIGHT},
-							{PeripheralType::pad1,KEY_INPUT_RIGHT } };
+	m_inputTable["ok"] = { {PeripheralType::keyboard,KEY_INPUT_RETURN},	//キーボード:エンターキー
+							{PeripheralType::pad1,Pad::pad_start } };	//パッド:スタート
+
+	m_inputTable["shot"] = { {PeripheralType::keyboard,KEY_INPUT_Z},	//キーボード:Z
+							{PeripheralType::pad1,Pad::pad_a} };		//パッド:Aボタン
+
+	m_inputTable["up"] = { {PeripheralType::keyboard,KEY_INPUT_UP},		//キーボード:上矢印
+							{PeripheralType::pad1,Pad::pad_up } };		//パッド:スティック上又は十字上
+
+	m_inputTable["down"] = { {PeripheralType::keyboard,KEY_INPUT_DOWN},	//キーボード:下矢印
+							{PeripheralType::pad1,Pad::pad_down } };	//パッド:スティック下又は十字下
+
+	m_inputTable["left"] = { {PeripheralType::keyboard,KEY_INPUT_LEFT},	//キーボード:左矢印
+								{PeripheralType::pad1,Pad::pad_left } };//パッド:スティック左又は十字左
+
+	m_inputTable["right"] = { {PeripheralType::keyboard,KEY_INPUT_RIGHT},//キーボード:右矢印
+							{PeripheralType::pad1,Pad::pad_right } };	 //パッド:スティック右又は十字右
+
+	m_inputTable["jump"] = { {PeripheralType::keyboard,KEY_INPUT_SPACE},//キーボード:スペースキー
+							{PeripheralType::pad1,Pad::pad_b	} };	//パッド:Bボタン
 	//あらかじめ入力データのための枠を開けておく
 	//ここで枠を開けておかないと、チェックの際にAt関数でクラッシュする可能性がある(Null)
 	for (const auto& inputInfo : m_inputTable)//forのinputInfoが変更されないようにconstにする

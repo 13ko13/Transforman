@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Input.h"
 
 enum class State
 {
@@ -19,9 +20,16 @@ public:
 
 	void Init() override;
 	void Update() override;
+	void Update(Input& input);
 	void Draw() override;
 
+	/// <summary>
+	/// ジャンプ処理
+	/// </summary>
+	void Jump(Input& input);
+
 private:
-	int m_handle;	//画像ハンドル
+	//int m_handle;	//画像ハンドル
+	bool m_isJump;///ジャンプしているかどうか
 };
 

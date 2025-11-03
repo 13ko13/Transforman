@@ -10,7 +10,7 @@ class GameScene : public Scene
 public:
 	GameScene(SceneController& controller);
 	void Init() override;
-	void Update(Input&)override;
+	void Update(Input& input)override;
 	void Draw()override;
 
 private:
