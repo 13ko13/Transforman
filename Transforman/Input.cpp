@@ -98,6 +98,14 @@ bool Input::IsTriggerd(const char* name)const
 	return m_inputData.at(name) && !m_lastInputData.at(name);
 }
 
+bool Input::IsReleased(const char* name) const
+{
+	//前のフレームで入力されているボタンと
+	//現在入力されているかどうかを比較して
+	//入力されていなかったらtrueにする
+	return m_lastInputData.at(name) && !m_inputData.at(name);
+}
+
 
 
 

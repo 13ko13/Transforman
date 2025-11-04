@@ -30,6 +30,7 @@ public:
 
 private:
 	//int m_handle;	//画像ハンドル
-	float m_jumpInputFrame;
+
+	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJump;///ジャンプしているかどうか
 };
