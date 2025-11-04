@@ -1,5 +1,6 @@
 #pragma once
 #include "Geometry.h"
+#include "Rect.h"
 
 class Object
 {
@@ -16,9 +17,15 @@ public:
 	/// </summary>
 	void Gravity();
 
+	Rect GetColRect() const { return m_colRect; }
+
 protected:
+	float m_frame;
+
 	Vector2 m_pos;
 	Vector2 m_velocity;
 
+	//“–‚½‚è”»’è
+	Rect m_colRect;
 };
 

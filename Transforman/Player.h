@@ -2,7 +2,7 @@
 #include "Object.h"
 #include "Input.h"
 
-enum class State
+enum class PlayerState
 {
 	Idle,
 	Shot,
@@ -30,6 +30,6 @@ public:
 
 private:
 	//int m_handle;	//画像ハンドル
+	float m_jumpInputFrame;
 	bool m_isJump;///ジャンプしているかどうか
 };
-

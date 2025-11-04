@@ -1,4 +1,5 @@
 #include "Object.h"
+#include <DxLib.h>
 
 namespace
 {
@@ -7,7 +8,8 @@ namespace
 
 Object::Object(const Vector2& pos,const Vector2& vel) :
 	m_pos(pos),
-	m_velocity(vel)
+	m_velocity(vel),
+	m_frame(0)
 {
 
 }
