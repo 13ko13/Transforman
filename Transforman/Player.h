@@ -1,6 +1,8 @@
 #pragma once
 #include "Object.h"
 #include "Input.h"
+#include <vector>
+#include <memory>
 
 enum class PlayerState
 {
@@ -12,6 +14,7 @@ enum class PlayerState
 	Bomb
 };
 
+class Shot;
 class Player : public Object
 {
 public:
@@ -20,8 +23,10 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Update(Input& input);
+	void Update(Input& input , std::vector<Bullet>& bulletArray);
 	void Draw() override;
+
+	bool GetIsRight() { return m_isRight; }
 
 	/// <summary>
 	/// ジャンプ処理
@@ -30,7 +35,10 @@ public:
 
 private:
 	//int m_handle;	//画像ハンドル
+	int m_jumpFrame;//ジャンプ中のフレーム数
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
-	bool m_isJump;///ジャンプしているかどうか
+	bool m_isJumping;///ジャンプしているかどうか
+	bool m_isGround;//接地しているかどうか
+	bool m_isRight;//右を向いているかどうか
 };
