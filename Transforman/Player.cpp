@@ -11,10 +11,10 @@ namespace
 	constexpr float size_height     = 64.0f;						//キャラクターの高さ
 
 	constexpr float low_jump_power  = -10.0f;						//低ジャンプの時のジャンプ力
-	constexpr float low_jump_input  = 20.0f;						//低ジャンプ時の入力猶予フレーム
-	constexpr float mid_jump_power  = -17.0f;						//中ジャンプの時のジャンプ力
-	constexpr float mid_jump_input  = 35.0f;						//中ジャンプ時の入力猶予フレーム
-	constexpr float high_jump_power = -20.0f;						//高ジャンプの時のジャンプ力
+	constexpr float low_jump_input  = 7.0f;						//低ジャンプ時の入力猶予フレーム
+	constexpr float mid_jump_power  = -13.0f;						//中ジャンプの時のジャンプ力
+	constexpr float mid_jump_input  = 13.0f;						//中ジャンプ時の入力猶予フレーム
+	constexpr float high_jump_power = -16.0f;						//高ジャンプの時のジャンプ力
 }
 
 Player::Player():
@@ -96,18 +96,18 @@ void Player::Jump(Input& input)
 			float jumpInputFrame = m_frame;
 
 			//低ジャンプ
-			if (jumpInputFrame < low_jump_input)
+			if (jumpInputFrame <= low_jump_input)
 			{
-				//0～10.0f
+				//0～7.0f
 				m_velocity.y = low_jump_power;
 				m_isJump = true;
 				m_frame = 0;
 			}
 			//中ジャンプ
-			else if ((jumpInputFrame < mid_jump_input) &&
+			else if ((jumpInputFrame <= mid_jump_input) &&
 				(jumpInputFrame > low_jump_input))
 			{
-				//10.0f～15.0f
+				//7.1f～13.0f
 				//フレーム数が中ジャンプの必要フレーム数より少なく、
 				// 低ジャンプの必要フレーム数より多い場合
 				m_velocity.y = mid_jump_power;
@@ -118,7 +118,7 @@ void Player::Jump(Input& input)
 		//高ジャンプ
 		else if (m_frame > mid_jump_input)
 		{
-			//15.0f～
+			//13.1f～
 			m_velocity.y = high_jump_power;
 			m_isJump = true;
 			m_frame = 0;
