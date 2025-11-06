@@ -3,19 +3,24 @@
 #include "GameConstants.h"
 #include "Player.h"
 
-constexpr float speed = 3.0f;
-constexpr int radius = 3.0f;
+namespace 
+{
+	constexpr float speed = 5.0f;
+	constexpr int radius = 10.0f;
+}
 
 Bullet::Bullet() :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),
 	m_dir({ 0.0f,0.0f }),
-	m_isAlive(false)
+	m_isAlive(false),
+	m_isRight(false)
 {
 	m_pPlayer = std::make_shared<Player>();
 }
 
 Bullet::~Bullet()
 {
+
 }
 
 void Bullet::Init()
@@ -24,15 +29,13 @@ void Bullet::Init()
 
 void Bullet::Update()
 {
-	if (m_pPlayer->GetIsRight())
+	if( m_isRight )
 	{
-		//プレイヤーが右を向いている場合
-		m_dir = { 1.0f,0.0f };
+		m_dir = { 1.0f, 0.0f };
 	}
 	else
 	{
-		//プレイヤーが左を向いている場合
-		m_dir = { -1.0f ,0.0f };
+		m_dir = { -1.0f, 0.0f };
 	}
 
 	if (m_isAlive == true)
@@ -44,7 +47,7 @@ void Bullet::Update()
 
 		//画面外に出てしまった場合は存在状態を
 		//保持している変数にfalseを代入
-		if (m_pos.y < Graphic::screen_height)
+		if( m_pos.x < 0 || m_pos.x > Graphic::screen_width )
 		{
 			m_isAlive = false;
 		}
@@ -55,9 +58,12 @@ void Bullet::Draw()
 {
 	if (m_isAlive == true)
 	{
+		
+
 #if _DEBUG
 		//弾を描画する
 		DrawCircle(m_pos.x, m_pos.y, radius, GetColor(255, 0, 0), false, 1);
+		DrawFormatString(0, 45, 0xffffff, L"Bullet Pos X:%f Y:%f", m_pos.x, m_pos.y);
 #endif
 	}
 }

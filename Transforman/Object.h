@@ -20,7 +20,7 @@ public:
 	Rect GetColRect() const { return m_colRect; }
 
 protected:
-	float m_frame;
+	int m_frame;
 
 	Vector2 m_pos;
 	Vector2 m_velocity;

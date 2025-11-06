@@ -14,6 +14,7 @@ enum class PlayerState
 	Bomb
 };
 
+class Bullet;
 class Player : public Object
 {
 public:
@@ -22,10 +23,10 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Update(Input& input);
+	void Update(Input& input,std::vector<std::shared_ptr<Bullet>>& pBullets);
 	void Draw() override;
 
-	bool GetIsRight() { return m_isRight; }
+	bool GetIsRight() const { return m_isRight; }
 
 	/// <summary>
 	/// ジャンプ処理
@@ -35,14 +36,17 @@ public:
 	/// <summary>
 	/// 移動処理
 	/// </summary>
-	void Move();
+	void Move(Input& input);
 
-
-	void Shot();
+	/// <summary>
+	/// ショット処理
+	/// </summary>
+	void Shot(std::vector<std::shared_ptr<Bullet>>& pBullets);
 
 private:
 	//int m_handle;	//画像ハンドル
 	int m_jumpFrame;//ジャンプ中のフレーム数
+	int m_shotCooltime;///ショットのクールタイム管理用
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか

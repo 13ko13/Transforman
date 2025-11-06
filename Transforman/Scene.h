@@ -1,7 +1,9 @@
 #pragma once
+#include <vector>
 
 class Input;
 class SceneController;	//シーンコントローラーのプロトタイプ宣言
+class Bullet;
 
 /// <summary>
 /// シーン基底クラス
