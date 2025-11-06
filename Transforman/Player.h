@@ -14,7 +14,6 @@ enum class PlayerState
 	Bomb
 };
 
-class Shot;
 class Player : public Object
 {
 public:
@@ -23,7 +22,7 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Update(Input& input , std::vector<Bullet>& bulletArray);
+	void Update(Input& input);
 	void Draw() override;
 
 	bool GetIsRight() { return m_isRight; }
@@ -32,6 +31,14 @@ public:
 	/// ジャンプ処理
 	/// </summary>
 	void Jump(Input& input);
+
+	/// <summary>
+	/// 移動処理
+	/// </summary>
+	void Move();
+
+
+	void Shot();
 
 private:
 	//int m_handle;	//画像ハンドル

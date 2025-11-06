@@ -11,7 +11,7 @@ namespace
 	constexpr float size_height     = 64.0f;						//キャラクターの高さ
 
 	constexpr int max_jump_frame	= 15;
-	constexpr float jump_power		= -10.0f;
+	constexpr float jump_power		= -9.0f;
 }
 
 Player::Player():
