@@ -2,7 +2,7 @@
 #include "Geometry.h"
 #include <DxLib.h>
 #include "GameConstants.h"
-#include "Bullet.h"
+#include "PlayerBullet.h"
 
 namespace
 {

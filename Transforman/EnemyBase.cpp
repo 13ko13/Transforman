@@ -14,7 +14,7 @@ void EnemyBase::Init()
 
 }
 
-void EnemyBase::Upbate()
+void EnemyBase::Update()
 {
 
 }

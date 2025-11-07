@@ -4,8 +4,6 @@
 #include <memory>
 #include "Geometry.h"
 
-class Player;
-
 class PlayerBullet : public Bullet
 {
 public:
@@ -20,7 +18,4 @@ public:
 
 private:
 	bool m_isRight;
-
-	std::shared_ptr<Player> m_pPlayer;
 };
-

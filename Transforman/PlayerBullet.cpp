@@ -1,7 +1,6 @@
 #include "PlayerBullet.h"
 #include <DxLib.h>
 #include "GameConstants.h"
-#include "Player.h"
 
 namespace 
 {
@@ -12,7 +11,6 @@ namespace
 PlayerBullet::PlayerBullet() :
 	m_isRight(false)
 {
-	m_pPlayer = std::make_shared<Player>();
 }
 
 PlayerBullet::~PlayerBullet()

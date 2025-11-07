@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-class PlayerBullet;
+class EnemyBullet;
 class ScrewDriver : public EnemyBase
 {
 public:
@@ -17,6 +17,7 @@ public:
 	void Attack() override;
 
 private:
-	std::vector<std::shared_ptr<PlayerBullet>> m_pBullets;
+	std::shared_ptr<EnemyBullet> m_pBullet;
+	int m_attackCooltime;
 };
 
