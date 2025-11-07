@@ -3,7 +3,7 @@
 
 class Input;
 class SceneController;	//シーンコントローラーのプロトタイプ宣言
-class Bullet;
+class PlayerBullet;
 
 /// <summary>
 /// シーン基底クラス

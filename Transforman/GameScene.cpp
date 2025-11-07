@@ -9,7 +9,7 @@ GameScene::GameScene(SceneController& controller) :
 	m_bullets.resize(3);
 	for (auto& bullet : m_bullets)
 	{
-		bullet = std::make_shared<Bullet>();
+		bullet = std::make_shared<PlayerBullet>();
 	}
 }
 

@@ -21,6 +21,8 @@ public:
 
 protected:
 	int m_frame;
+	int m_sizeWidth;
+	int m_sizeHeight;
 
 	Vector2 m_pos;
 	Vector2 m_velocity;

@@ -1,31 +1,22 @@
 #pragma once
 #include "Object.h"
-#include "Input.h"
-#include <memory>
-#include "Geometry.h"
-
-class Player;
-
 class Bullet : public Object
 {
 public:
 	Bullet();
-	~Bullet();
+	virtual ~Bullet();
 
-	void Init() override;
-	void Update() override;
-	void Draw() override;
+	virtual void Init() override;
+	virtual void Update() override;
+	virtual void Draw() override;
 
+	Vector2 GetPos() { return m_pos; }
 	void SetPos(const Vector2& pos) { m_pos = pos; }
-	bool GetIsAlive() const { return m_isAlive; }
+	bool GetIsAlive() { return m_isAlive; }
 	void SetIsAlive(bool isAlive) { m_isAlive = isAlive; }
-	void SetIsRight(bool isRight) { m_isRight = isRight; }
 
-private:
+protected:
 	Vector2 m_dir;
 	bool m_isAlive;
-	bool m_isRight;
-
-	std::shared_ptr<Player> m_pPlayer;
 };
 

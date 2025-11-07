@@ -14,7 +14,7 @@ enum class PlayerState
 	Bomb
 };
 
-class Bullet;
+class PlayerBullet;
 class Player : public Object
 {
 public:
@@ -23,7 +23,7 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Update(Input& input,std::vector<std::shared_ptr<Bullet>>& pBullets);
+	void Update(Input& input,std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 	void Draw() override;
 
 	bool GetIsRight() const { return m_isRight; }
@@ -41,7 +41,7 @@ public:
 	/// <summary>
 	/// ショット処理
 	/// </summary>
-	void Shot(std::vector<std::shared_ptr<Bullet>>& pBullets);
+	void Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
 private:
 	//int m_handle;	//画像ハンドル

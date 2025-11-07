@@ -139,6 +139,9 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="EnemyBase.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Geometry.cpp" />
@@ -149,12 +152,16 @@
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneController.cpp" />
+    <ClCompile Include="ScrewDriver.cpp" />
     <ClCompile Include="StringFunctions.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="GameConstants.h" />
     <ClInclude Include="GameScene.h" />
@@ -165,6 +172,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneController.h" />
+    <ClInclude Include="ScrewDriver.h" />
     <ClInclude Include="StringFunctions.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>

@@ -36,17 +36,19 @@ Player::~Player()
 void Player::Init()
 {
 	m_pos = { Graphic::screen_width / 2,Graphic::screen_height / 2 };
+	m_sizeWidth = 32;
+	m_sizeHeight = 64;
 }
 
 void Player::Update()
 {
 }
 
-void Player::Update(Input& input, std::vector<std::shared_ptr<Bullet>>& pBullets)
+void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 	m_frame++;
 	//プレイヤーの中心座標を基準にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, size_width, size_height);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_sizeWidth, m_sizeHeight);
 
 	//重力を計算
 	Gravity();
@@ -138,7 +140,7 @@ void Player::Move(Input& input)
 	m_pos += dir.Normalized() * move_speed;
 }
 
-void Player::Shot(std::vector<std::shared_ptr<Bullet>>& pBullets)
+void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 		for (auto& bullet : pBullets)
 		{

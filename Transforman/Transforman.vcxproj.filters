@@ -28,6 +28,18 @@
     <Filter Include="GameObjects">
       <UniqueIdentifier>{232ff1fc-fc3a-4d5f-ace8-a0ed753b121b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects\Enemy">
+      <UniqueIdentifier>{1d7d426a-efce-4609-9e1e-a2127933fef3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Player">
+      <UniqueIdentifier>{a81d5610-2025-4231-90fd-203f7f9c043f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Bullet">
+      <UniqueIdentifier>{cd98a3d8-1bf7-4856-b68b-1ecd515f9711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Object">
+      <UniqueIdentifier>{10c213fb-3c48-4f23-82c8-05ebf5f2d260}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -63,14 +75,26 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>GameObjects</Filter>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>GameObjects\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>GameObjects</Filter>
+      <Filter>GameObjects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>GameObjects\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrewDriver.cpp">
+      <Filter>GameObjects\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>GameObjects\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>GameObjects</Filter>
+      <Filter>GameObjects\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>GameObjects\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,14 +131,26 @@
     <ClInclude Include="TitleScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>GameObjects</Filter>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>GameObjects\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>GameObjects</Filter>
+      <Filter>GameObjects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>GameObjects\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrewDriver.h">
+      <Filter>GameObjects\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>GameObjects\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
-      <Filter>GameObjects</Filter>
+      <Filter>GameObjects\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>GameObjects\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
