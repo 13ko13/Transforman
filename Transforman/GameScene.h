@@ -7,6 +7,7 @@
 class Input;
 class Player;
 class ScrewDriver;
+class EnemyBullet;
 class GameScene : public Scene
 {
 public:
@@ -18,6 +19,6 @@ public:
 private:
 	std::shared_ptr<Player> m_pPlayer;
 	std::vector<std::shared_ptr<PlayerBullet>> m_bullets;
-	std::vector<std::shared_ptr<ScrewDriver>> m_ScrewDrivers;
+	std::vector<std::shared_ptr<ScrewDriver>> m_screwDrivers;
 };
 

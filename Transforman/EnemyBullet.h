@@ -20,6 +20,18 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void DirUpUpdate();
+	void DirDownUpdate();
+	using UpdateFunc_t = void(EnemyBullet::*)();
+	UpdateFunc_t m_update;
+
+	void DirUpDraw();
+	void DirDownDraw();
+	using DrawFunc_t = void(EnemyBullet::*)();	
+	DrawFunc_t m_draw;
+
+	void SetDirection(Direction direction) { m_direction = direction; }
+
 private:
 	Direction m_direction;
 };

@@ -27,6 +27,7 @@ void ScrewDriver::Init()
 	m_sizeWidth = size_width;
 	m_sizeHeight = size_height;
 	m_attackCooltime = attack_cooltime;
+	m_pBullet->Init();
 }
 
 void ScrewDriver::Update()
@@ -43,6 +44,7 @@ void ScrewDriver::Update()
 		//クールタイムをリセット
 		m_attackCooltime = attack_cooltime;
 	}
+	m_pBullet->Update();
 }
 
 void ScrewDriver::Draw()
@@ -51,6 +53,7 @@ void ScrewDriver::Draw()
 	m_colRect.Draw(0xaaffff,false);
 	DrawFormatString(0, 80, 0xffffff, L"AttackCooltime:%d", m_attackCooltime);
 #endif
+	m_pBullet->Draw();
 }
 
 void ScrewDriver::Attack()
@@ -61,5 +64,6 @@ void ScrewDriver::Attack()
 		//弾が存在していない場合弾を発射する
 		m_pBullet->SetPos({ m_pos.x, m_pos.y });
 		m_pBullet->SetIsAlive(true);
+		m_pBullet->SetDirection(Direction::Down);
 	}
 }

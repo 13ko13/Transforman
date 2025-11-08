@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "PlayerBullet.h"
 #include "ScrewDriver.h"
+#include "EnemyBullet.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
@@ -15,8 +16,8 @@ GameScene::GameScene(SceneController& controller) :
 		bullet = std::make_shared<PlayerBullet>();
 	}
 	// スクリュードライバーの生成
-	m_ScrewDrivers.resize(1);
-	for (auto& screwDriver : m_ScrewDrivers)
+	m_screwDrivers.resize(1);
+	for (auto& screwDriver : m_screwDrivers)
 	{
 		screwDriver = std::make_shared<ScrewDriver>();
 	}
@@ -30,7 +31,7 @@ void GameScene::Init()
 	{
 		bullet->Init();
 	}
-	for (auto& screwDriver : m_ScrewDrivers)
+	for (auto& screwDriver : m_screwDrivers)
 	{
 		screwDriver->Init();
 	}
@@ -44,7 +45,7 @@ void GameScene::Update(Input& input)
 	{
 		bullet->Update();
 	}
-	for (auto& screwDriver : m_ScrewDrivers)
+	for (auto& screwDriver : m_screwDrivers)
 	{
 		screwDriver->Update();
 	}
@@ -58,7 +59,7 @@ void GameScene::Draw()
 	{
 		bullet->Draw();
 	}
-	for (auto& screwDriver : m_ScrewDrivers)
+	for (auto& screwDriver : m_screwDrivers)
 	{
 		screwDriver->Draw();
 	}
