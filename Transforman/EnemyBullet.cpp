@@ -1,15 +1,21 @@
 #include "EnemyBullet.h"
 #include <DxLib.h>
 #include "GameConstants.h"
+#include <cmath>
 
 namespace
 {
 	constexpr int radius = 10;
 	constexpr float speed = 3.0f;
+	constexpr int way_num = 5;
+	constexpr float angle_30 = DX_PI_F / 6.0f;
+	constexpr int bullet_num = 128;
 }
 
 EnemyBullet::EnemyBullet() :
-	m_direction(Direction::Down)
+	m_direction(Direction::Down),
+	m_update(DirUpUpdate),
+	m_draw(DirUpDraw)
 {
 	
 }
@@ -71,7 +77,8 @@ void EnemyBullet::DirDownUpdate()
 		//弾を移動させる。dirは長さ1なので、
 		//正規化はいらない
 		Vector2 shotVelocity = m_dir * speed;
-		m_pos += shotVelocity;
+		auto theta = std::atan2(shotVelocity.y, shotVelocity.x) - angle_30 * (way_num / 2);
+		int count = 0;
 		//画面外に出てしまった場合は存在状態を
 		//保持している変数にfalseを代入
 		if (m_pos.y < 0 || m_pos.y > Graphic::screen_height ||
