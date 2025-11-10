@@ -17,7 +17,7 @@ public:
 	void Attack() override;
 
 private:
-	std::shared_ptr<EnemyBullet> m_pBullet;
+	std::vector<std::shared_ptr<EnemyBullet>> m_pBullets;
 	int m_attackCooltime;
 };
 

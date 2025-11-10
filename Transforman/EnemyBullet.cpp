@@ -13,11 +13,10 @@ namespace
 }
 
 EnemyBullet::EnemyBullet() :
-	m_direction(Direction::Down),
-	m_update(DirUpUpdate),
-	m_draw(DirUpDraw)
+	m_direction(Direction::Down)
 {
-	
+	m_update = &EnemyBullet::DirDownUpdate;
+	m_draw = &EnemyBullet::DirDownDraw;
 }
 
 EnemyBullet::~EnemyBullet()
@@ -77,8 +76,7 @@ void EnemyBullet::DirDownUpdate()
 		//弾を移動させる。dirは長さ1なので、
 		//正規化はいらない
 		Vector2 shotVelocity = m_dir * speed;
-		auto theta = std::atan2(shotVelocity.y, shotVelocity.x) - angle_30 * (way_num / 2);
-		int count = 0;
+		m_pos += shotVelocity;
 		//画面外に出てしまった場合は存在状態を
 		//保持している変数にfalseを代入
 		if (m_pos.y < 0 || m_pos.y > Graphic::screen_height ||

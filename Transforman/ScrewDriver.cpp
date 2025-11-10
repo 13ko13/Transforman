@@ -9,12 +9,17 @@ namespace
 
 	const Vector2 first_pos = { 500.0f,500.0f };
 	constexpr int attack_cooltime = 60;//攻撃のクールタイム
+	constexpr float bullet_pos_offset = 10.0f;
 }
 
 ScrewDriver::ScrewDriver() : 
 	m_attackCooltime(0)
 {
-	m_pBullet = std::make_shared<EnemyBullet>();
+	m_pBullets.resize(5);
+	for (auto& bullet : m_pBullets)
+	{
+		bullet = std::make_shared<EnemyBullet>();
+	}
 }
 
 ScrewDriver::~ScrewDriver()
@@ -27,24 +32,32 @@ void ScrewDriver::Init()
 	m_sizeWidth = size_width;
 	m_sizeHeight = size_height;
 	m_attackCooltime = attack_cooltime;
-	m_pBullet->Init();
+	
+	for (auto& bullet : m_pBullets)
+	{
+		bullet->Init();
+	}
 }
 
 void ScrewDriver::Update()
 {
 	//スクリュードライバーの中心座標を基準にする
 	m_colRect.SetCenter(m_pos.x, m_pos.y, m_sizeWidth, m_sizeHeight);
-	
+
 	//攻撃のクールタイムを更新
 	m_attackCooltime--;
 	//攻撃のクールタイムが0以下になったら攻撃
-	if( m_attackCooltime <= 0 )
+	if (m_attackCooltime <= 0)
 	{
 		Attack();
 		//クールタイムをリセット
 		m_attackCooltime = attack_cooltime;
 	}
-	m_pBullet->Update();
+	//弾の動きを更新
+	for (auto& bullet : m_pBullets)
+	{
+		bullet->Update();
+	}
 }
 
 void ScrewDriver::Draw()
@@ -53,17 +66,30 @@ void ScrewDriver::Draw()
 	m_colRect.Draw(0xaaffff,false);
 	DrawFormatString(0, 80, 0xffffff, L"AttackCooltime:%d", m_attackCooltime);
 #endif
-	m_pBullet->Draw();
+	for (auto& bullet : m_pBullets)
+	{
+		bullet->Draw();
+	}
 }
 
 void ScrewDriver::Attack()
 {
-	//弾を撃つ
-	if (!m_pBullet->GetIsAlive())
+	for (auto& bullet : m_pBullets)
 	{
-		//弾が存在していない場合弾を発射する
-		m_pBullet->SetPos({ m_pos.x, m_pos.y });
-		m_pBullet->SetIsAlive(true);
-		m_pBullet->SetDirection(Direction::Down);
+		//弾を撃つ
+		if (!bullet->GetIsAlive())
+		{
+			//float x = m_pos.x + bullet_pos_offset;
+			//float y = m_pos.y + bullet_pos_offset;
+			
+			//弾を生成するごとにScrewDriverを中心に
+			// 180÷n 度ずつずらす(n方向に弾を飛ばす)
+			
+
+			//弾が存在していない場合弾を発射する
+			bullet->SetPos({ m_pos.x, m_pos.y });
+			bullet->SetIsAlive(true);
+			bullet->SetDirection(Direction::Down);
+		}
 	}
 }
