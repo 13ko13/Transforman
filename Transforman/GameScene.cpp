@@ -1,7 +1,7 @@
 #include "GameScene.h"
 #include "Player.h"
 #include "PlayerBullet.h"
-#include "ScrewDriver.h"
+#include "ChargeShotBoss.h"
 #include "EnemyBullet.h"
 
 GameScene::GameScene(SceneController& controller) :
@@ -10,57 +10,45 @@ GameScene::GameScene(SceneController& controller) :
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>();
 	// 弾の生成
-	m_bullets.resize(3);
-	for (auto& bullet : m_bullets)
+	m_pBullets.resize(3);
+	for (auto& bullet : m_pBullets)
 	{
 		bullet = std::make_shared<PlayerBullet>();
 	}
 	// スクリュードライバーの生成
-	m_screwDrivers.resize(1);
-	for (auto& screwDriver : m_screwDrivers)
-	{
-		screwDriver = std::make_shared<ScrewDriver>();
-	}
+	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>();
 }
 
 void GameScene::Init()
 {
 	// 各オブジェクトの初期化
 	m_pPlayer->Init();
-	for (auto& bullet : m_bullets)
+	for (auto& bullet : m_pBullets)
 	{
 		bullet->Init();
 	}
-	for (auto& screwDriver : m_screwDrivers)
-	{
-		screwDriver->Init();
-	}
+	m_pChargeShotBoss->Init();
+	m_pChargeShotBoss->SetPlayerPtr(m_pPlayer);
 }
 
 void GameScene::Update(Input& input)
 {
 	// 各オブジェクトの更新
-	m_pPlayer->Update(input,m_bullets);
-	for (auto& bullet : m_bullets)
+	m_pPlayer->Update(input,m_pBullets);
+	for (auto& bullet : m_pBullets)
 	{
 		bullet->Update();
 	}
-	for (auto& screwDriver : m_screwDrivers)
-	{
-		screwDriver->Update();
-	}
+	m_pChargeShotBoss->Update();
 }
 
 void GameScene::Draw()
 {
 	// 各オブジェクトの描画
 	m_pPlayer->Draw();
-	for (auto& bullet : m_bullets)
+	for (auto& bullet : m_pBullets)
 	{
 		bullet->Draw();
 	}
-	for (auto& screwDriver : m_screwDrivers)
-	{
-		screwDriver->Draw();
-	}
+	m_pChargeShotBoss->Draw();
 }

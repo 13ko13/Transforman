@@ -6,7 +6,7 @@
 //プロトタイプ宣言
 class Input;
 class Player;
-class ScrewDriver;
+class ChargeShotBoss;
 class EnemyBullet;
 class GameScene : public Scene
 {
@@ -18,7 +18,7 @@ public:
 
 private:
 	std::shared_ptr<Player> m_pPlayer;
-	std::vector<std::shared_ptr<PlayerBullet>> m_bullets;
-	std::vector<std::shared_ptr<ScrewDriver>> m_screwDrivers;
+	std::vector<std::shared_ptr<PlayerBullet>> m_pBullets;
+	std::shared_ptr<ChargeShotBoss> m_pChargeShotBoss; 
 };
 

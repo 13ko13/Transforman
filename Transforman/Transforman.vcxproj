@@ -152,7 +152,7 @@
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneController.cpp" />
-    <ClCompile Include="ScrewDriver.cpp" />
+    <ClCompile Include="ChargeShotBoss.cpp" />
     <ClCompile Include="StringFunctions.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
@@ -172,7 +172,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneController.h" />
-    <ClInclude Include="ScrewDriver.h" />
+    <ClInclude Include="ChargeShotBoss.h" />
     <ClInclude Include="StringFunctions.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>

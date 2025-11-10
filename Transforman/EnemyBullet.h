@@ -1,14 +1,16 @@
 #pragma once
 #include "Bullet.h"
+#include <memory>
 
-/// <summary>
-/// 弾の方向を表す列挙型
-/// </summary>
-enum class Direction
+enum class EnemyState
 {
-	Up,
-	Down
+	Normal,
+	Shotting,
+	Dead
 };
+
+//プロトタイプ宣言
+class ChargeShotBoss;
 
 class EnemyBullet : public Bullet
 {
@@ -20,19 +22,13 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void DirUpUpdate();
-	void DirDownUpdate();
-	using UpdateFunc_t = void(EnemyBullet::*)();
-	UpdateFunc_t m_update;
+	/// <summary>
+	/// 弾自身の移動
+	/// </summary>
+	void Movement();
 
-	void DirUpDraw();
-	void DirDownDraw();
-	using DrawFunc_t = void(EnemyBullet::*)();	
-	DrawFunc_t m_draw;
-
-	void SetDirection(Direction direction) { m_direction = direction; }
-
+	void SetDir(const Vector2& dir) { m_dir = dir; }
 private:
-	Direction m_direction;
+	EnemyState m_state;
 };
 

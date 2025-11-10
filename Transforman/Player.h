@@ -12,7 +12,7 @@ enum class PlayerState
 	BigShot,
 	Cutter,
 	Bomb
-};
+}; 
 
 class PlayerBullet;
 class Player : public Object
@@ -43,7 +43,7 @@ public:
 	/// </summary>
 	void Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
-private:
+private:	
 	//int m_handle;	//画像ハンドル
 	int m_jumpFrame;//ジャンプ中のフレーム数
 	int m_shotCooltime;///ショットのクールタイム管理用
