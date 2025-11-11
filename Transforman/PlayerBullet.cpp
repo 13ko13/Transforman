@@ -5,12 +5,14 @@
 namespace 
 {
 	constexpr float speed = 5.0f;
-	constexpr int radius = 10.0f;
+	constexpr int normal_shot_radius = 15.0f;
+	constexpr int charge_shot_radius = 25.0f;
 }
 
 PlayerBullet::PlayerBullet() :
 	m_isRight(false)
 {
+	m_bulletType = BulletType::Normal;
 }
 
 PlayerBullet::~PlayerBullet()
@@ -47,18 +49,38 @@ void PlayerBullet::Update()
 			m_isAlive = false;
 		}
 	}
+
+	switch (m_bulletType)
+	{
+	case BulletType::Normal:
+		break;
+	case BulletType::Charge:
+		break;
+	}
 }
 
 void PlayerBullet::Draw()
 {
-	if (m_isAlive == true)
+	if (m_isAlive)
 	{
-		
-
+		switch (m_bulletType)
+		{
+		case BulletType::Normal:
 #if _DEBUG
-		//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-		DrawCircle(m_pos.x, m_pos.y, radius, GetColor(255, 0, 0), false, 1);
-		DrawFormatString(0, 45, 0xffffff, L"PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
+			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
+			DrawCircle(m_pos.x, m_pos.y, normal_shot_radius, GetColor(255, 0, 0), false, 1);
+			DrawFormatString(0, 45, 0xffffff, L"PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
+			break;
+
+		case BulletType::Charge:
+#if _DEBUG
+			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
+			DrawCircle(m_pos.x, m_pos.y, charge_shot_radius, GetColor(255, 0, 0), false, 1);
+			DrawFormatString(0, 45, 0xffffff, L"PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
+#endif
+			break;
+		}
+
 	}
 }

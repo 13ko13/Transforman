@@ -4,16 +4,6 @@
 #include <vector>
 #include <memory>
 
-enum class PlayerState
-{
-	Idle,
-	Shot,
-	Jumpm,
-	BigShot,
-	Cutter,
-	Bomb
-}; 
-
 class PlayerBullet;
 class Player : public Object
 {
@@ -43,6 +33,12 @@ public:
 	/// </summary>
 	void Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
+	/// <summary>
+	/// チャージショットの処理
+	/// </summary>
+	/// <param name="pBullet">プレイヤーの弾丸を格納する共有ポインタのベクター</param>
+	void ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
+
 private:	
 	//int m_handle;	//画像ハンドル
 	int m_jumpFrame;//ジャンプ中のフレーム数
@@ -52,4 +48,20 @@ private:
 	bool m_isJumping;///ジャンプしているかどうか
 	bool m_isGround;//接地しているかどうか
 	bool m_isRight;//右を向いているかどうか
+
+	int m_prevChargeFrame;
+	int m_chargeFrame;
+
+	enum class PlayerState
+	{
+		None,
+		Idle,
+		Walk,
+		Shot,
+		Jump,
+		ChageShot,
+		Climb,
+		Fire
+	};
+	PlayerState m_state;
 };

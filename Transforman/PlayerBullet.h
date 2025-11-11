@@ -4,6 +4,12 @@
 #include <memory>
 #include "Geometry.h"
 
+enum class BulletType
+{
+	Normal,
+	Charge
+};
+
 class PlayerBullet : public Bullet
 {
 public:
@@ -15,7 +21,9 @@ public:
 	void Draw() override;
 
 	void SetIsRight(bool isRight) { m_isRight = isRight; }
+	void SetType(BulletType bulletType) { m_bulletType = bulletType; }
 
 private:
 	bool m_isRight;
+	BulletType m_bulletType;
 };
