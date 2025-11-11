@@ -14,9 +14,8 @@ namespace
 	constexpr int max_jump_frame = 15;
 	constexpr float jump_power = -10.0f;
 
-	constexpr int shot_cooltime = 10;							//ショットのクールタイム
+	constexpr int shot_cooltime = 30;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
-	constexpr int charge_time = 60;							//チャージしはじめて、撃てるまでのフレーム
 }
 
 Player::Player() :
@@ -24,11 +23,11 @@ Player::Player() :
 	m_isJumping(false),
 	m_isGround(false),
 	m_isRight(false),
+	m_isCharging(false),
 	m_jumpFrame(0),
 	m_shotCooltime(0),
 	m_state(PlayerState::None),
-	m_prevChargeFrame(0),
-	m_chargeFrame(0)
+	m_prevChargeFrame(0)
 {
 
 }
@@ -57,37 +56,15 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 
 	//重力を計算
 	Gravity();
+
 	//ジャンプ
 	Jump(input);
+
 	//移動
 	Move(input);
-	//ショット
-	m_shotCooltime--;
-	if (m_shotCooltime < 0)
-	{
-		m_shotCooltime = 0;
-	}
-	if (input.IsTriggerd("shot") &&
-		m_shotCooltime == 0)
-	{
-		Shot(pBullets);
-		m_shotCooltime = shot_cooltime;
-	}
-	
-	
 
-	//ボタンが一定フレーム以上
-	//長押しされたらチャージショットの判定にする
-	if (input.IsPressed("shot"))
-	{
-		m_chargeFrame++;
-
-		if (m_chargeFrame > prev_charge_time)
-		{
-			//チャージショット
-			ChargeShot(pBullets);
-		}
-	}
+	//ショットの準備
+	PrevShot(input, pBullets);
 
 	//仮の地面を設定
 	if (m_pos.y >= ground - 20)
@@ -135,7 +112,7 @@ void Player::Draw()
 	DrawFormatString(0, 15, 0xffffff, L"playerPosY:%f", m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, L"isRight:%d", m_isRight);
 	DrawFormatString(0, 60, 0xffffff, L"shotCoolTime:%d", m_shotCooltime);
-	DrawFormatString(0, 150, 0xffffff, L"chargeFrame:%d", m_chargeFrame);
+	DrawFormatString(0, 150, 0xffffff, L"prevChargeFrame:%d", m_prevChargeFrame);
 #endif
 }
 
@@ -205,6 +182,7 @@ void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 				//左向き
 				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
 			}
+			bullet->SetType(BulletType::Normal);
 			bullet->SetIsAlive(true);
 			bullet->SetIsRight(m_isRight);
 			break;	//1発撃ったらループを抜ける
@@ -214,31 +192,64 @@ void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 
 void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
-	DrawFormatString(0, 165, 0xffffff, L"チャージ中！");
-	m_chargeFrame++;
-	if (m_chargeFrame > charge_time)
+	for (auto& bullet : pBullets)
 	{
-		for (auto& bullet : pBullets)
+		if (!bullet->GetIsAlive())
 		{
-			if (!bullet->GetIsAlive())
+			//弾が存在していない場合、弾を発射する
+			if (m_isRight)
 			{
-				//弾が存在していない場合、弾を発射する
-				if (m_isRight)
-				{
-					//右向き
-					bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
-				}
-				else
-				{
-					//左向き
-					bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
-				}
-				bullet->BulletType::Charge;
-				bullet->SetIsAlive(true);
-				bullet->SetIsRight(m_isRight);
-				break;	//1発撃ったらループを抜ける
+				//右向き
+				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
 			}
+			else
+			{
+				//左向き
+				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
+			}
+			bullet->SetType(BulletType::Charge);
+			bullet->SetIsAlive(true);
+			bullet->SetIsRight(m_isRight);
+			break;	//1発撃ったらループを抜ける
 		}
 	}
+}
 
+void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
+{
+	m_shotCooltime--;
+	if (m_shotCooltime < 0)
+	{
+		//クールタイムを更新して0以下になったら
+		//ショット可能状態にする
+		m_shotCooltime = 0;
+	}
+	//ボタンが一定フレーム以上
+	//長押しされたらチャージショットの判定にする
+	//チャージショットの猶予時間を超えたらチャージショット
+	//それ以外は通常ショット
+	if (input.IsPressed("shot"))
+	{
+		m_prevChargeFrame++;
+		m_isCharging = true;
+		DrawFormatString(0, 180, 0xffffff, L"チャージ中！");
+	}
+	if (input.IsReleased("shot"))
+	{
+		if (m_prevChargeFrame > prev_charge_time)
+		{
+			//チャージショット
+			ChargeShot(pBullets);
+			m_shotCooltime = shot_cooltime;
+			m_prevChargeFrame = 0;
+			m_isCharging = false;
+		}
+		else
+		{
+			//通常ショット
+			Shot(pBullets);
+			m_shotCooltime = shot_cooltime;
+			m_prevChargeFrame = 0;
+		}
+	}
 }

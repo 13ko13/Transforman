@@ -39,6 +39,13 @@ public:
 	/// <param name="pBullet">プレイヤーの弾丸を格納する共有ポインタのベクター</param>
 	void ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
+	/// <summary>
+	/// ショットを打つ準備の処理
+	/// </summary>
+	/// <param name="input">イベント名</param>
+	/// <param name="pBullets">プレイヤーの弾丸</param>
+	void PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
+
 private:	
 	//int m_handle;	//画像ハンドル
 	int m_jumpFrame;//ジャンプ中のフレーム数
@@ -48,9 +55,9 @@ private:
 	bool m_isJumping;///ジャンプしているかどうか
 	bool m_isGround;//接地しているかどうか
 	bool m_isRight;//右を向いているかどうか
+	bool m_isCharging;//チャージショットをしているかどうか
 
-	int m_prevChargeFrame;
-	int m_chargeFrame;
+	int m_prevChargeFrame;//チャージショットのためのフレーム数
 
 	enum class PlayerState
 	{
