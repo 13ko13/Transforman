@@ -55,9 +55,10 @@ void EnemyBullet::Draw()
 		DrawCircle(m_pos.x, m_pos.y, radius, GetColor(255, 0, 0), false, 1);
 		DrawFormatString(0, 115, 0xffffff, L"EnemyBulletPos X : %f , Y : %f", m_pos.x, m_pos.y);
 		DrawFormatString(0, 130, 0xffffff, L"ShotDir : %f , %f", m_dir.x, m_dir.y);
+		DrawFormatString(0, 95, 0xffffff, L"EnemyBulletAlive : %d", m_isAlive);
 	}
 #endif 
-	DrawFormatString(0, 95, 0xffffff, L"EnemyBulletAlive : %d", m_isAlive);
+	
 }
 
 void EnemyBullet::Movement()

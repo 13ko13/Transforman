@@ -7,7 +7,8 @@
 enum class BulletType
 {
 	Normal,
-	Charge
+	Charge,
+	Fire
 };
 
 class PlayerBullet : public Bullet

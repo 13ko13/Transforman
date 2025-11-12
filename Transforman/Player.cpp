@@ -232,7 +232,9 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 	{
 		m_prevChargeFrame++;
 		m_isCharging = true;
+#if _DEBUG
 		DrawFormatString(0, 180, 0xffffff, L"チャージ中！");
+#endif
 	}
 	if (input.IsReleased("shot"))
 	{
