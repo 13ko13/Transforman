@@ -30,7 +30,7 @@ bool Application::Init()
 	//ウィンドwモード設定
 	ChangeWindowMode(true);
 	//ゲーム名
-	SetWindowText(L"TransforMan");
+	SetWindowText("TransforMan");
 	if (DxLib_Init() == -1)
 	{
 		return false;

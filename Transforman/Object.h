@@ -26,6 +26,7 @@ public:
 	Vector2 GetPos() const { return m_pos; }
 
 protected:
+	int m_handle;	//‰æ‘œ‚Ìƒnƒ“ƒhƒ‹
 	int m_frame;
 	int m_sizeWidth;
 	int m_sizeHeight;

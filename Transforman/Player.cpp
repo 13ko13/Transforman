@@ -8,14 +8,22 @@ namespace
 {
 	constexpr float ground = Graphic::screen_height - 100;	//地面の高さ(仮)
 	constexpr float move_speed = 3.0f;							//移動速度
-	constexpr float size_width = 32.0f;						//キャラクターの横幅
-	constexpr float size_height = 64.0f;						//キャラクターの高さ
+	constexpr float size_width = 40.0f;						//キャラクターの横幅
+	constexpr float size_height = 40.0f;						//キャラクターの高さ
+	constexpr double   draw_scale = 1.5;								//描画スケール			
 
 	constexpr int max_jump_frame = 15;
 	constexpr float jump_power = -10.0f;
 
 	constexpr int shot_cooltime = 30;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
+
+	//アニメーション用のグラフのインデックス
+	constexpr int graph_index_idle = 0;	
+	constexpr int graph_index_walk = 1;
+	constexpr int graph_index_damage = 3;
+	constexpr int graph_index_deth = 7;
+	constexpr int graph_index_jump = 8;
 }
 
 Player::Player() :
@@ -29,12 +37,12 @@ Player::Player() :
 	m_state(PlayerState::None),
 	m_prevChargeFrame(0)
 {
-
+	m_handle = LoadGraph("img/game/Player/player.png");
 }
 
 Player::~Player()
 {
-
+	DeleteGraph(m_handle);
 }
 
 void Player::Init()
@@ -51,8 +59,8 @@ void Player::Update()
 void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 	m_frame++;
-	//プレイヤーの中心座標を基準にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_sizeWidth, m_sizeHeight);
+	//プレイヤーの左上座標を基準にする
+	m_colRect.SetLT(m_pos.x - m_sizeWidth / 2, m_pos.y - m_sizeHeight / 2, m_sizeWidth, m_sizeHeight);
 
 	//重力を計算
 	Gravity();
@@ -72,6 +80,10 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 		m_pos.y = ground - 20;
 		m_isGround = true;
 		m_velocity.y = 0.0f;
+	}
+	else
+	{
+		m_isGround = false;
 	}
 
 	//None,
@@ -104,37 +116,46 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 
 void Player::Draw()
 {
-	
-
 #if _DEBUG
 	m_colRect.Draw(0xffffff, false);
-	DrawFormatString(0, 0, 0xffffff, L"frame:%d", m_frame);
-	DrawFormatString(0, 15, 0xffffff, L"playerPosY:%f", m_pos.y);
-	DrawFormatString(0, 30, 0xffffff, L"isRight:%d", m_isRight);
-	DrawFormatString(0, 60, 0xffffff, L"shotCoolTime:%d", m_shotCooltime);
-	DrawFormatString(0, 150, 0xffffff, L"prevChargeFrame:%d", m_prevChargeFrame);
+	DrawFormatString(0, 0, 0xffffff, "frame:%d", m_frame);
+	DrawFormatString(0, 15, 0xffffff, "playerPosY:%f", m_pos.y);
+	DrawFormatString(0, 30, 0xffffff, "isRight:%d", m_isRight);
+	DrawFormatString(0, 60, 0xffffff, "shotCoolTime:%d", m_shotCooltime);
+	DrawFormatString(0, 150, 0xffffff, "prevChargeFrame:%d", m_prevChargeFrame);
 #endif
+
+	int srcX = 0;
+	int srcY = 0;
+
+	DrawRectRotaGraph(
+		static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), //表示位置
+		srcX, srcY,												//切り取り開始位置
+		size_width, size_height,								//切り取りサイズ
+		draw_scale, 0.0,											//拡大率、回転角度
+		m_handle,											//画像ハンドル
+		true,												//透明度
+		!m_isRight											//反転
+	);
 }
 
 void Player::Jump(Input& input)
 {
-	if (input.IsPressed("jump") && m_isGround)
+	if (input.IsTriggered("jump") && m_isGround
+		&& !m_isJumping)
 	{
 		//地面にいる状態でジャンプボタンを押されるとジャンプ
 		// 可能状態になる
 		m_isJumping = true;
 	}
 	//ジャンプを入力した、かつ、ジャンプ可能状態だったら
-	if (input.IsPressed("jump"))
+	if (input.IsPressed("jump") && m_isJumping)
 	{
-		if (m_isJumping)
+		m_jumpFrame++;
+		m_isGround = false;
+		if (m_jumpFrame < max_jump_frame)
 		{
-			m_jumpFrame++;
-			m_isGround = false;
-			if (m_jumpFrame < max_jump_frame)
-			{
-				m_velocity.y = jump_power;
-			}
+			m_velocity.y = jump_power;
 		}
 	}
 	else
@@ -233,7 +254,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 		m_prevChargeFrame++;
 		m_isCharging = true;
 #if _DEBUG
-		DrawFormatString(0, 180, 0xffffff, L"チャージ中！");
+		DrawFormatString(0, 180, 0xffffff, "チャージ中！");
 #endif
 	}
 	if (input.IsReleased("shot"))

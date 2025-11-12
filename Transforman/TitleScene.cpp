@@ -13,7 +13,7 @@ TitleScene::TitleScene(SceneController& controller) :
 	Scene(controller)
 {
 	//タイトルロゴハンドルに画像のハンドルを渡す
-	m_titleLogoH = LoadGraph(L"img/title/title_logo.png");
+	m_titleLogoH = LoadGraph("img/title/title_logo.png");
 	assert(m_titleLogoH >= 1);	//Nullチェック
 
 	//updateとdrawの関数ポインタにFadeInUpdateと
@@ -47,7 +47,7 @@ void TitleScene::NormalUpdate(Input& input)
 {
 	//okボタンが押されたら
 	//関数を切り替えてフェードアウトに入る
-	if (input.IsTriggerd("ok"))
+	if (input.IsTriggered("ok"))
 	{
 		m_update = &TitleScene::FadeOutUpdate;
 		m_draw = &TitleScene::FadeDraw;

@@ -91,7 +91,7 @@ bool Input::IsPressed(const char* name)const
 	return m_inputData.at(name);//const関数内部なので[]ではなくatを使用してる
 }
 
-bool Input::IsTriggerd(const char* name)const
+bool Input::IsTriggered(const char* name)const
 {
 	// 今入力されているボタンと
 	// 前のフレームで入力されているボタンを比較する

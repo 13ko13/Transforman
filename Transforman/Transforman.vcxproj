@@ -30,7 +30,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -43,7 +43,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -153,7 +153,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneController.cpp" />
     <ClCompile Include="ChargeShotBoss.cpp" />
-    <ClCompile Include="StringFunctions.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +172,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneController.h" />
     <ClInclude Include="ChargeShotBoss.h" />
-    <ClInclude Include="StringFunctions.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

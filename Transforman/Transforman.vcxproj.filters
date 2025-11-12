@@ -60,9 +60,6 @@
     <ClCompile Include="Rect.cpp">
       <Filter>General</Filter>
     </ClCompile>
-    <ClCompile Include="StringFunctions.cpp">
-      <Filter>General</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
@@ -114,9 +111,6 @@
       <Filter>General</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">
-      <Filter>General</Filter>
-    </ClInclude>
-    <ClInclude Include="StringFunctions.h">
       <Filter>General</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">

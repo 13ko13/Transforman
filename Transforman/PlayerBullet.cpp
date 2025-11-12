@@ -69,7 +69,7 @@ void PlayerBullet::Draw()
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
 			DrawCircle(m_pos.x, m_pos.y, normal_shot_radius, GetColor(255, 0, 0), false, 1);
-			DrawFormatString(0, 45, 0xffffff, L"PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
+			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
 			break;
 
@@ -77,7 +77,7 @@ void PlayerBullet::Draw()
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
 			DrawCircle(m_pos.x, m_pos.y, charge_shot_radius, GetColor(255, 0, 0), false, 1);
-			DrawFormatString(0, 45, 0xffffff, L"PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
+			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
 			break;
 		}

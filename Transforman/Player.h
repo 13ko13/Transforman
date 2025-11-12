@@ -46,8 +46,7 @@ public:
 	/// <param name="pBullets">プレイヤーの弾丸</param>
 	void PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
-private:	
-	//int m_handle;	//画像ハンドル
+private:
 	int m_jumpFrame;//ジャンプ中のフレーム数
 	int m_shotCooltime;///ショットのクールタイム管理用
 

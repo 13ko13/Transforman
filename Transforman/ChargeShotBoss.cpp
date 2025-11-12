@@ -66,7 +66,7 @@ void ChargeShotBoss::Draw()
 {
 #if _DEBUG
 	m_colRect.Draw(0xaaffff, false);
-	DrawFormatString(0, 80, 0xffffff, L"AttackCooltime:%d", m_attackCooltime);
+	DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
 #endif
 	for (auto& bullet : m_pBullets)
 	{
