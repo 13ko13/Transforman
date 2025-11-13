@@ -9,8 +9,11 @@ namespace
 	constexpr float ground = Graphic::screen_height - 100;	//地面の高さ(仮)
 	constexpr float move_speed = 3.0f;							//移動速度
 	constexpr float size_width = 40.0f;						//キャラクターの横幅
-	constexpr float size_height = 40.0f;						//キャラクターの高さ
-	constexpr double   draw_scale = 1.5;								//描画スケール			
+	constexpr float size_height = 50.0f;					//キャラクターの高さ
+	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
+	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
+
+	constexpr double   draw_scale = 1.5;					//描画スケール			
 
 	constexpr int max_jump_frame = 15;
 	constexpr float jump_power = -10.0f;
@@ -48,8 +51,8 @@ Player::~Player()
 void Player::Init()
 {
 	m_pos = { Graphic::screen_width / 2,Graphic::screen_height / 2 };
-	m_sizeWidth = 32;
-	m_sizeHeight = 64;
+	m_sizeWidth = size_width;
+	m_sizeHeight = size_height;
 }
 
 void Player::Update()
@@ -59,8 +62,7 @@ void Player::Update()
 void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 	m_frame++;
-	//プレイヤーの左上座標を基準にする
-	m_colRect.SetLT(m_pos.x - m_sizeWidth / 2, m_pos.y - m_sizeHeight / 2, m_sizeWidth, m_sizeHeight);
+	
 
 	//重力を計算
 	Gravity();
@@ -112,6 +114,10 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 	case PlayerState::Fire:
 		break;
 	}
+
+	//プレイヤーの左上座標を基準にする
+
+	m_colRect.SetLT(m_pos.x - size_width / 2, m_pos.y - size_height / 2 + 5, size_width, size_height);
 }
 
 void Player::Draw()
@@ -131,7 +137,7 @@ void Player::Draw()
 	DrawRectRotaGraph(
 		static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), //表示位置
 		srcX, srcY,												//切り取り開始位置
-		size_width, size_height,								//切り取りサイズ
+		graph_width, graph_height,								//切り取りサイズ
 		draw_scale, 0.0,											//拡大率、回転角度
 		m_handle,											//画像ハンドル
 		true,												//透明度
