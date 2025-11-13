@@ -2,7 +2,10 @@
 
 Animation::Animation()
 {
-
+	m_currentAnim = PlayerAnim::None;
+	m_attachAnimIndex = -1;
+	m_animFrame = 0;
+	m_isLoopAnim = false;
 }
 
 Animation::~Animation()
