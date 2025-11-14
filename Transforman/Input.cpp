@@ -29,6 +29,7 @@ Input::Input() :
 
 	m_inputTable["jump"] = { {PeripheralType::keyboard,KEY_INPUT_SPACE},//キーボード:スペースキー
 							{PeripheralType::pad1,Pad::pad_b	} };	//パッド:Bボタン
+
 	//あらかじめ入力データのための枠を開けておく
 	//ここで枠を開けておかないと、チェックの際にAt関数でクラッシュする可能性がある(Null)
 	for (const auto& inputInfo : m_inputTable)//forのinputInfoが変更されないようにconstにする

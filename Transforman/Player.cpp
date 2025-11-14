@@ -67,8 +67,14 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 	//重力を計算
 	Gravity();
 
-	//ジャンプ
-	Jump(input);
+	if (input.IsPressed("jump") && m_isGround
+		&& !m_isJumping)
+	{
+		//地面にいる状態でジャンプボタンを押されるとジャンプ
+		// 可能状態になる
+		m_isJumping = true;
+		Jump(input);
+	}
 
 	//移動
 	Move(input);
@@ -76,10 +82,16 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 	//ショットの準備
 	PrevShot(input, pBullets);
 
-	//仮の地面を設定
-	if (m_pos.y >= ground - 20)
+	//壁のぼり
+	if (input.IsPressed("up"))
 	{
-		m_pos.y = ground - 20;
+		Climb();
+	}
+
+	//仮の地面を設定
+	if (m_pos.y >= ground)
+	{
+		m_pos.y = ground ;
 		m_isGround = true;
 		m_velocity.y = 0.0f;
 	}
@@ -129,6 +141,8 @@ void Player::Draw()
 	DrawFormatString(0, 30, 0xffffff, "isRight:%d", m_isRight);
 	DrawFormatString(0, 60, 0xffffff, "shotCoolTime:%d", m_shotCooltime);
 	DrawFormatString(0, 150, 0xffffff, "prevChargeFrame:%d", m_prevChargeFrame);
+	DrawFormatString(0, 165, 0xffffff, "ground : %d", m_isGround);
+	
 #endif
 
 	int srcX = 0;
@@ -147,27 +161,21 @@ void Player::Draw()
 
 void Player::Jump(Input& input)
 {
-	if (input.IsTriggered("jump") && m_isGround
-		&& !m_isJumping)
-	{
-		//地面にいる状態でジャンプボタンを押されるとジャンプ
-		// 可能状態になる
-		m_isJumping = true;
-	}
+	
 	//ジャンプを入力した、かつ、ジャンプ可能状態だったら
-	if (input.IsPressed("jump") && m_isJumping)
+	if (input.IsPressed("jump") )
 	{
 		m_jumpFrame++;
-		m_isGround = false;
 		if (m_jumpFrame < max_jump_frame)
 		{
-			m_velocity.y = jump_power;
+			m_velocity.y += jump_power;
+			m_isJumping = false;
 		}
-	}
-	else
-	{
-		m_jumpFrame = 0;
-		m_isJumping = false;
+		else
+		{
+			m_jumpFrame = 0;
+			m_isJumping = false;
+		}
 	}
 }
 
@@ -281,4 +289,9 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 			m_prevChargeFrame = 0;
 		}
 	}
+}
+
+void Player::Climb()
+{
+
 }
