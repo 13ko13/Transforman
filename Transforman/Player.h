@@ -49,7 +49,7 @@ public:
 	void Climb();
 
 private:
-	int m_jumpFrame;//ジャンプ中のフレーム数
+	int m_jumpPower;//可変ジャンプ力
 	int m_shotCooltime;///ショットのクールタイム管理用
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
@@ -59,6 +59,10 @@ private:
 	bool m_isCharging;//チャージショットをしているかどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
+	float m_animFrame;		//現在のアニメーションのフレーム数
+	int m_animSrcX;		  //現在のアニメーションの横の切り取り位置
+	int m_animSrcY;		  //現在のアニメーションの縦の切り取り位置
+	int m_animIdx;			//現在のアニメーションのインデックス
 
 	enum class PlayerState
 	{
@@ -67,7 +71,7 @@ private:
 		Walk,
 		Shot,
 		Jump,
-		ChageShot,
+		ChargeShot,
 		Climb,
 		Fire
 	};

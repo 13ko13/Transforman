@@ -83,8 +83,3 @@ Vector2 Vector2::operator*(float scale) const
 	/// ベクトルのスカラー倍
 	return { x * scale, y * scale };
 }
-
-void Circle::Draw()
-{
-	DrawCircleAA(pos.x, pos.y, r, 16, 0xffffff, false);
-}

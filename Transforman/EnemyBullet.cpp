@@ -43,6 +43,7 @@ void EnemyBullet::Update()
 		{
 			m_isAlive = false;
 		}
+		
 	}
 }
 

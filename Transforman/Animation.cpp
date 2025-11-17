@@ -27,3 +27,7 @@ void Animation::Draw()
 {
 
 }
+
+void Animation::ChangeAnim()
+{
+}

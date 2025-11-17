@@ -11,6 +11,7 @@ public:
 	void Init();
 	void Update();
 	void Draw();
+	void ChangeAnim();
 
 	/// <summary>
 	/// プレイヤーのアニメーションの種類

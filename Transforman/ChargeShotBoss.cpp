@@ -2,11 +2,14 @@
 #include "EnemyBullet.h"
 #include <DxLib.h>
 #include "Player.h"
+#include <cassert>
 
 namespace
 {
 	constexpr int size_width = 128;//幅
 	constexpr int size_height = 128;//高さ
+	constexpr int graph_width = 48;	//画像1枚の幅
+	constexpr int graph_height = 32;//画像1枚の高さ
 
 	const Vector2 first_pos = { 500.0f,500.0f };
 	constexpr int attack_cooltime = 60;//攻撃のクールタイム
@@ -17,10 +20,14 @@ ChargeShotBoss::ChargeShotBoss() :
 	m_attackCooltime(0),
 	m_isRight(true)
 {
+	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
+	assert(m_handle > -1);
+
 	m_pBullets.resize(5);
 	for (auto& bullet : m_pBullets)
 	{
 		bullet = std::make_shared<EnemyBullet>();
+		bullet->SetPlayer(m_pPlayer);
 	}
 }
 

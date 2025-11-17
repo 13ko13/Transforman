@@ -31,10 +31,3 @@ struct Size
 	int h;///‚‚³
 };
 
-struct Circle
-{
-	Position2 pos;//‰~‚Ì’†S“_
-	float r;//‰~‚Ì”¼Œa
-	void Draw();	//‰~‚Ì•`‰æ
-};
-
