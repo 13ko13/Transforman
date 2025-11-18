@@ -13,15 +13,15 @@ public:
 
 	void Init() override;
 	void Update() override;
+	void Update(std::vector<std::shared_ptr<EnemyBullet>>& pBullets);
 	void Draw(Camera camera) override;
 
 	void Attack() override;
-	void SetPlayerPtr(std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
+	void Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets);
+	
 
 private:
 	bool m_isRight;
-
-	std::vector<std::shared_ptr<EnemyBullet>> m_pBullets;
 	int m_attackCooltime;
 	std::shared_ptr<Player> m_pPlayer;
 };

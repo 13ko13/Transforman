@@ -9,6 +9,7 @@ class Player;
 class ChargeShotBoss;
 class EnemyBullet;
 class Camera;
+class EnemyBase;
 class GameScene : public Scene
 {
 public:
@@ -19,7 +20,9 @@ public:
 
 private:
 	std::shared_ptr<Player> m_pPlayer;
-	std::vector<std::shared_ptr<PlayerBullet>> m_pBullets;
+	std::vector<std::shared_ptr<PlayerBullet>> m_pPlayerBullets;
+	std::vector<std::shared_ptr<EnemyBullet>> m_pEnemyBullets;
+	std::vector<std::shared_ptr<EnemyBase>> m_pEnemies;
 	std::shared_ptr<ChargeShotBoss> m_pChargeShotBoss;
 	std::shared_ptr<Camera> m_pCamera;
 };

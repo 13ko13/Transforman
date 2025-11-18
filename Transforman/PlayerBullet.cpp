@@ -3,6 +3,7 @@
 #include "GameConstants.h"
 #include "Camera.h"
 #include "Circle.h"
+#include "EnemyBase.h"
 
 namespace 
 {
@@ -46,7 +47,7 @@ void PlayerBullet::Update()
 		Vector2 shotVelocity = m_dir * speed;
 		m_pos = m_pos + shotVelocity;
 
-		if (m_pCircle->IsCollWithRect(m_colRect))
+		if (m_pCircle->IsCollWithRect(m_pEnemy->GetColRect()))
 		{
 			m_isAlive = false;
 		}

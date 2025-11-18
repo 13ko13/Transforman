@@ -16,8 +16,9 @@ namespace
 
 	constexpr double   draw_scale = 1.5;					//描画スケール			
 
-	constexpr int max_jump_power = 13.0f;					//最大ジャンプ力
-	constexpr int min_jump_power = 10.0f;					//最低ジャンプ力
+	constexpr int max_jump_power = 10.0f;					//最大ジャンプ力
+	constexpr int min_jump_power = 8.0f;					//最低ジャンプ力
+	constexpr float jump_scale = 1.4f;							//ジャンプ力の倍率
 
 	constexpr int shot_cooltime = 30;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
@@ -209,7 +210,7 @@ void Player::Jump(Input& input)
 	{
 		m_jumpPower = -min_jump_power;
 	}
-	m_velocity.y += m_jumpPower;
+	m_velocity.y += static_cast<float>(m_jumpPower * jump_scale);
 	m_pos.y += m_velocity.y;
 	m_jumpPower = 0;
 }
@@ -219,7 +220,7 @@ void Player::Move(Input& input)
 	Vector2 dir = { 0.0f,0.0f };//プレイヤーの速度ベクトル
 	if (input.IsPressed("right"))
 	{
-		m_state = PlayerState::Walk;
+		m_state = PlayerState::Walk; 
 		dir.x = 1.0f;
 		m_isRight = true;
 	}
@@ -250,25 +251,17 @@ void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			{
 				//右向き
 				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
-				////状態遷移
-				//m_state = PlayerState::Shot;
 			}
 			else
 			{
 				//左向き
 				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
-				////状態遷移
-				//m_state = PlayerState::Shot;
 			}
 			bullet->SetType(BulletType::Normal);
 			bullet->SetIsAlive(true);
 			bullet->SetIsRight(m_isRight);
 			break;	//1発撃ったらループを抜ける
 		}
-		//else
-		//{
-		//	m_state = PlayerState::Idle;
-		//}
 	}
 }
 

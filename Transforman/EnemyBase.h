@@ -1,6 +1,9 @@
 #pragma once
 #include "Object.h"
+#include <memory>
 
+// プロトタイプ宣言
+class Player;
 /// <summary>
 /// エネミー全体の基底クラス
 /// </summary>
@@ -10,14 +13,15 @@ public:
 	EnemyBase();
 	virtual ~EnemyBase();
 
-	virtual void Init() override;
-	virtual void Update() override;
-	virtual void Draw(Camera camera) override;
+	virtual void Init() override abstract;
+	virtual void Update() override abstract;
+	virtual void Draw(Camera camera) override abstract;
 
 	virtual void Attack() abstract;
+	void SetPlayerPtr(std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 private:
 
 protected:
-
+	std::shared_ptr<Player> m_pPlayer;
 };
 

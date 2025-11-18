@@ -21,7 +21,7 @@ public:
 	/// ‰~‚Æ‹éŒ`‚Ì“–‚½‚è”»’è
 	/// </summary>
 	/// <returns>‹éŒ`‚Æ“–‚½‚Á‚Ä‚¢‚é:true,“–‚½‚Á‚Ä‚¢‚È‚¢:false</returns>
-	bool IsCollWithRect(Rect& rect);
+	bool IsCollWithRect(Rect rect);
 
 	/// <summary>
 	/// •`‰æ‚·‚éÛ‚É”¼Œa‚ğŒˆ‚ß‚é

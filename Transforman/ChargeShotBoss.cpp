@@ -23,13 +23,6 @@ ChargeShotBoss::ChargeShotBoss() :
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
 	assert(m_handle > -1);
-
-	m_pBullets.resize(5);
-	for (auto& bullet : m_pBullets)
-	{
-		bullet = std::make_shared<EnemyBullet>();
-		bullet->SetPlayer(m_pPlayer);
-	}
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -42,54 +35,58 @@ void ChargeShotBoss::Init()
 	m_sizeWidth = size_width;
 	m_sizeHeight = size_height;
 	m_attackCooltime = attack_cooltime;
-
-	for (auto& bullet : m_pBullets)
-	{
-		bullet->Init();
-	}
 }
 
 void ChargeShotBoss::Update()
 {
-	//スクリュードライバーの中心座標を基準にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_sizeWidth, m_sizeHeight);
 
+}
+
+void ChargeShotBoss::Update(std::vector<std::shared_ptr<EnemyBullet>>& pBullets)
+{
 	//攻撃のクールタイムを更新
 	m_attackCooltime--;
-	//攻撃のクールタイムが0以下になったら攻撃
+	//攻撃のクールタイムが0以下になったら攻撃 
 	if (m_attackCooltime <= 0)
 	{
-		Attack();
+		Attack(pBullets);
 		//クールタイムをリセット
 		m_attackCooltime = attack_cooltime;
 	}
 	//弾の動きを更新
-	for (auto& bullet : m_pBullets)
+	for (auto& bullet : pBullets)
 	{
 		bullet->Update();
 	}
+	//自身の当たり判定を更新
+	m_colRect.SetLT(
+		m_pos.x - m_sizeWidth / 2,
+		m_pos.y - m_sizeHeight / 2,
+		m_sizeWidth,
+		m_sizeHeight);
 }
 
 void ChargeShotBoss::Draw(Camera camera)
 {
 #if _DEBUG
-	m_colRect.Draw(0xaaffff, false,camera);
+	m_colRect.Draw(0xaaffff, false, camera);
 	DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
 #endif
-	for (auto& bullet : m_pBullets)
-	{
-		bullet->Draw(camera);
-	}
 }
 
 void ChargeShotBoss::Attack()
 {
-	for (auto& bullet : m_pBullets)
-	{	
+
+}
+
+void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets)
+{
+	for (auto& bullet : pBullets)
+	{
 		//弾を撃つ
 		if (!bullet->GetIsAlive())
 		{
-			
+
 			//プレイヤーの場所を取得して
 			//弾の向きを決定する
 			if (m_pPlayer->GetPos().x > m_pos.x)

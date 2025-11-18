@@ -35,7 +35,7 @@ float Circle::GetDistance(Vector2& pos)
 	return std::sqrt(disX * disX + disY * disY);
 }
 
-bool Circle::IsCollWithRect(Rect& rect)
+bool Circle::IsCollWithRect(Rect rect)
 {
 	//矩形が自分(Circle)からみてどこにあるかを見る
 	//なので矩形の中心に最も近い点を探す
