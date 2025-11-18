@@ -3,6 +3,7 @@
 #include <DxLib.h>
 #include "Player.h"
 #include <cassert>
+#include "Camera.h"
 
 namespace
 {
@@ -69,15 +70,15 @@ void ChargeShotBoss::Update()
 	}
 }
 
-void ChargeShotBoss::Draw()
+void ChargeShotBoss::Draw(Camera camera)
 {
 #if _DEBUG
-	m_colRect.Draw(0xaaffff, false);
+	m_colRect.Draw(0xaaffff, false,camera);
 	DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
 #endif
 	for (auto& bullet : m_pBullets)
 	{
-		bullet->Draw();
+		bullet->Draw(camera);
 	}
 }
 

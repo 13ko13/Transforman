@@ -3,6 +3,7 @@
 #include <DxLib.h>
 #include "GameConstants.h"
 #include "PlayerBullet.h"
+#include "Camera.h"
 
 namespace
 {
@@ -172,10 +173,10 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 	m_colRect.SetLT(m_pos.x - size_width / 2, m_pos.y - size_height / 2 + 5, size_width, size_height);
 }
 
-void Player::Draw()
+void Player::Draw(Camera camera)
 {
 #if _DEBUG
-	m_colRect.Draw(0xffffff, false);
+	m_colRect.Draw(0xffffff, false,camera);
 	DrawFormatString(0, 0, 0xffffff, "frame:%d", m_frame);
 	DrawFormatString(0, 15, 0xffffff, "playerPosY:%f", m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, "isRight:%d", m_isRight);
@@ -187,7 +188,7 @@ void Player::Draw()
 #endif
 
 	DrawRectRotaGraph(
-		static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), //表示位置
+		static_cast<int>(m_pos.x + camera.GetDrawOffset().x), static_cast<int>(m_pos.y + camera.GetDrawOffset().y), //表示位置
 		m_animSrcX, m_animSrcY,												//切り取り開始位置
 		graph_width, graph_height,								//切り取りサイズ
 		draw_scale, 0.0,											//拡大率、回転角度

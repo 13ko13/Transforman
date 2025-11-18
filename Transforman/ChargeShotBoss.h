@@ -13,7 +13,7 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Draw() override;
+	void Draw(Camera camera) override;
 
 	void Attack() override;
 	void SetPlayerPtr(std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }

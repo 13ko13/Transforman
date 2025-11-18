@@ -4,6 +4,8 @@
 #include <cmath>
 #include "Player.h"
 #include "ChargeShotBoss.h"
+#include "Camera.h"
+#include "Circle.h"
 
 namespace
 {
@@ -36,6 +38,13 @@ void EnemyBullet::Update()
 	{
 		//’e‚ÌˆÚ“®ˆ—
 		Movement();
+		//“–‚½‚è”»’è‚ğ’†S‚Éİ’è‚·‚é
+		m_pCircle->SetPos(m_pos);
+		if (m_pCircle->IsCollWithRect(m_colRect))
+		{
+			m_isAlive = false;
+		}
+
 		//‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚Á‚½ê‡‚Í‘¶İó‘Ô‚ğ
 		//•Û‚µ‚Ä‚¢‚é•Ï”‚Éfalse‚ğ‘ã“ü
 		if (m_pos.y < 0 || m_pos.y > Graphic::screen_height ||
@@ -43,17 +52,18 @@ void EnemyBullet::Update()
 		{
 			m_isAlive = false;
 		}
-		
 	}
 }
 
-void EnemyBullet::Draw()
+void EnemyBullet::Draw(Camera camera)
 {
 #if _DEBUG
 	if (m_isAlive)
 	{
-		//“–‚½‚è”»’è‚ğ•`‰æ‚·‚é
-		DrawCircle(m_pos.x, m_pos.y, radius, GetColor(255, 0, 0), false, 1);
+		m_pCircle->SetRadius(radius);
+		m_pCircle->Draw(camera);
+		
+
 		DrawFormatString(0, 115, 0xffffff,"EnemyBulletPos X : %f , Y : %f", m_pos.x, m_pos.y);
 		DrawFormatString(0, 130, 0xffffff, "ShotDir : %f , %f", m_dir.x, m_dir.y);
 		DrawFormatString(0, 95, 0xffffff, "EnemyBulletAlive : %d", m_isAlive);

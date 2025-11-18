@@ -12,7 +12,7 @@ public:
 
 	virtual void Init() override;
 	virtual void Update() override;
-	virtual void Draw() override;
+	virtual void Draw(Camera camera) override;
 
 	virtual void Attack() abstract;
 private:

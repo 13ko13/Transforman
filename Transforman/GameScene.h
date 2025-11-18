@@ -8,6 +8,7 @@ class Input;
 class Player;
 class ChargeShotBoss;
 class EnemyBullet;
+class Camera;
 class GameScene : public Scene
 {
 public:
@@ -19,6 +20,7 @@ public:
 private:
 	std::shared_ptr<Player> m_pPlayer;
 	std::vector<std::shared_ptr<PlayerBullet>> m_pBullets;
-	std::shared_ptr<ChargeShotBoss> m_pChargeShotBoss; 
+	std::shared_ptr<ChargeShotBoss> m_pChargeShotBoss;
+	std::shared_ptr<Camera> m_pCamera;
 };
 

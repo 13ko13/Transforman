@@ -1,4 +1,5 @@
 #include "EnemyBase.h"
+#include "Camera.h"
 
 EnemyBase::EnemyBase() :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f })
@@ -19,7 +20,7 @@ void EnemyBase::Update()
 
 }
 
-void EnemyBase::Draw()
+void EnemyBase::Draw(Camera camera)
 {
 
 }

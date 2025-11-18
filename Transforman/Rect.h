@@ -1,6 +1,7 @@
 #pragma once
 #include "Geometry.h"
 
+class Camera;
 /// <summary>
 /// 矩形を管理するクラス
 /// </summary>
@@ -22,7 +23,7 @@ public:
 	/// </summary>
 	/// <param name="Color">矩形の色</param>
 	/// <param name="isFill">矩形の中身を塗りつぶすかどうか</param>
-	void Draw(unsigned int Color, bool isFill);
+	void Draw(unsigned int Color, bool isFill,Camera camera);
 
 	/// <summary>
 	/// 左上の座標と幅高さを指定

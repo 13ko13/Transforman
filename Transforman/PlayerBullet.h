@@ -19,7 +19,7 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Draw() override;
+	void Draw(Camera camera) override;
 
 	void SetIsRight(bool isRight) { m_isRight = isRight; }
 	void SetType(BulletType bulletType) { m_bulletType = bulletType; }

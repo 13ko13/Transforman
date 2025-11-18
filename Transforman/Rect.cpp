@@ -1,6 +1,7 @@
 #include "Rect.h"
 #include <DxLib.h>
 #include <cassert>
+#include "Camera.h"
 
 Rect::Rect() :
 	m_left(0.0f),
@@ -16,10 +17,15 @@ Rect::~Rect()
 
 }
 
-void Rect::Draw(unsigned int Color, bool isFill)
+void Rect::Draw(unsigned int Color, bool isFill,Camera camera)
 {
 	//デバッグ用の矩形の描画
-	DrawBox(static_cast<int>(m_left), static_cast<int>(m_top), static_cast<int>(m_right), static_cast<int>(m_bottom), GetColor(255, 0, 0), false);
+	DrawBox(static_cast<int>(
+		m_left + camera.GetDrawOffset().x),
+		static_cast<int>(m_top + camera.GetDrawOffset().y), 
+		static_cast<int>(m_right + camera.GetDrawOffset().x),
+		static_cast<int>(m_bottom + camera.GetDrawOffset().y), 
+		GetColor(255, 0, 0), false);
 }
 
 void Rect::SetLT(float left, float top, float width, float height)

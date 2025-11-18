@@ -1,12 +1,14 @@
 #include "PlayerBullet.h"
 #include <DxLib.h>
 #include "GameConstants.h"
+#include "Camera.h"
+#include "Circle.h"
 
 namespace 
 {
 	constexpr float speed = 7.0f;
-	constexpr int normal_shot_radius = 15.0f;
-	constexpr int charge_shot_radius = 25.0f;
+	constexpr float normal_shot_radius = 15.0f;
+	constexpr float charge_shot_radius = 25.0f;
 }
 
 PlayerBullet::PlayerBullet() :
@@ -37,10 +39,17 @@ void PlayerBullet::Update()
 
 	if (m_isAlive == true)
 	{
+		m_pCircle->SetPos(m_pos);
+
 		//’e‚ðˆÚ“®‚³‚¹‚éBdir‚Íí‚Éã•ûŒü‚Å’·‚³1‚È‚Ì‚ÅA
 		//³‹K‰»‚Í‚¢‚ç‚È‚¢
 		Vector2 shotVelocity = m_dir * speed;
 		m_pos = m_pos + shotVelocity;
+
+		if (m_pCircle->IsCollWithRect(m_colRect))
+		{
+			m_isAlive = false;
+		}
 
 		//‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚Á‚½ê‡‚Í‘¶Ýó‘Ô‚ð
 		//•ÛŽ‚µ‚Ä‚¢‚é•Ï”‚Éfalse‚ð‘ã“ü
@@ -59,7 +68,7 @@ void PlayerBullet::Update()
 	}
 }
 
-void PlayerBullet::Draw()
+void PlayerBullet::Draw(Camera camera)
 {
 	if (m_isAlive)
 	{
@@ -68,15 +77,21 @@ void PlayerBullet::Draw()
 		case BulletType::Normal:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			DrawCircle(m_pos.x, m_pos.y, normal_shot_radius, GetColor(255, 0, 0), false, 1);
-			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
+			m_pCircle->SetRadius(normal_shot_radius);
+			m_pCircle->Draw(camera);
+
+			DrawFormatString(
+				0, 45, 0xffffff,
+				"PlayerBulletPos X:%f , Y:%f",
+				m_pos.x, m_pos.y);
 #endif
 			break;
 
 		case BulletType::Charge:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			DrawCircle(m_pos.x, m_pos.y, charge_shot_radius, GetColor(255, 0, 0), false, 1);
+			m_pCircle->SetRadius(charge_shot_radius);
+			m_pCircle->Draw(camera);
 			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
 			break;

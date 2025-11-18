@@ -3,6 +3,7 @@
 #include "PlayerBullet.h"
 #include "ChargeShotBoss.h"
 #include "EnemyBullet.h"
+#include "Camera.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
@@ -17,6 +18,8 @@ GameScene::GameScene(SceneController& controller) :
 	}
 	// スクリュードライバーの生成
 	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>();
+	//カメラの生成
+	m_pCamera = std::make_shared<Camera>();
 }
 
 void GameScene::Init()
@@ -40,15 +43,16 @@ void GameScene::Update(Input& input)
 		bullet->Update();
 	}
 	m_pChargeShotBoss->Update();
+	m_pCamera->Update(*m_pPlayer);
 }
 
 void GameScene::Draw()
 {
 	// 各オブジェクトの描画
-	m_pPlayer->Draw();
+	m_pPlayer->Draw(*m_pCamera);
 	for (auto& bullet : m_pBullets)
 	{
-		bullet->Draw();
+		bullet->Draw(*m_pCamera);
 	}
-	m_pChargeShotBoss->Draw();
+	m_pChargeShotBoss->Draw(*m_pCamera);
 }

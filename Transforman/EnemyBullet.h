@@ -20,7 +20,7 @@ public:
 
 	void Init() override;
 	void Update() override;
-	void Draw() override;
+	void Draw(Camera camera) override;
 
 	/// <summary>
 	/// ’e©g‚ÌˆÚ“®

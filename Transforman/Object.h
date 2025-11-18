@@ -1,7 +1,9 @@
 #pragma once
 #include "Geometry.h"
+#include <memory>
 #include "Rect.h"
 
+class Camera;
 class Object
 {
 public:
@@ -10,7 +12,7 @@ public:
 
 	virtual void Init() abstract;
 	virtual void Update() abstract;
-	virtual void Draw() abstract;
+	virtual void Draw(Camera camera) abstract;
 
 	/// <summary>
 	/// 重力を計算する関数
@@ -21,7 +23,7 @@ public:
 	/// オブジェクトの衝突判定用の矩形を返す
 	/// </summary>
 	/// <returns>矩形</returns>
-	Rect GetColRect() const { return m_colRect; }
+	Rect GetColRect() { return m_colRect; };
 
 	Vector2 GetPos() const { return m_pos; }
 
