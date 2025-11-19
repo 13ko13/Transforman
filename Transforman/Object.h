@@ -1,7 +1,6 @@
 #pragma once
 #include "Geometry.h"
 #include <memory>
-#include "Rect.h"
 
 class Camera;
 class Object
@@ -19,12 +18,6 @@ public:
 	/// </summary>
 	void Gravity();
 
-	/// <summary>
-	/// オブジェクトの衝突判定用の矩形を返す
-	/// </summary>
-	/// <returns>矩形</returns>
-	Rect GetColRect() { return m_colRect; };
-
 	Vector2 GetPos() const { return m_pos; }
 
 protected:
@@ -35,8 +28,5 @@ protected:
 
 	Vector2 m_pos;
 	Vector2 m_velocity;
-
-	//当たり判定
-	Rect m_colRect;
 };
 

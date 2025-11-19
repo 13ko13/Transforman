@@ -8,6 +8,8 @@ Bullet::Bullet() :
 	m_dir({ 0.0f,0.0f })
 {
 	m_pCircle = std::make_shared<Circle>();
+	//“–‚½‚è”»’è‚ð’†S‚ÉÝ’è‚·‚é
+	m_pCircle->SetPos(m_pos);
 }
 
 Bullet::~Bullet()

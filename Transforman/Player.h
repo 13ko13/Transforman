@@ -3,6 +3,7 @@
 #include "Input.h"
 #include <vector>
 #include <memory>
+#include "Rect.h"
 
 class PlayerBullet;
 class Player : public Object
@@ -46,6 +47,12 @@ public:
 	/// <param name="pBullets">プレイヤーの弾丸</param>
 	void PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
+	/// <summary>
+	/// 矩形のポインタを返す
+	/// </summary>
+	/// <returns>矩形のポインタ</returns>
+	std::shared_ptr<Rect> GetColRectPtr() { return m_pColRect; }
+
 	void Climb();
 
 private:
@@ -76,4 +83,6 @@ private:
 		Fire
 	};
 	PlayerState m_state;
+
+	std::shared_ptr<Rect> m_pColRect;
 };

@@ -142,6 +142,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="ColManager.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="EnemyBullet.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="ColManager.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="EnemyBullet.h" />

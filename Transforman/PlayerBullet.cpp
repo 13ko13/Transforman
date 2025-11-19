@@ -47,7 +47,7 @@ void PlayerBullet::Update()
 		Vector2 shotVelocity = m_dir * speed;
 		m_pos = m_pos + shotVelocity;
 
-		if (m_pCircle->IsCollWithRect(m_pEnemy->GetColRect()))
+		if (m_pCircle->IsCollWithRect(m_pEnemy->GetColRectPtr()))
 		{
 			m_isAlive = false;
 		}

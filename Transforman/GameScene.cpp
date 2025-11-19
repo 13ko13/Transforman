@@ -15,6 +15,11 @@ GameScene::GameScene(SceneController& controller) :
 	for (auto& bullet : m_pPlayerBullets)
 	{
 		bullet = std::make_shared<PlayerBullet>();
+		bullet->SetEnemy(
+			for (auto& enemy : m_pEnemies)
+			{
+
+			}
 	}
 	// 敵の弾の生成
 	m_pEnemyBullets.resize(20);
@@ -24,7 +29,7 @@ GameScene::GameScene(SceneController& controller) :
 	}
 	// 敵の生成
 	//チャージショットボス、壁のぼりボス、火炎放射ボス、植物系ボスの4体
-	m_pEnemies.resize(4);
+	//m_pEnemies.resize(0);
 	//チャージショットボスを試しに追加する
 	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>();
 	m_pEnemies.push_back(m_pChargeShotBoss);

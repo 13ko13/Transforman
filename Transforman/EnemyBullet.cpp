@@ -38,9 +38,11 @@ void EnemyBullet::Update()
 	{
 		//’e‚ÌˆÚ“®ˆ—
 		Movement();
+		
 		//“–‚½‚è”»’è‚ð’†S‚ÉÝ’è‚·‚é
 		m_pCircle->SetPos(m_pos);
-		if (m_pCircle->IsCollWithRect(m_pPlayer->GetColRect()))
+
+		if (m_pCircle->IsCollWithRect(m_pPlayer->GetColRectPtr()))
 		{
 			m_isAlive = false;
 		}

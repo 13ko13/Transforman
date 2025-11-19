@@ -35,14 +35,14 @@ float Circle::GetDistance(Vector2& pos)
 	return std::sqrt(disX * disX + disY * disY);
 }
 
-bool Circle::IsCollWithRect(Rect rect)
+bool Circle::IsCollWithRect(std::shared_ptr<Rect> rect)
 {
 	//矩形が自分(Circle)からみてどこにあるかを見る
 	//なので矩形の中心に最も近い点を探す
-	float closestX = std::fmax(rect.GetLeft(),
-		std::fmin(m_pos .x, rect.GetLeft() + rect.GetWidth()));
-	float closestY = std::fmax(rect.GetTop(),
-		std::fmin(m_pos.y ,rect.GetTop() + rect.GetHeight()));
+	float closestX = std::fmax(rect->GetLeft(),
+		std::fmin(m_pos .x, rect->GetLeft() + rect->GetWidth()));
+	float closestY = std::fmax(rect->GetTop(),
+		std::fmin(m_pos.y ,rect->GetTop() + rect->GetHeight()));
 
 	//円の中心とその点の距離を計算
 	float dx = m_pos.x - closestX;

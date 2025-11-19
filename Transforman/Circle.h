@@ -1,5 +1,6 @@
 #pragma once
 #include "Geometry.h"
+#include <memory>
 
 class Rect;
 class Camera;
@@ -21,7 +22,7 @@ public:
 	/// ‰~‚Æ‹éŒ`‚Ì“–‚½‚è”»’è
 	/// </summary>
 	/// <returns>‹éŒ`‚Æ“–‚½‚Á‚Ä‚¢‚é:true,“–‚½‚Á‚Ä‚¢‚È‚¢:false</returns>
-	bool IsCollWithRect(Rect rect);
+	bool IsCollWithRect(std::shared_ptr<Rect> rect);
 
 	/// <summary>
 	/// •`‰æ‚·‚éÛ‚É”¼Œa‚ğŒˆ‚ß‚é

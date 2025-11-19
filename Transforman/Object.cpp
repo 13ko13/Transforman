@@ -14,11 +14,17 @@ Object::Object(const Vector2& pos,const Vector2& vel) :
 	m_sizeHeight(0),
 	m_handle(0)
 {
-	m_colRect.SetLT(m_pos.x, m_pos.y, m_sizeWidth, m_sizeHeight);
+
 }
 
 Object::~Object()
 {
+	
+}
+
+void Object::Update()
+{
+
 }
 
 void Object::Gravity()
