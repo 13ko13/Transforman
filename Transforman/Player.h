@@ -53,6 +53,12 @@ public:
 	/// <returns>矩形のポインタ</returns>
 	std::shared_ptr<Rect> GetColRectPtr() { return m_pColRect; }
 
+	/// <summary>
+	/// プレイヤーが死亡しているかどうかを返す
+	/// </summary>
+	/// <returns>死んでいる:true,生きている:false</returns>
+	bool GetIsDead() const { return m_isDead; }
+
 	void Climb();
 
 private:
@@ -64,6 +70,7 @@ private:
 	bool m_isGround;//接地しているかどうか
 	bool m_isRight;//右を向いているかどうか
 	bool m_isCharging;//チャージショットをしているかどうか
+	bool m_isDead;//死亡しているかどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
 	float m_animFrame;		//現在のアニメーションのフレーム数

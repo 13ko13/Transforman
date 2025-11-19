@@ -24,10 +24,8 @@ public:
 
 	void SetIsRight(bool isRight) { m_isRight = isRight; }
 	void SetType(BulletType bulletType) { m_bulletType = bulletType; }
-	void SetEnemy(std::shared_ptr<EnemyBase> pEnemy) { m_pEnemy = pEnemy; }
 
 private:
 	bool m_isRight;
 	BulletType m_bulletType;
-	std::shared_ptr<EnemyBase> m_pEnemy;
 };

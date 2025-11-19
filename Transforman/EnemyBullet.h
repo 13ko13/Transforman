@@ -32,10 +32,7 @@ public:
 	/// </summary>
 	/// <param name="dir">設定する方向ベクトル。</param>
 	void SetDir(const Vector2& dir) { m_dir = dir; }
-
-	void SetPlayer(std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 private:
 	EnemyState m_state;
-	std::shared_ptr<Player> m_pPlayer;
 };
 

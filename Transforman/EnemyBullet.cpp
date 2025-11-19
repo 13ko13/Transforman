@@ -42,11 +42,6 @@ void EnemyBullet::Update()
 		//“–‚½‚è”»’è‚ğ’†S‚Éİ’è‚·‚é
 		m_pCircle->SetPos(m_pos);
 
-		if (m_pCircle->IsCollWithRect(m_pPlayer->GetColRectPtr()))
-		{
-			m_isAlive = false;
-		}
-
 		//‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚Á‚½ê‡‚Í‘¶İó‘Ô‚ğ
 		//•Û‚µ‚Ä‚¢‚é•Ï”‚Éfalse‚ğ‘ã“ü
 		if (m_pos.y < 0 || m_pos.y > Graphic::screen_height ||

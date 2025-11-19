@@ -15,11 +15,6 @@ GameScene::GameScene(SceneController& controller) :
 	for (auto& bullet : m_pPlayerBullets)
 	{
 		bullet = std::make_shared<PlayerBullet>();
-		bullet->SetEnemy(
-			for (auto& enemy : m_pEnemies)
-			{
-
-			}
 	}
 	// 敵の弾の生成
 	m_pEnemyBullets.resize(20);
@@ -34,7 +29,7 @@ GameScene::GameScene(SceneController& controller) :
 	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>();
 	m_pEnemies.push_back(m_pChargeShotBoss);
 	//生成した敵の初期化
-	for( auto& enemy : m_pEnemies)
+	for (auto& enemy : m_pEnemies)
 	{
 		enemy = std::make_shared<ChargeShotBoss>();
 	}
@@ -51,35 +46,54 @@ void GameScene::Init()
 	{
 		bullet->Init();
 	}
-	for( auto& bullet : m_pEnemyBullets)
+	for (auto& bullet : m_pEnemyBullets)
 	{
 		bullet->Init();
-		bullet->SetPlayer(m_pPlayer);
 	}
-	for( auto& enemy : m_pEnemies)
+	for (auto& enemy : m_pEnemies)
 	{
 		enemy->Init();
-		enemy->SetPlayerPtr(m_pPlayer);
 	}
 }
 
 void GameScene::Update(Input& input)
 {
 	// 各オブジェクトの更新
-	m_pPlayer->Update(input,m_pPlayerBullets);
+	m_pPlayer->Update(input, m_pPlayerBullets);
 	for (auto& bullet : m_pPlayerBullets)
 	{
 		bullet->Update();
 	}
-	for( auto& bullet : m_pEnemyBullets)
+	for (auto& bullet : m_pEnemyBullets)
 	{
 		bullet->Update();
 	}
-	for( auto& enemy : m_pEnemies)
+	for (auto& enemy : m_pEnemies)
 	{
 		enemy->Update();
 	}
 
+
+	//弾と敵の当たり判定処理
+	for (auto& playerBullet : m_pPlayerBullets)
+	{
+		for (auto& enemy : m_pEnemies)
+		{
+			//敵の当たり判定とプレイヤーの弾の当たり判定が
+			//衝突していたら
+			if (playerBullet->GetIsAlive() && 
+				!enemy->GetIsDead() && 
+				enemy->GetColRectPtr()->)
+			{
+				//敵を消す
+				enemy->SetIsDead(true);
+				//弾を消す
+				playerBullet->SetIsAlive(false);
+			}
+		}
+	}
+
+	// カメラの更新
 	m_pCamera->Update(*m_pPlayer);
 }
 
@@ -91,11 +105,11 @@ void GameScene::Draw()
 	{
 		bullet->Draw(*m_pCamera);
 	}
-	for( auto& bullet : m_pEnemyBullets)
+	for (auto& bullet : m_pEnemyBullets)
 	{
 		bullet->Draw(*m_pCamera);
-	} 
-	for( auto& enemy : m_pEnemies)
+	}
+	for (auto& enemy : m_pEnemies)
 	{
 		enemy->Draw(*m_pCamera);
 	}

@@ -47,11 +47,6 @@ void PlayerBullet::Update()
 		Vector2 shotVelocity = m_dir * speed;
 		m_pos = m_pos + shotVelocity;
 
-		if (m_pCircle->IsCollWithRect(m_pEnemy->GetColRectPtr()))
-		{
-			m_isAlive = false;
-		}
-
 		//‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚Á‚½ê‡‚Í‘¶İó‘Ô‚ğ
 		//•Û‚µ‚Ä‚¢‚é•Ï”‚Éfalse‚ğ‘ã“ü
 		if( m_pos.x < 0 || m_pos.x > Graphic::screen_width )

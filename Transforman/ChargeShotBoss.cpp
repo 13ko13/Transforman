@@ -42,14 +42,15 @@ void ChargeShotBoss::Update()
 
 }
 
-void ChargeShotBoss::Update(std::vector<std::shared_ptr<EnemyBullet>>& pBullets)
+void ChargeShotBoss::Update(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
+							std::shared_ptr<Player> pPlayer)
 {
 	//攻撃のクールタイムを更新
 	m_attackCooltime--;
 	//攻撃のクールタイムが0以下になったら攻撃 
 	if (m_attackCooltime <= 0)
 	{
-		Attack(pBullets);
+		Attack(pBullets, pPlayer);
 		//クールタイムをリセット
 		m_attackCooltime = attack_cooltime;
 	}
@@ -73,7 +74,8 @@ void ChargeShotBoss::Attack()
 
 }
 
-void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets)
+void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
+							std::shared_ptr<Player> pPlayer)
 {
 	for (auto& bullet : pBullets)
 	{
@@ -83,7 +85,7 @@ void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets)
 
 			//プレイヤーの場所を取得して
 			//弾の向きを決定する
-			if (m_pPlayer->GetPos().x > m_pos.x)
+			if (pPlayer->GetPos().x > m_pos.x)
 			{
 				bullet->SetDir({ 1.0f,0.0f });
 				//弾の初期位置を設定

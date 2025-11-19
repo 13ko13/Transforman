@@ -19,18 +19,21 @@ public:
 	virtual void Draw(Camera camera) override abstract;
 
 	virtual void Attack() abstract;
-	void SetPlayerPtr(std::shared_ptr<Player> pPlayer) { m_pPlayer = pPlayer; }
 
 	/// <summary>
 	/// 矩形のポインタを返す
 	/// </summary>
 	/// <returns>矩形のポインタ</returns>
 	std::shared_ptr<Rect> GetColRectPtr() { return m_pColRect; }
+
+	bool GetIsDead() const { return m_isDead; }
+	void SetIsDead(bool isDead) { m_isDead = isDead; }
+
 private:
 
 protected:
-	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<Rect> m_pColRect;
+	bool m_isDead;
 
 };
 
