@@ -61,12 +61,12 @@ void CollisionManager::CheckCollisions(
 
 bool CollisionManager::CheckCollision(const Player& player, const EnemyBase& enemy)
 {
-	return false;
+	return player.GetColRect().IsCollision(enemy.GetColRect());
 }
 
 bool CollisionManager::CheckCollision(const PlayerBullet& bullet, const EnemyBase& enemy)
 {
-	return false;
+	return bullet.GetCircle().IsCollWithRect(enemy.GetColRect());
 }
 
 bool CollisionManager::CheckCollision(const Player& player, const EnemyBullet& bullet)

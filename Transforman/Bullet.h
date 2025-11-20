@@ -1,8 +1,8 @@
 #pragma once
 #include "Object.h"
 #include <memory>
+#include "Circle.h"
 
-class Circle;
 class Bullet : public Object
 {
 public:
@@ -18,9 +18,11 @@ public:
 	bool GetIsAlive() { return m_isAlive; }
 	void SetIsAlive(bool isAlive) { m_isAlive = isAlive; }
 
+	Circle GetCircle() const { return m_circle; }
+
 protected:
 	Vector2 m_dir;
 	bool m_isAlive;
-	std::shared_ptr<Circle> m_pCircle;
+	Circle m_circle;
 };
 

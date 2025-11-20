@@ -21,10 +21,10 @@ public:
 	virtual void Attack() abstract;
 
 	/// <summary>
-	/// 矩形のポインタを返す
+	/// 矩形の参照を返す
 	/// </summary>
 	/// <returns>矩形のポインタ</returns>
-	std::shared_ptr<Rect> GetColRectPtr() { return m_pColRect; }
+	const Rect& GetColRect() const { return m_colRect; }
 
 	bool GetIsDead() const { return m_isDead; }
 	void SetIsDead(bool isDead) { m_isDead = isDead; }
@@ -32,7 +32,7 @@ public:
 private:
 
 protected:
-	std::shared_ptr<Rect> m_pColRect;
+	Rect m_colRect;
 	bool m_isDead;
 
 };

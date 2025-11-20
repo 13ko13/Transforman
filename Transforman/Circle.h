@@ -22,7 +22,7 @@ public:
 	/// ‰~‚Æ‹éŒ`‚Ì“–‚½‚è”»’è
 	/// </summary>
 	/// <returns>‹éŒ`‚Æ“–‚½‚Á‚Ä‚¢‚é:true,“–‚½‚Á‚Ä‚¢‚È‚¢:false</returns>
-	bool IsCollWithRect(std::shared_ptr<Rect> rect);
+	bool IsCollWithRect(const Rect& rect);
 
 	/// <summary>
 	/// •`‰æ‚·‚éÛ‚É”¼Œa‚ğŒˆ‚ß‚é

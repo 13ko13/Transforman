@@ -48,10 +48,10 @@ public:
 	void PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
 	/// <summary>
-	/// 矩形のポインタを返す
+	/// 矩形の参照を返す
 	/// </summary>
-	/// <returns>矩形のポインタ</returns>
-	std::shared_ptr<Rect> GetColRectPtr() { return m_pColRect; }
+	/// <returns>参照された矩形</returns>
+	const Rect& GetColRect() const { return m_colRect; }
 
 	/// <summary>
 	/// プレイヤーが死亡しているかどうかを返す
@@ -91,5 +91,5 @@ private:
 	};
 	PlayerState m_state;
 
-	std::shared_ptr<Rect> m_pColRect;
+	Rect m_colRect;
 };

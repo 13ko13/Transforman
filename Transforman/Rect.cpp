@@ -65,7 +65,7 @@ Vector2 Rect::GetCenter() const
 	return Vector2{ x,y };
 }
 
-bool Rect::IsCollision(const Rect& rect)
+bool Rect::IsCollision(const Rect& rect) const
 {
 	//â‘Î‚É“–‚½‚ç‚È‚¢ƒpƒ^[ƒ“‚ğ‚Í‚¶‚¢‚Ä‚¢‚­
 	if (m_right < rect.m_left) return false;

@@ -55,8 +55,8 @@ Player::Player() :
 	m_animIdx(0)
 {
 	m_handle = LoadGraph("img/game/Player/player.png");
-	m_pColRect = std::make_shared<Rect>();
-	m_pColRect->SetLT(
+	m_colRect = std::make_shared<Rect>();
+	m_colRect->SetLT(
 		m_pos.x, m_pos.y,
 		m_pos.x + m_sizeWidth,
 		m_pos.y + m_sizeHeight
@@ -177,13 +177,13 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 	}
 
 	//プレイヤーの左上座標を基準にする
-	m_pColRect->SetLT(m_pos.x - size_width / 2, m_pos.y - size_height / 2 + 5, size_width, size_height);
+	m_colRect->SetLT(m_pos.x - size_width / 2, m_pos.y - size_height / 2 + 5, size_width, size_height);
 }
 
 void Player::Draw(Camera camera)
 {
 #if _DEBUG
-	m_pColRect->Draw(0xffffff, false,camera);
+	m_colRect->Draw(0xffffff, false,camera);
 	DrawFormatString(0, 0, 0xffffff, "frame:%d", m_frame);
 	DrawFormatString(0, 15, 0xffffff, "playerPosY:%f", m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, "isRight:%d", m_isRight);
