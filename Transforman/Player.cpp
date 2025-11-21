@@ -71,11 +71,7 @@ void Player::Init()
 	m_pos = { Graphic::screen_width / 2,Graphic::screen_height / 2 };
 }
 
-void Player::Update()
-{
-}
-
-void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
+void Player::Update(GameContext& ctx)
 {
 	m_frame++;
 	m_pos += m_velocity;
@@ -87,26 +83,26 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pB
 	//押されている間ジャンプ力が可変する
 	//ジャンプボタンが離されるor最大ジャンプ力を超えたら強制的に
 	//ジャンプさせる
-	if (input.IsPressed("jump") &&
+	if (ctx.input.IsPressed("jump") &&
 		m_isGround)
 	{
 		m_jumpPower--;
 	}
-	if ((input.IsReleased("jump") ||
+	if ((ctx.input.IsReleased("jump") ||
 		abs(m_jumpPower) > max_jump_power ) &&
 		m_isGround)
 	{
-		Jump(input);
+		Jump(ctx.input);
 	}
 
 	//移動
-	Move(input);
+	Move(ctx.input);
 
 	//ショットの準備
-	PrevShot(input, pBullets);
+	PrevShot(ctx.input, ctx.p_playerBullets);
 
 	//壁のぼり
-	if (input.IsPressed("up"))
+	if (ctx.input.IsPressed("up"))
 	{
 		Climb();
 	}
@@ -318,7 +314,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 		m_prevChargeFrame++;
 		m_isCharging = true;
 #if _DEBUG
-		DrawFormatString(0, 180, 0xffffff, "チャージ中！");
+		DrawFormatString(0, 230, 0xffffff, "チャージ中！");
 #endif
 	}
 	if (input.IsReleased("shot"))

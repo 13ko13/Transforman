@@ -12,9 +12,7 @@ public:
 	~ChargeShotBoss();
 
 	void Init() override;
-	void Update() override;
-	void Update(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
-				std::shared_ptr<Player> pPlayer);
+	void Update(GameContext& ctx) override;
 	void Draw(Camera camera) override;
 
 	void Attack() override;

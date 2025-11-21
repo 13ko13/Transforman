@@ -13,8 +13,7 @@ public:
 	~Player();
 
 	void Init() override;
-	void Update() override;
-	void Update(Input& input,std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
+	void Update(GameContext& ctx) override;
 	void Draw(Camera camera) override;
 
 	bool GetIsRight() const { return m_isRight; }

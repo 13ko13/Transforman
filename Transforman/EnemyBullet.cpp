@@ -33,7 +33,7 @@ void EnemyBullet::Init()
 	m_dir = { 0.0f,0.0f };
 }
 
-void EnemyBullet::Update()
+void EnemyBullet::Update(GameContext& ctx)
 {
 	//’e‚ª‘¶İ‚µ‚Ä‚¢‚éê‡‚Ì‚İXV
 	if (m_isAlive)
@@ -60,7 +60,6 @@ void EnemyBullet::Draw(Camera camera)
 #if _DEBUG
 	if (m_isAlive)
 	{
-		m_circle.SetRadius(radius);
 		m_circle.Draw(camera);
 		
 

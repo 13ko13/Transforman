@@ -39,27 +39,21 @@ void ChargeShotBoss::Init()
 	
 }
 
-void ChargeShotBoss::Update()
-{
-
-}
-
-void ChargeShotBoss::Update(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
-							std::shared_ptr<Player> pPlayer)
+void ChargeShotBoss::Update(GameContext& ctx)
 {
 	//攻撃のクールタイムを更新
 	m_attackCooltime--;
 	//攻撃のクールタイムが0以下になったら攻撃 
 	if (m_attackCooltime <= 0)
 	{
-		Attack(pBullets, pPlayer);
+		Attack(ctx.p_enemyBullets, ctx.player);
 		//クールタイムをリセット
 		m_attackCooltime = attack_cooltime;
 	}
 	//弾の動きを更新
-	for (auto& bullet : pBullets)
+	for (auto& bullet : ctx.p_enemyBullets)
 	{
-		bullet->Update();
+		bullet->Update(ctx);
 	}
 }
 

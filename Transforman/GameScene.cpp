@@ -25,14 +25,24 @@ GameScene::GameScene(SceneController& controller) :
 	}
 	// 敵の生成
 	//チャージショットボス、壁のぼりボス、火炎放射ボス、植物系ボスの4体
-	//m_pEnemies.resize(0);
+	m_pEnemies.resize(0);
 	//チャージショットボスを試しに追加する
 	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>();
 	m_pEnemies.push_back(m_pChargeShotBoss);
-	//生成した敵の初期化
+
+	//オブジェクトを継承しているクラスをすべてObjects配列に入れる
+	m_pObjects.push_back(m_pPlayer);
+	for (auto& bullet : m_pPlayerBullets)
+	{
+		m_pObjects.push_back(bullet);
+	}
+	for (auto& bullet : m_pEnemyBullets)
+	{
+		m_pObjects.push_back(bullet);
+	}
 	for (auto& enemy : m_pEnemies)
 	{
-		enemy = std::make_shared<ChargeShotBoss>();
+		m_pObjects.push_back(enemy);
 	}
 
 	//カメラの生成
@@ -42,36 +52,19 @@ GameScene::GameScene(SceneController& controller) :
 void GameScene::Init()
 {
 	// 各オブジェクトの初期化
-	m_pPlayer->Init();
-	for (auto& bullet : m_pPlayerBullets)
+	for (auto& object : m_pObjects)
 	{
-		bullet->Init();
-	}
-	for (auto& bullet : m_pEnemyBullets)
-	{
-		bullet->Init();
-	}
-	for (auto& enemy : m_pEnemies)
-	{
-		enemy->Init();
+		object->Init();
 	}
 }
 
 void GameScene::Update(Input& input)
 {
+	GameContext ctx{m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,input};
 	// 各オブジェクトの更新
-	m_pPlayer->Update(input, m_pPlayerBullets);
-	for (auto& bullet : m_pPlayerBullets)
+	for (auto& object : m_pObjects)
 	{
-		bullet->Update();
-	}
-	for (auto& bullet : m_pEnemyBullets)
-	{
-		bullet->Update();
-	}
-	for (auto& enemy : m_pEnemies)
-	{
-		enemy->Update();
+		object->Update(ctx);
 	}
 	
 	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets);
@@ -83,17 +76,8 @@ void GameScene::Update(Input& input)
 void GameScene::Draw()
 {
 	// 各オブジェクトの描画
-	m_pPlayer->Draw(*m_pCamera);
-	for (auto& bullet : m_pPlayerBullets)
+	for (auto& object : m_pObjects)
 	{
-		bullet->Draw(*m_pCamera);
-	}
-	for (auto& bullet : m_pEnemyBullets)
-	{
-		bullet->Draw(*m_pCamera);
-	}
-	for (auto& enemy : m_pEnemies)
-	{
-		enemy->Draw(*m_pCamera);
+		object->Draw(*m_pCamera);
 	}
 }

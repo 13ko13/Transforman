@@ -1,8 +1,24 @@
 #pragma once
 #include "Geometry.h"
 #include <memory>
+#include <vector>
 
 class Camera;
+class Player;
+class EnemyBullet;
+class PlayerBullet;
+class Input;
+/// <summary>
+/// 継承しているクラスのUpdateで使用可能な引数の構造体
+/// </summary>
+struct GameContext
+{
+	std::vector<std::shared_ptr<EnemyBullet>>& p_enemyBullets;
+	std::vector<std::shared_ptr<PlayerBullet>>& p_playerBullets;
+	std::shared_ptr<Player> player;
+	Input& input;
+};
+
 class Object
 {
 public:
@@ -10,7 +26,7 @@ public:
 	virtual ~Object();
 
 	virtual void Init() abstract;
-	virtual void Update() abstract;
+	virtual void Update(GameContext& ctx) abstract;
 	virtual void Draw(Camera camera) abstract;
 
 	/// <summary>

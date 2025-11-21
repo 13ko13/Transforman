@@ -19,7 +19,7 @@ public:
 	~EnemyBullet();
 
 	void Init() override;
-	void Update() override;
+	void Update(GameContext& ctx) override;
 	void Draw(Camera camera) override;
 
 	/// <summary>

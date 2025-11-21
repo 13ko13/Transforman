@@ -19,6 +19,11 @@ void CollisionManager::CheckCollisions(
 			CheckCollision(*pPlayer, *enemy))
 		{
 			//–¢ŽÀ‘•—\’è
+			printfDx("“G‚Æ“–‚½‚Á‚½\n");
+		}
+		else
+		{
+			printfDx("\n");
 		}
 	}
 
@@ -54,8 +59,6 @@ void CollisionManager::CheckCollisions(
 	}
 
 	RemoveDeadEnemies(pEnemies);
-	RemoveDeadEnemyBullets(pEnemyBullets);
-	RemoveDeadPlayerBullets(pPlayerBullets);
 }
 
 
@@ -79,27 +82,7 @@ void CollisionManager::RemoveDeadEnemies(std::vector<std::shared_ptr<EnemyBase>>
 	pEnemies.erase(std::remove_if(pEnemies.begin(), pEnemies.end(), IsEnemyDead), pEnemies.end());
 }
 
-void CollisionManager::RemoveDeadEnemyBullets(std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets)
-{
-	pEnemyBullets.erase(std::remove_if(pEnemyBullets.begin(), pEnemyBullets.end(), IsEnemyBulletDead), pEnemyBullets.end());
-}
-
-void CollisionManager::RemoveDeadPlayerBullets(std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets)
-{
-	pPlayerBullets.erase(std::remove_if(pPlayerBullets.begin(), pPlayerBullets.end(), IsPlayerBulletDead), pPlayerBullets.end());
-}
-
 bool CollisionManager::IsEnemyDead(const std::shared_ptr<EnemyBase>& pEnemy) 
 {
 	return pEnemy->GetIsDead();
-}
-
-bool CollisionManager::IsEnemyBulletDead(const std::shared_ptr<EnemyBullet>& pBullet) 
-{
-	return !pBullet->GetIsAlive();
-}
-
-bool CollisionManager::IsPlayerBulletDead(const std::shared_ptr<PlayerBullet>& pBullet) 
-{
-	return !pBullet->GetIsAlive();
 }

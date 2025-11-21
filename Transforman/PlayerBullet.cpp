@@ -29,11 +29,8 @@ void PlayerBullet::Init()
 {
 }
 
-void PlayerBullet::Update()
+void PlayerBullet::Update(GameContext& ctx)
 {
-	m_circle.SetPos(m_pos);
-	
-
 	if( m_isRight )
 	{
 		m_dir = { 1.0f, 0.0f };
@@ -92,7 +89,6 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Charge:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_circle.Draw(camera);
 			m_circle.Draw(camera);
 			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif

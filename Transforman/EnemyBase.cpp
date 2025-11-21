@@ -17,7 +17,7 @@ void EnemyBase::Init()
 
 }
 
-void EnemyBase::Update()
+void EnemyBase::Update(GameContext& ctx)
 {
 
 }

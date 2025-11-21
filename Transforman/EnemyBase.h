@@ -2,9 +2,11 @@
 #include "Object.h"
 #include <memory>
 #include "Rect.h"
+#include <vector>
 
 // プロトタイプ宣言
 class Player;
+struct GameContext;
 /// <summary>
 /// エネミー全体の基底クラス
 /// </summary>
@@ -15,7 +17,7 @@ public:
 	virtual ~EnemyBase();
 
 	virtual void Init() override abstract;
-	virtual void Update() override abstract;
+	virtual void Update(GameContext& ctx) override abstract;
 	virtual void Draw(Camera camera) override abstract;
 
 	virtual void Attack() abstract;

@@ -22,6 +22,7 @@ Circle::~Circle()
 
 void Circle::Draw(Camera& camera)
 {
+	//“–‚½‚è”»’è‚ð•`‰æ
 	DrawCircle(
 		m_pos.x + camera.GetDrawOffset().x,
 		m_pos.y + camera.GetDrawOffset().y, 

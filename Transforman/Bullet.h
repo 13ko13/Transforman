@@ -3,6 +3,7 @@
 #include <memory>
 #include "Circle.h"
 
+struct GameContext;
 class Bullet : public Object
 {
 public:
@@ -10,7 +11,7 @@ public:
 	virtual ~Bullet();
 
 	virtual void Init() override;
-	virtual void Update() override;
+	virtual void Update(GameContext& ctx) override;
 	virtual void Draw(Camera camera) override;
 
 	Vector2 GetPos() { return m_pos; }
