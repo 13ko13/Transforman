@@ -40,7 +40,7 @@ void PlayerBullet::Update()
 
 	if (m_isAlive == true)
 	{
-		m_circle->SetPos(m_pos);
+		m_circle.SetPos(m_pos);
 
 		//’e‚ðˆÚ“®‚³‚¹‚éBdir‚Íí‚Éã•ûŒü‚Å’·‚³1‚È‚Ì‚ÅA
 		//³‹K‰»‚Í‚¢‚ç‚È‚¢
@@ -73,8 +73,8 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Normal:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_circle->SetRadius(normal_shot_radius);
-			m_circle->Draw(camera);
+			m_circle.SetRadius(normal_shot_radius);
+			m_circle.Draw(camera);
 
 			DrawFormatString(
 				0, 45, 0xffffff,
@@ -86,8 +86,8 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Charge:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_circle->SetRadius(charge_shot_radius);
-			m_circle->Draw(camera);
+			m_circle.SetRadius(charge_shot_radius);
+			m_circle.Draw(camera);
 			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
 			break;

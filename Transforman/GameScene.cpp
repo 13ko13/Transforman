@@ -4,6 +4,7 @@
 #include "ChargeShotBoss.h"
 #include "EnemyBullet.h"
 #include "Camera.h"
+#include "CollisionManager.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
@@ -72,26 +73,8 @@ void GameScene::Update(Input& input)
 	{
 		enemy->Update();
 	}
-
-
-	//’e‚Æ“G‚Ì“–‚½‚è”»’èˆ—
-	for (auto& playerBullet : m_pPlayerBullets)
-	{
-		for (auto& enemy : m_pEnemies)
-		{
-			//“G‚Ì“–‚½‚è”»’è‚ÆƒvƒŒƒCƒ„[‚Ì’e‚Ì“–‚½‚è”»’è‚ª
-			//Õ“Ë‚µ‚Ä‚¢‚½‚ç
-			if (playerBullet->GetIsAlive() && 
-				!enemy->GetIsDead() && 
-				enemy->GetColRectPtr()->)
-			{
-				//“G‚ðÁ‚·
-				enemy->SetIsDead(true);
-				//’e‚ðÁ‚·
-				playerBullet->SetIsAlive(false);
-			}
-		}
-	}
+	
+	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets);
 
 	// ƒJƒƒ‰‚ÌXV
 	m_pCamera->Update(*m_pPlayer);

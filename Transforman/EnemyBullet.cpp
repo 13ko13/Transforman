@@ -40,7 +40,7 @@ void EnemyBullet::Update()
 		Movement();
 		
 		//“–‚½‚è”»’è‚ð’†S‚ÉÝ’è‚·‚é
-		m_circle->SetPos(m_pos);
+		m_circle.SetPos(m_pos);
 
 		//‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚Á‚½ê‡‚Í‘¶Ýó‘Ô‚ð
 		//•ÛŽ‚µ‚Ä‚¢‚é•Ï”‚Éfalse‚ð‘ã“ü
@@ -57,8 +57,8 @@ void EnemyBullet::Draw(Camera camera)
 #if _DEBUG
 	if (m_isAlive)
 	{
-		m_circle->SetRadius(radius);
-		m_circle->Draw(camera);
+		m_circle.SetRadius(radius);
+		m_circle.Draw(camera);
 		
 
 		DrawFormatString(0, 115, 0xffffff,"EnemyBulletPos X : %f , Y : %f", m_pos.x, m_pos.y);

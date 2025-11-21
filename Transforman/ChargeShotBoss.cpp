@@ -64,7 +64,7 @@ void ChargeShotBoss::Update(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 void ChargeShotBoss::Draw(Camera camera)
 {
 #if _DEBUG
-	m_pColRect->Draw(0xaaffff, false, camera);
+	m_colRect.Draw(0xaaffff, false, camera);
 	DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
 #endif
 }

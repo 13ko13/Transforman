@@ -10,6 +10,7 @@ class ChargeShotBoss;
 class EnemyBullet;
 class Camera;
 class EnemyBase;
+class CollisionManager;
 class GameScene : public Scene
 {
 public:
@@ -25,5 +26,6 @@ private:
 	std::vector<std::shared_ptr<EnemyBase>> m_pEnemies;
 	std::shared_ptr<ChargeShotBoss> m_pChargeShotBoss;
 	std::shared_ptr<Camera> m_pCamera;
+	std::shared_ptr<CollisionManager> m_pColManager;
 };
 

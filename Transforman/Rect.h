@@ -2,6 +2,7 @@
 #include "Geometry.h"
 
 class Camera;
+class Circle;
 /// <summary>
 /// 矩形を管理するクラス
 /// </summary>
@@ -86,11 +87,11 @@ public:
 	float GetBottom() const { return m_bottom; }
 
 	/// <summary>
-	/// 矩形の当たり判定
+	/// 矩形同士の当たり判定
 	/// </summary>
 	/// <param name="rect">矩形情報</param>
 	/// <returns>当たってるかどうか</returns>
-	bool IsCollision(const Rect& rect) const;
+	bool IsCollRect(const Rect& rect) const;
 
 private:
 	float m_left;  //左上のX座標

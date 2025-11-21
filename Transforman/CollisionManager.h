@@ -65,5 +65,26 @@ private:
 	/// </summary>
 	/// <param name="pPlayerBullets"></param>
 	static void RemoveDeadPlayerBullets(std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets);
+
+	/// <summary>
+	/// 敵が死亡してるかを取得する関数
+	/// </summary>
+	/// <param name="pEnemy">敵のポインタ</param>
+	/// <returns>死んでいる:true,死んでいない:false</returns>
+	bool IsEnemyDead(const std::shared_ptr<EnemyBase>& pEnemy) const;
+
+	/// <summary>
+	/// 敵弾が死んでいるかを取得する関数
+	/// </summary>
+	/// <param name="pBullet">敵弾のポインタ</param>
+	/// <returns>死んでいる:true,死んでいない:false</returns>
+	bool IsEnemyBulletDead(const std::shared_ptr<EnemyBullet>& pBullet) const;
+
+	/// <summary>
+	/// プレイヤー弾が死んでいるかを取得する関数
+	/// </summary>
+	/// <param name="pBullet">プレイヤーの弾のポインタ</param>
+	/// <returns>死んでいる:true,死んでいない:false</returns>
+	bool IsPlayerBulletDead(const std::shared_ptr<PlayerBullet>& pBullet) const;
 };
 

@@ -61,7 +61,7 @@ void CollisionManager::CheckCollisions(
 
 bool CollisionManager::CheckCollision(const Player& player, const EnemyBase& enemy)
 {
-	return player.GetColRect().IsCollision(enemy.GetColRect());
+	return player.GetColRect().IsCollRect(enemy.GetColRect());
 }
 
 bool CollisionManager::CheckCollision(const PlayerBullet& bullet, const EnemyBase& enemy)
@@ -71,20 +71,35 @@ bool CollisionManager::CheckCollision(const PlayerBullet& bullet, const EnemyBas
 
 bool CollisionManager::CheckCollision(const Player& player, const EnemyBullet& bullet)
 {
-	return false;
+	return bullet.GetCircle().IsCollWithRect(player.GetColRect());
 }
 
 void CollisionManager::RemoveDeadEnemies(std::vector<std::shared_ptr<EnemyBase>>& pEnemies)
 {
-
+	pEnemies.erase(std::remove_if(pEnemies.begin(), pEnemies.end(), IsEnemyDead), pEnemies.end());
 }
 
 void CollisionManager::RemoveDeadEnemyBullets(std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets)
 {
-
+	pEnemyBullets.erase(std::remove_if(pEnemyBullets.begin(), pEnemyBullets.end(), IsEnemyBulletDead), pEnemyBullets.end());
 }
 
 void CollisionManager::RemoveDeadPlayerBullets(std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets)
 {
+	pPlayerBullets.erase(std::remove_if(pPlayerBullets.begin(), pPlayerBullets.end(), IsPlayerBulletDead), pPlayerBullets.end());
+}
 
+bool CollisionManager::IsEnemyDead(const std::shared_ptr<EnemyBase>& pEnemy) const
+{
+	return pEnemy->GetIsDead();
+}
+
+bool CollisionManager::IsEnemyBulletDead(const std::shared_ptr<EnemyBullet>& pBullet) const
+{
+	return !pBullet->GetIsAlive();
+}
+
+bool CollisionManager::IsPlayerBulletDead(const std::shared_ptr<PlayerBullet>& pBullet) const
+{
+	return !pBullet->GetIsAlive();
 }

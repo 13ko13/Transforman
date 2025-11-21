@@ -7,9 +7,8 @@ Bullet::Bullet() :
 	m_isAlive(false),
 	m_dir({ 0.0f,0.0f })
 {
-	m_circle = std::make_shared<Circle>();
 	//“–‚½‚è”»’è‚ð’†S‚ÉÝ’è‚·‚é
-	m_circle->SetPos(m_pos);
+	m_circle.SetPos(m_pos);
 }
 
 Bullet::~Bullet()
