@@ -45,6 +45,7 @@ Player::Player() :
 	m_isGround(false),
 	m_isRight(false),
 	m_isCharging(false),
+	m_isDead(false),
 	m_jumpPower(0),
 	m_shotCooltime(0),
 	m_state(PlayerState::Idle),
@@ -57,9 +58,7 @@ Player::Player() :
 	m_handle = LoadGraph("img/game/Player/player.png");
 	m_colRect.SetLT(
 		m_pos.x, m_pos.y,
-		m_pos.x + m_sizeWidth,
-		m_pos.y + m_sizeHeight
-	);
+		size_width ,size_height);
 }
 
 Player::~Player()
@@ -70,8 +69,6 @@ Player::~Player()
 void Player::Init()
 {
 	m_pos = { Graphic::screen_width / 2,Graphic::screen_height / 2 };
-	m_sizeWidth = size_width;
-	m_sizeHeight = size_height;
 }
 
 void Player::Update()

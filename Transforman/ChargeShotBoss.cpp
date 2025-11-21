@@ -23,6 +23,11 @@ ChargeShotBoss::ChargeShotBoss() :
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
 	assert(m_handle > -1);
+
+	m_pos = first_pos;
+	m_attackCooltime = attack_cooltime;
+
+	m_colRect.SetLT(m_pos.x - size_width / 2, m_pos.y - size_height / 2 + 5, size_width, size_height);
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -31,10 +36,7 @@ ChargeShotBoss::~ChargeShotBoss()
 
 void ChargeShotBoss::Init()
 {
-	m_pos = first_pos;
-	m_sizeWidth = size_width;
-	m_sizeHeight = size_height;
-	m_attackCooltime = attack_cooltime;
+	
 }
 
 void ChargeShotBoss::Update()
@@ -89,13 +91,13 @@ void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 			{
 				bullet->SetDir({ 1.0f,0.0f });
 				//’e‚Ì‰ŠúˆÊ’u‚ðÝ’è
-				bullet->SetPos({ m_pos.x + m_sizeWidth / 2, m_pos.y });
+				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
 			}
 			else
 			{
 				bullet->SetDir({ -1.0f,0.0f });
 				//’e‚Ì‰ŠúˆÊ’u‚ðÝ’è
-				bullet->SetPos({ m_pos.x - m_sizeWidth / 2, m_pos.y });
+				bullet->SetPos({ m_pos.x - size_height / 2, m_pos.y });
 			}
 			bullet->SetIsAlive(true);
 		}

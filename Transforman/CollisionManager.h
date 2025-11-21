@@ -71,20 +71,20 @@ private:
 	/// </summary>
 	/// <param name="pEnemy">敵のポインタ</param>
 	/// <returns>死んでいる:true,死んでいない:false</returns>
-	bool IsEnemyDead(const std::shared_ptr<EnemyBase>& pEnemy) const;
+	static bool IsEnemyDead(const std::shared_ptr<EnemyBase>& pEnemy);
 
 	/// <summary>
 	/// 敵弾が死んでいるかを取得する関数
 	/// </summary>
 	/// <param name="pBullet">敵弾のポインタ</param>
 	/// <returns>死んでいる:true,死んでいない:false</returns>
-	bool IsEnemyBulletDead(const std::shared_ptr<EnemyBullet>& pBullet) const;
+	static bool IsEnemyBulletDead(const std::shared_ptr<EnemyBullet>& pBullet);
 
 	/// <summary>
 	/// プレイヤー弾が死んでいるかを取得する関数
 	/// </summary>
 	/// <param name="pBullet">プレイヤーの弾のポインタ</param>
 	/// <returns>死んでいる:true,死んでいない:false</returns>
-	bool IsPlayerBulletDead(const std::shared_ptr<PlayerBullet>& pBullet) const;
+	static bool IsPlayerBulletDead(const std::shared_ptr<PlayerBullet>& pBullet);
 };
 

@@ -16,6 +16,8 @@ PlayerBullet::PlayerBullet() :
 	m_isRight(false)
 {
 	m_bulletType = BulletType::Normal;
+	m_circle.SetPos(m_pos);
+	m_circle.SetRadius(normal_shot_radius);
 }
 
 PlayerBullet::~PlayerBullet()
@@ -29,6 +31,9 @@ void PlayerBullet::Init()
 
 void PlayerBullet::Update()
 {
+	m_circle.SetPos(m_pos);
+	
+
 	if( m_isRight )
 	{
 		m_dir = { 1.0f, 0.0f };
@@ -58,8 +63,10 @@ void PlayerBullet::Update()
 	switch (m_bulletType)
 	{
 	case BulletType::Normal:
+		m_circle.SetRadius(normal_shot_radius);
 		break;
 	case BulletType::Charge:
+		m_circle.SetRadius(charge_shot_radius);
 		break;
 	}
 }
@@ -73,7 +80,6 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Normal:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_circle.SetRadius(normal_shot_radius);
 			m_circle.Draw(camera);
 
 			DrawFormatString(
@@ -86,7 +92,7 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Charge:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_circle.SetRadius(charge_shot_radius);
+			m_circle.Draw(camera);
 			m_circle.Draw(camera);
 			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif

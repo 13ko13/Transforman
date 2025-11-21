@@ -19,6 +19,8 @@ namespace
 EnemyBullet::EnemyBullet() 
 {
 	m_state = EnemyState::Normal;
+	m_circle.SetPos(m_pos);
+	m_circle.SetRadius(radius);
 }
 
 EnemyBullet::~EnemyBullet()
@@ -41,6 +43,7 @@ void EnemyBullet::Update()
 		
 		//“–‚½‚è”»’è‚ğ’†S‚Éİ’è‚·‚é
 		m_circle.SetPos(m_pos);
+		m_circle.SetRadius(radius);
 
 		//‰æ–ÊŠO‚Éo‚Ä‚µ‚Ü‚Á‚½ê‡‚Í‘¶İó‘Ô‚ğ
 		//•Û‚µ‚Ä‚¢‚é•Ï”‚Éfalse‚ğ‘ã“ü
