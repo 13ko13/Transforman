@@ -15,6 +15,10 @@ namespace
 	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
 	constexpr int rect_offset = 5;							//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 
+	constexpr float knockback_duration = 15.0f;						//ノックバックする時間
+	constexpr float knockback_speed = 15.0f;					//ノックバックするときのスピード
+	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
+
 	constexpr double   draw_scale = 1.5;					//描画スケール			
 
 	constexpr int max_jump_power = 10.0f;					//最大ジャンプ力
@@ -49,13 +53,15 @@ Player::Player() :
 	m_isDead(false),
 	m_jumpPower(0),
 	m_shotCooltime(0),
+	m_knockackTimer(0),
 	m_state(PlayerState::Idle),
 	m_prevChargeFrame(0),
 	m_animFrame(0),
 	m_animSrcX(0),
 	m_animSrcY(0),
 	m_animIdx(0),
-	m_damageAnimFrame(0)
+	m_damageAnimFrame(0),
+	m_knockbackDir(0)
 {
 	m_handle = LoadGraph("img/game/Player/player.png");
 	m_colRect.SetLT(
@@ -83,32 +89,36 @@ void Player::Update(GameContext& ctx)
 	//重力を計算
 	Gravity();
 
-	//押されている間ジャンプ力が可変する
+	if (m_state != PlayerState::Damage)
+	{
+		//押されている間ジャンプ力が可変する
 	//ジャンプボタンが離されるor最大ジャンプ力を超えたら強制的に
 	//ジャンプさせる
-	if (ctx.input.IsPressed("jump") &&
-		m_isGround)
-	{
-		m_jumpPower--;
-	}
-	if ((ctx.input.IsReleased("jump") ||
-		abs(m_jumpPower) > max_jump_power ) &&
-		m_isGround)
-	{
-		Jump(ctx.input);
+		if (ctx.input.IsPressed("jump") &&
+			m_isGround)
+		{
+			m_jumpPower--;
+		}
+		if ((ctx.input.IsReleased("jump") ||
+			abs(m_jumpPower) > max_jump_power) &&
+			m_isGround)
+		{
+			Jump(ctx.input);
+		}
+
+		//移動
+		Move(ctx.input);
+
+		//ショットの準備
+		PrevShot(ctx.input, ctx.p_playerBullets);
+
+		//壁のぼり
+		if (ctx.input.IsPressed("up"))
+		{
+			Climb();
+		}
 	}
 
-	//移動
-	Move(ctx.input);
-
-	//ショットの準備
-	PrevShot(ctx.input, ctx.p_playerBullets);
-
-	//壁のぼり
-	if (ctx.input.IsPressed("up"))
-	{
-		Climb();
-	}
 
 
 	//仮の地面を設定
@@ -122,14 +132,6 @@ void Player::Update(GameContext& ctx)
 	{
 		m_isGround = false;
 	}
-
-#if _DEBUG
-	if (ctx.input.IsTriggered("changeState"))
-	{
-		printfDx("押された");
-		m_state = PlayerState::Damage;
-	}
-#endif
 
 	//None,
 	//Idle,
@@ -170,15 +172,17 @@ void Player::Update(GameContext& ctx)
 
 		break;
 	case PlayerState::Damage:
+		Knockback();
 		m_animSrcY = graph_height * graph_index_damage;
 		animMax = damage_anim_frame;
+		m_animSrcX = graph_width * ((int)m_damageAnimFrame / anim_wait_frame);
 		//ダメージアニメーションが終わったら
 		//StateをIdleに切り替える
 		m_damageAnimFrame++;
-		if (m_damageAnimFrame > damage_anim_frame * anim_wait_frame)
+		if (m_damageAnimFrame >= animMax * anim_wait_frame)
 		{
-			m_state = PlayerState::Idle;
 			m_damageAnimFrame = 0;
+			m_state = PlayerState::Idle;
 		}
 		break;
 	}
@@ -201,9 +205,9 @@ void Player::Update(GameContext& ctx)
 void Player::Draw(Camera camera)
 {
 #if _DEBUG
-	m_colRect.Draw(0xffffff, false,camera);
+	m_colRect.Draw(0xffffff, false, camera);
 	DrawFormatString(0, 0, 0xffffff, "frame:%d", m_frame);
-	DrawFormatString(0, 15, 0xffffff, "playerPosY:%f", m_pos.y);
+	DrawFormatString(0, 15, 0xffffff, "playerPosX:%f, Y: %f", m_pos.x ,m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, "isRight:%d", m_isRight);
 	DrawFormatString(0, 60, 0xffffff, "shotCoolTime:%d", m_shotCooltime);
 	DrawFormatString(0, 150, 0xffffff, "prevChargeFrame:%d", m_prevChargeFrame);
@@ -211,10 +215,12 @@ void Player::Draw(Camera camera)
 	DrawFormatString(0, 180, 0xffffff, "jumpPower : %d", m_jumpPower);
 	DrawFormatString(0, 195, 0xffffff, "velocity(%f , %f)", m_velocity.x, m_velocity.y);
 	DrawFormatString(0, 210, 0xffffff, "PlayerState : %d", m_state);
+	DrawFormatString(0, 225, 0xffffff, "DamageAnimFrame : %f", m_damageAnimFrame);
 #endif
 
 	DrawRectRotaGraph(
-		static_cast<int>(m_pos.x + camera.GetDrawOffset().x), static_cast<int>(m_pos.y + camera.GetDrawOffset().y), //表示位置
+		static_cast<int>(m_pos.x + camera.GetDrawOffset().x),
+		static_cast<int>(m_pos.y + camera.GetDrawOffset().y), //表示位置
 		m_animSrcX, m_animSrcY,												//切り取り開始位置
 		graph_width, graph_height,								//切り取りサイズ
 		draw_scale, 0.0,											//拡大率、回転角度
@@ -245,7 +251,7 @@ void Player::Move(Input& input)
 	Vector2 dir = { 0.0f,0.0f };//プレイヤーの速度ベクトル
 	if (input.IsPressed("right"))
 	{
-		m_state = PlayerState::Walk; 
+		m_state = PlayerState::Walk;
 		dir.x = 1.0f;
 		m_isRight = true;
 	}
@@ -261,7 +267,7 @@ void Player::Move(Input& input)
 		{
 			m_state = PlayerState::Idle;
 		}
-		
+
 	}
 
 	//ディレクションを正規化してプレイヤーのスピードをかけて
@@ -320,10 +326,10 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			bullet->SetIsRight(m_isRight);
 			break;	//1発撃ったらループを抜ける
 		}
-	/*	else
-		{
-			m_state = PlayerState::Idle;
-		}*/
+		/*	else
+			{
+				m_state = PlayerState::Idle;
+			}*/
 	}
 }
 
@@ -375,4 +381,38 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 void Player::Climb()
 {
 
+}
+
+void Player::ChangeState(PlayerState state)
+{
+	m_state = state;
+}
+
+void Player::Knockback()
+{
+	//残りノックバック時間を減らしていく
+	m_knockackTimer--;
+	m_velocity.x--;
+	if (m_velocity.x <= 0)
+	{
+		m_velocity.x = 0.0f;
+	}
+
+	//ノックバックの時間が終了するとステートをidleに戻す
+	if (m_knockackTimer <= 0)
+	{
+		m_state = PlayerState::Idle;
+		
+	}
+}
+
+void Player::StartKnockback(int dir)
+{
+	m_state = PlayerState::Damage;//ステートを切り替える
+	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
+	m_knockbackDir = dir;//ノックバックする方向を代入
+
+	//ノックバックするための方向と速度を代入する
+	m_velocity.x = m_knockbackDir * knockback_speed;
+	m_velocity.y = knockback_jump;
 }

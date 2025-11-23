@@ -5,6 +5,19 @@
 #include <memory>
 #include "Rect.h"
 
+enum class PlayerState
+{
+	None,
+	Idle,
+	Walk,
+	Shot,
+	Jump,
+	ChargeShot,
+	Climb,
+	Fire,
+	Damage
+};
+
 class PlayerBullet;
 class Player : public Object
 {
@@ -60,9 +73,34 @@ public:
 
 	void Climb();
 
+	/// <summary>
+	/// Stateを切り替える
+	/// </summary>
+	/// <param name="state">ステート名</param>
+	void ChangeState(PlayerState state);
+
+	/// <summary>
+	/// ダメージを食らった時のノックバックモーション
+	/// </summary>
+	/// <param name="isHIt">当たっている:true,当たっていない:false</param>
+	void Knockback();
+
+	/// <summary>
+	/// CollisionManagerに呼ばせる
+	/// NockBack開始時の処理
+	/// </summary>
+	/// <param name="dir">ノックバックさせる方向</param>
+	void StartKnockback(int dir);
+
+	/// <summary>
+	/// 右向きか左向きかを設定する
+	/// </summary>
+	/// <param name="isRight">true:右向き,false:左向き</param>
+	void SetIsRight(bool isRight) { m_isRight = isRight; }
 private:
 	int m_jumpPower;//可変ジャンプ力
 	int m_shotCooltime;///ショットのクールタイム管理用
+	int m_knockackTimer;//ノックバック中のタイム管理用
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
@@ -77,20 +115,10 @@ private:
 	int m_animSrcY;		  //現在のアニメーションの縦の切り取り位置
 	int m_animIdx;			//現在のアニメーションのインデックス
 
-	int m_damageAnimFrame;	//現在のダメージアニメーションフレーム数
+	float m_damageAnimFrame;	//現在のダメージアニメーションフレーム数
 
-	enum class PlayerState
-	{
-		None,
-		Idle,
-		Walk,
-		Shot,
-		Jump,
-		ChargeShot,
-		Climb,
-		Fire,
-		Damage
-	};
+	int m_knockbackDir;			//ノックバックする方向
+
 	PlayerState m_state;
 
 	Rect m_colRect;

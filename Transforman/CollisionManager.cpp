@@ -3,6 +3,7 @@
 #include "EnemyBullet.h"
 #include "EnemyBase.h"
 #include "Player.h"
+#include "Geometry.h"
 #include <DxLib.h>
 
 void CollisionManager::CheckCollisions(
@@ -18,8 +19,29 @@ void CollisionManager::CheckCollisions(
 			!enemy->GetIsDead() &&
 			CheckCollision(*pPlayer, *enemy))
 		{
-			//未実装予定
 			printfDx("敵と当たった\n");
+			//プレイヤーのStateをダメージに変える
+			pPlayer->ChangeState(PlayerState::Damage);
+			//プレイヤーが右と左どちらから
+			//攻撃を受けたかで渡す
+			// ノックバックする方向を決める
+			int dir = 0;
+			bool isRight = false;
+			if (pPlayer->GetPos().x > enemy->GetPos().x)//プレイヤーが右にいる場合
+			{
+				//プレイヤーのノックバックする方向は右
+				dir = 1;
+				//左向いてからノックバックさせる
+				isRight = false;
+			}
+			else//プレイヤーが左にいる
+			{
+				//プレイヤーのノックバックする方向は左
+				dir = -1;
+				//右向いてからノックバックさせる
+				isRight = true;
+			}
+			pPlayer->StartKnockback(dir);
 		}
 		else
 		{
@@ -54,7 +76,28 @@ void CollisionManager::CheckCollisions(
 		{
 			//弾の存在を消す
 			bullet->SetIsAlive(false);
-			//プレイヤーの処理は未定
+			//プレイヤーのStateをダメージに変える
+			pPlayer->ChangeState(PlayerState::Damage);
+			int dir = 0;
+			bool isRight = false;
+			if (pPlayer->GetPos().x > bullet->GetPos().x)//プレイヤーが右にいる場合
+			{
+				//プレイヤーのノックバックする方向は右
+				dir = 1.0f;
+				//左向いてからノックバックさせる
+				isRight = false;
+			}
+			else//プレイヤーが左にいる
+			{
+				//プレイヤーのノックバックする方向は左
+				dir = -1.0f;
+				//右向いてからノックバックさせる
+				isRight = true;
+			}
+			//ノックバックさせる方向と
+			//プレイヤーが向く方向を設定
+			pPlayer->SetIsRight(isRight);
+			pPlayer->StartKnockback(dir);
 		}
 	}
 
@@ -82,7 +125,7 @@ void CollisionManager::RemoveDeadEnemies(std::vector<std::shared_ptr<EnemyBase>>
 	pEnemies.erase(std::remove_if(pEnemies.begin(), pEnemies.end(), IsEnemyDead), pEnemies.end());
 }
 
-bool CollisionManager::IsEnemyDead(const std::shared_ptr<EnemyBase>& pEnemy) 
+bool CollisionManager::IsEnemyDead(const std::shared_ptr<EnemyBase>& pEnemy)
 {
 	return pEnemy->GetIsDead();
 }
