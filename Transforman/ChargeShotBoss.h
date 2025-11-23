@@ -20,7 +20,8 @@ public:
 				std::shared_ptr<Player> pPlayer);
 
 private:
-	bool m_isRight;
+	bool m_isRight;//‰E‚ğŒü‚¢‚Ä‚¢‚é:true,¶‚ğŒü‚¢‚Ä‚¢‚é:false
+	bool m_isGround;//’n–Ê‚É—§‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	int m_attackCooltime;
 };
 

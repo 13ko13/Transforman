@@ -13,6 +13,7 @@ namespace
 	constexpr float size_height = 50.0f;					//キャラクターの高さ
 	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
 	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
+	constexpr int rect_offset = 5;							//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 
 	constexpr double   draw_scale = 1.5;					//描画スケール			
 
@@ -30,13 +31,13 @@ namespace
 	constexpr int graph_index_deth = 7;
 	constexpr int graph_index_jump = 8;
 
+	//アニメーション関係
 	constexpr int anim_wait_frame = 10;						//次のアニメーションまでの待機時間
 	constexpr int idle_anim_frame = 4;						//アイドルアニメーションの枚数
 	constexpr int walk_anim_frame = 7;						//歩き状態のアニメーションの枚数
 	constexpr int damage_anim_frame = 8;					//食らい状態のアニメーション枚数
 	constexpr int deth_anim_frame = 20;						//死んだときのアニメーション枚数
 	constexpr int jump_anim_frame = 3;						//ジャンプの時のアニメーション枚数
-
 }
 
 Player::Player() :
@@ -53,12 +54,14 @@ Player::Player() :
 	m_animFrame(0),
 	m_animSrcX(0),
 	m_animSrcY(0),
-	m_animIdx(0)
+	m_animIdx(0),
+	m_damageAnimFrame(0)
 {
 	m_handle = LoadGraph("img/game/Player/player.png");
 	m_colRect.SetLT(
-		m_pos.x, m_pos.y,
-		size_width ,size_height);
+		m_pos.x - size_width / 2,
+		m_pos.y - size_height / 2 + rect_offset,
+		size_width, size_height);
 }
 
 Player::~Player()
@@ -120,6 +123,14 @@ void Player::Update(GameContext& ctx)
 		m_isGround = false;
 	}
 
+#if _DEBUG
+	if (ctx.input.IsTriggered("changeState"))
+	{
+		printfDx("押された");
+		m_state = PlayerState::Damage;
+	}
+#endif
+
 	//None,
 	//Idle,
 	//Walk,
@@ -129,10 +140,10 @@ void Player::Update(GameContext& ctx)
 	//Climb,
 	//Fire
 	//アニメーションのフレーム数から表示したいコマ番号を計算で求める
-	//1フレーム進むごとにアニメーションが1枚進む
+	//anim_wait_frame進むごとにアニメーションが1枚進む
 	int AnimNo = m_animFrame / anim_wait_frame;
-	m_animSrcX = graph_width * AnimNo;
-	m_animSrcY = graph_height * m_animIdx;
+	m_animSrcX = graph_width * AnimNo;//現在表示したいStateのアニメーションの横切り取り位置
+	m_animSrcY = graph_height * m_animIdx;//現在表示したいStateのアニメーションの縦切り取り位置
 	int animMax = 0;
 	switch (m_state)
 	{
@@ -158,10 +169,22 @@ void Player::Update(GameContext& ctx)
 	case PlayerState::Fire:
 
 		break;
+	case PlayerState::Damage:
+		m_animSrcY = graph_height * graph_index_damage;
+		animMax = damage_anim_frame;
+		//ダメージアニメーションが終わったら
+		//StateをIdleに切り替える
+		m_damageAnimFrame++;
+		if (m_damageAnimFrame > damage_anim_frame * anim_wait_frame)
+		{
+			m_state = PlayerState::Idle;
+			m_damageAnimFrame = 0;
+		}
+		break;
 	}
 
 	//現在のアニメーションのフレーム数が
-	//現在のステートの描画枚数を超えたら現在のアニメーションの
+	//現在のステートの描画枚数を超えたら
 	//現在のアニメーションのフレーム数を0にする
 	if (m_animFrame >= animMax * anim_wait_frame)
 	{
@@ -169,7 +192,10 @@ void Player::Update(GameContext& ctx)
 	}
 
 	//プレイヤーの左上座標を基準にする
-	m_colRect.SetLT(m_pos.x - size_width / 2, m_pos.y - size_height / 2 + 5, size_width, size_height);
+	m_colRect.SetLT(
+		m_pos.x - size_width / 2,
+		m_pos.y - size_height / 2 + rect_offset,
+		size_width, size_height);
 }
 
 void Player::Draw(Camera camera)
@@ -184,6 +210,7 @@ void Player::Draw(Camera camera)
 	DrawFormatString(0, 165, 0xffffff, "ground : %d", m_isGround);
 	DrawFormatString(0, 180, 0xffffff, "jumpPower : %d", m_jumpPower);
 	DrawFormatString(0, 195, 0xffffff, "velocity(%f , %f)", m_velocity.x, m_velocity.y);
+	DrawFormatString(0, 210, 0xffffff, "PlayerState : %d", m_state);
 #endif
 
 	DrawRectRotaGraph(
@@ -230,7 +257,11 @@ void Player::Move(Input& input)
 	}
 	else
 	{
-		m_state = PlayerState::Idle;
+		if (m_state != PlayerState::Damage)
+		{
+			m_state = PlayerState::Idle;
+		}
+		
 	}
 
 	//ディレクションを正規化してプレイヤーのスピードをかけて

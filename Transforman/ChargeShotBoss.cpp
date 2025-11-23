@@ -4,9 +4,12 @@
 #include "Player.h"
 #include <cassert>
 #include "Camera.h"
+#include "GameConstants.h"
 
 namespace
 {
+	constexpr float ground = Graphic::screen_height - 100;	//地面の高さ(仮)
+
 	constexpr int size_width = 128;//幅
 	constexpr int size_height = 128;//高さ
 	constexpr int graph_width = 48;	//画像1枚の幅
@@ -19,7 +22,8 @@ namespace
 
 ChargeShotBoss::ChargeShotBoss() :
 	m_attackCooltime(0),
-	m_isRight(true)
+	m_isRight(true),
+	m_isGround(false)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
 	assert(m_handle > -1);
@@ -27,7 +31,10 @@ ChargeShotBoss::ChargeShotBoss() :
 	m_pos = first_pos;
 	m_attackCooltime = attack_cooltime;
 
-	m_colRect.SetLT(m_pos.x - size_width / 2, m_pos.y - size_height / 2 + 5, size_width, size_height);
+	m_colRect.SetLT(
+		m_pos.x - size_width / 2,
+		m_pos.y - size_height / 2 ,
+		size_width, size_height);
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -41,6 +48,26 @@ void ChargeShotBoss::Init()
 
 void ChargeShotBoss::Update(GameContext& ctx)
 {
+	Gravity();
+	m_pos += m_velocity;
+
+	m_colRect.SetLT(
+		m_pos.x - size_width / 2, 
+		m_pos.y - size_height / 2,
+		size_width, size_height);
+
+	//仮の地面を設定
+	if (m_pos.y >= ground)
+	{
+		m_pos.y = ground;
+		m_isGround = true;
+		m_velocity.y = 0.0f;
+	}
+	else
+	{
+		m_isGround = false;
+	}
+
 	//攻撃のクールタイムを更新
 	m_attackCooltime--;
 	//攻撃のクールタイムが0以下になったら攻撃 
@@ -63,6 +90,14 @@ void ChargeShotBoss::Draw(Camera camera)
 	m_colRect.Draw(0xaaffff, false, camera);
 	DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
 #endif
+	//キャラクターを表示
+	DrawRectRotaGraph(
+		m_pos.x + camera.GetDrawOffset().x,
+		m_pos.y + camera.GetDrawOffset().y,
+		0, 0, graph_width,
+		graph_height,
+		3.0, 0.0,
+		m_handle, true,!m_isRight);
 }
 
 void ChargeShotBoss::Attack()

@@ -10,25 +10,29 @@ Input::Input() :
 {
 	//イベント名を添え時にして、右辺値に実際の入力種別と押されたボタンの配列を置く
 	m_inputTable["ok"] = { {PeripheralType::keyboard,KEY_INPUT_RETURN},	//キーボード:エンターキー
-							{PeripheralType::pad1,Pad::pad_start } };	//パッド:スタート
+							{PeripheralType::pad1,PAD_INPUT_START } };	//パッド:スタート
 
 	m_inputTable["shot"] = { {PeripheralType::keyboard,KEY_INPUT_Z},	//キーボード:Z
-							{PeripheralType::pad1,Pad::pad_a} };		//パッド:Aボタン
+							{PeripheralType::pad1,PAD_INPUT_A} };		//パッド:Aボタン
 
 	m_inputTable["up"] = { {PeripheralType::keyboard,KEY_INPUT_UP},		//キーボード:上矢印
-							{PeripheralType::pad1,Pad::pad_up } };		//パッド:スティック上又は十字上
+							{PeripheralType::pad1,PAD_INPUT_UP } };		//パッド:スティック上又は十字上
 
 	m_inputTable["down"] = { {PeripheralType::keyboard,KEY_INPUT_DOWN},	//キーボード:下矢印
-							{PeripheralType::pad1,Pad::pad_down } };	//パッド:スティック下又は十字下
+							{PeripheralType::pad1,PAD_INPUT_DOWN } };	//パッド:スティック下又は十字下
 
 	m_inputTable["left"] = { {PeripheralType::keyboard,KEY_INPUT_LEFT},	//キーボード:左矢印
-								{PeripheralType::pad1,Pad::pad_left } };//パッド:スティック左又は十字左
+								{PeripheralType::pad1,PAD_INPUT_LEFT } };//パッド:スティック左又は十字左
 
 	m_inputTable["right"] = { {PeripheralType::keyboard,KEY_INPUT_RIGHT},//キーボード:右矢印
-							{PeripheralType::pad1,Pad::pad_right } };	 //パッド:スティック右又は十字右
+							{PeripheralType::pad1,PAD_INPUT_RIGHT } };	 //パッド:スティック右又は十字右
 
 	m_inputTable["jump"] = { {PeripheralType::keyboard,KEY_INPUT_SPACE},//キーボード:スペースキー
-							{PeripheralType::pad1,Pad::pad_b	} };	//パッド:Bボタン
+							{PeripheralType::pad1,PAD_INPUT_B	} };	//パッド:Bボタン
+
+	m_inputTable["changeState"] = { {PeripheralType::keyboard,KEY_INPUT_S},//キーボード:S
+							{PeripheralType::pad1,PAD_INPUT_X	} };	//パッド:Xボタン
+
 
 	//あらかじめ入力データのための枠を開けておく
 	//ここで枠を開けておかないと、チェックの際にAt関数でクラッシュする可能性がある(Null)

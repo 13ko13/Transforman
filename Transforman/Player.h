@@ -77,6 +77,8 @@ private:
 	int m_animSrcY;		  //現在のアニメーションの縦の切り取り位置
 	int m_animIdx;			//現在のアニメーションのインデックス
 
+	int m_damageAnimFrame;	//現在のダメージアニメーションフレーム数
+
 	enum class PlayerState
 	{
 		None,
@@ -86,7 +88,8 @@ private:
 		Jump,
 		ChargeShot,
 		Climb,
-		Fire
+		Fire,
+		Damage
 	};
 	PlayerState m_state;
 
