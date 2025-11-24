@@ -48,56 +48,64 @@ void ChargeShotBoss::Init()
 
 void ChargeShotBoss::Update(GameContext& ctx)
 {
-	Gravity();
-	m_pos += m_velocity;
+	//生きているなら行動させる
+	if (!m_isDead)
+	{
+		Gravity();
+		m_pos += m_velocity;
 
-	m_colRect.SetLT(
-		m_pos.x - size_width / 2, 
-		m_pos.y - size_height / 2,
-		size_width, size_height);
+		m_colRect.SetLT(
+			m_pos.x - size_width / 2,
+			m_pos.y - size_height / 2,
+			size_width, size_height);
 
-	//仮の地面を設定
-	if (m_pos.y >= ground)
-	{
-		m_pos.y = ground;
-		m_isGround = true;
-		m_velocity.y = 0.0f;
-	}
-	else
-	{
-		m_isGround = false;
-	}
+		//仮の地面を設定
+		if (m_pos.y >= ground)
+		{
+			m_pos.y = ground;
+			m_isGround = true;
+			m_velocity.y = 0.0f;
+		}
+		else
+		{
+			m_isGround = false;
+		}
 
-	//攻撃のクールタイムを更新
-	m_attackCooltime--;
-	//攻撃のクールタイムが0以下になったら攻撃 
-	if (m_attackCooltime <= 0)
-	{
-		Attack(ctx.p_enemyBullets, ctx.player);
-		//クールタイムをリセット
-		m_attackCooltime = attack_cooltime;
-	}
-	//弾の動きを更新
-	for (auto& bullet : ctx.p_enemyBullets)
-	{
-		bullet->Update(ctx);
+		//攻撃のクールタイムを更新
+		m_attackCooltime--;
+		//攻撃のクールタイムが0以下になったら攻撃 
+		if (m_attackCooltime <= 0)
+		{
+			Attack(ctx.p_enemyBullets, ctx.player);
+			//クールタイムをリセット
+			m_attackCooltime = attack_cooltime;
+		}
+		//弾の動きを更新
+		for (auto& bullet : ctx.p_enemyBullets)
+		{
+			bullet->Update(ctx);
+		}
 	}
 }
 
 void ChargeShotBoss::Draw(Camera camera)
 {
+	//生きているなら描画
+	if (!m_isDead)
+	{
 #if _DEBUG
-	m_colRect.Draw(0xaaffff, false, camera);
-	DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
+		m_colRect.Draw(0xaaffff, false, camera);
+		DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
 #endif
-	//キャラクターを表示
-	DrawRectRotaGraph(
-		m_pos.x + camera.GetDrawOffset().x,
-		m_pos.y + camera.GetDrawOffset().y,
-		0, 0, graph_width,
-		graph_height,
-		3.0, 0.0,
-		m_handle, true,!m_isRight);
+		//キャラクターを表示
+		DrawRectRotaGraph(
+			m_pos.x + camera.GetDrawOffset().x,
+			m_pos.y + camera.GetDrawOffset().y,
+			0, 0, graph_width,
+			graph_height,
+			4.0, 0.0,
+			m_handle, true, !m_isRight);
+	}
 }
 
 void ChargeShotBoss::Attack()

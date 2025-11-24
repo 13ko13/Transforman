@@ -15,10 +15,17 @@ void CollisionManager::CheckCollisions(
 	//プレイヤーと敵(今のところ使わない)
 	for (auto& enemy : pEnemies)
 	{
+		//プレイヤーが生きていて、
+		//無敵中ではなくて、
+		//敵が生きていて
+		//プレイヤーと敵がぶつかっているとき
 		if (!pPlayer->GetIsDead() &&
+			!pPlayer->GetIsInvincible() &&
 			!enemy->GetIsDead() &&
 			CheckCollision(*pPlayer, *enemy))
 		{
+			//プレイヤーのチャージ状態をアイドルに切り替える
+			pPlayer->ChangeState(PlayerState::Idle); 
 			printfDx("敵と当たった\n");
 			//プレイヤーのStateをダメージに変える
 			pPlayer->ChangeState(PlayerState::Damage);
@@ -27,19 +34,31 @@ void CollisionManager::CheckCollisions(
 			// ノックバックする方向を決める
 			int dir = 0;
 			bool isRight = false;
-			if (pPlayer->GetPos().x > enemy->GetPos().x)//プレイヤーが右にいる場合
+			if (pPlayer->GetColRect().GetCenter().x > enemy->GetColRect().GetCenter().x)//プレイヤーが右にいる場合
 			{
+				//プレイヤーがすでに左を向いている場合は
+				//向きは変えずに、プレイヤーが右を向いているなら
+				//向きを敵の方向に向ける
+				if (pPlayer->GetIsRight())
+				{
+					//左向いてからノックバックさせる
+					isRight = false;
+				}
 				//プレイヤーのノックバックする方向は右
 				dir = 1;
-				//左向いてからノックバックさせる
-				isRight = false;
 			}
 			else//プレイヤーが左にいる
 			{
+				//プレイヤーがすでに右を向いている場合は
+				//向きは変えずに、プレイヤーが左を向いているなら
+				//向きを敵の方向に向ける
+				if (pPlayer->GetIsRight())
+				{
+					//右向いてからノックバックさせる
+					isRight = true;
+				}
 				//プレイヤーのノックバックする方向は左
 				dir = -1;
-				//右向いてからノックバックさせる
-				isRight = true;
 			}
 			pPlayer->StartKnockback(dir);
 		}
@@ -70,7 +89,12 @@ void CollisionManager::CheckCollisions(
 	//プレイヤーと敵の弾
 	for (auto& bullet : pEnemyBullets)
 	{
+		//プレイヤーが生きていて、
+		//無敵中ではなくて、
+		//敵弾が生きていて
+		//プレイヤーと敵弾がぶつかっているとき
 		if (!pPlayer->GetIsDead() &&
+			!pPlayer->GetIsInvincible() &&
 			bullet->GetIsAlive() &&
 			CheckCollision(*pPlayer, *bullet))
 		{
@@ -80,20 +104,24 @@ void CollisionManager::CheckCollisions(
 			pPlayer->ChangeState(PlayerState::Damage);
 			int dir = 0;
 			bool isRight = false;
-			if (pPlayer->GetPos().x > bullet->GetPos().x)//プレイヤーが右にいる場合
+			for (auto& enemy : pEnemies)
 			{
-				//プレイヤーのノックバックする方向は右
-				dir = 1.0f;
-				//左向いてからノックバックさせる
-				isRight = false;
+				if (pPlayer->GetColRect().GetCenter().x > enemy->GetColRect().GetCenter().x)//プレイヤーが右にいる場合
+				{
+					//プレイヤーのノックバックする方向は右
+					dir = 1.0f;
+					//左向いてからノックバックさせる
+					isRight = false;
+				}
+				else//プレイヤーが左にいる
+				{
+					//プレイヤーのノックバックする方向は左
+					dir = -1.0f;
+					//右向いてからノックバックさせる
+					isRight = true;
+				}
 			}
-			else//プレイヤーが左にいる
-			{
-				//プレイヤーのノックバックする方向は左
-				dir = -1.0f;
-				//右向いてからノックバックさせる
-				isRight = true;
-			}
+			
 			//ノックバックさせる方向と
 			//プレイヤーが向く方向を設定
 			pPlayer->SetIsRight(isRight);

@@ -97,10 +97,24 @@ public:
 	/// </summary>
 	/// <param name="isRight">true:右向き,false:左向き</param>
 	void SetIsRight(bool isRight) { m_isRight = isRight; }
+
+	/// <summary>
+	/// 現在無敵中かどうかを返す関数
+	/// </summary>
+	/// <returns>true:無敵中,false:無敵ではない</returns>
+	bool GetIsInvincible() { return m_isInvincible; };
+
+	/// <summary>
+	/// 現在弾をチャージしているかどうか
+	/// </summary>
+	/// <returns>true:チャージ中,false:チャージしていない</returns>
+	bool GetIsCharging() { return m_isCharging; }
+
 private:
 	int m_jumpPower;//可変ジャンプ力
 	int m_shotCooltime;///ショットのクールタイム管理用
 	int m_knockackTimer;//ノックバック中のタイム管理用
+	int m_blinkingTimer;//無敵中の点滅中のタイム管理用
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
@@ -108,6 +122,7 @@ private:
 	bool m_isRight;//右を向いているかどうか
 	bool m_isCharging;//チャージショットをしているかどうか
 	bool m_isDead;//死亡しているかどうか
+	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
 	float m_animFrame;		//現在のアニメーションのフレーム数
