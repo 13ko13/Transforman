@@ -4,7 +4,6 @@
 #include <vector>
 #include <memory>
 #include "Rect.h"
-#include "Rect.h"
 
 enum class PlayerState
 {
@@ -19,12 +18,6 @@ enum class PlayerState
 	Damage
 };
 
-enum class PlayerWeapon
-{
-	Normal,
-	Fire
-};
-
 class PlayerBullet;
 class Player : public Object
 {
@@ -36,7 +29,7 @@ public:
 	void Update(GameContext& ctx) override;
 	void Draw(Camera camera) override;
 
-	const bool GetIsRight() const { return m_isRight; }
+	bool GetIsRight() const { return m_isRight; }
 
 	/// <summary>
 	/// ジャンプ処理
@@ -60,12 +53,6 @@ public:
 	void ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
 	/// <summary>
-	/// 炎を発射する処理
-	/// </summary>
-	/// <param name="pBullets">プレイヤーの弾丸を格納する共有ポインタのベクター</param>
-	void FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
-
-	/// <summary>
 	/// ショットを打つ準備の処理
 	/// </summary>
 	/// <param name="input">イベント名</param>
@@ -82,7 +69,7 @@ public:
 	/// プレイヤーが死亡しているかどうかを返す
 	/// </summary>
 	/// <returns>死んでいる:true,生きている:false</returns>
-	const bool GetIsDead() const { return m_isDead; }
+	bool GetIsDead() const { return m_isDead; }
 
 	void Climb();
 
@@ -103,7 +90,7 @@ public:
 	/// NockBack開始時の処理
 	/// </summary>
 	/// <param name="dir">ノックバックさせる方向</param>
-	void OnKnockback(int dir);
+	void StartKnockback(int dir);
 
 	/// <summary>
 	/// 右向きか左向きかを設定する
@@ -115,13 +102,13 @@ public:
 	/// 現在無敵中かどうかを返す関数
 	/// </summary>
 	/// <returns>true:無敵中,false:無敵ではない</returns>
-	const bool GetIsInvincible() const { return m_isInvincible; };
+	bool GetIsInvincible() { return m_isInvincible; };
 
 	/// <summary>
 	/// 現在弾をチャージしているかどうか
 	/// </summary>
 	/// <returns>true:チャージ中,false:チャージしていない</returns>
-	const bool GetIsCharging() const { return m_isCharging; }
+	bool GetIsCharging() { return m_isCharging; }
 
 private:
 	int m_jumpPower;//可変ジャンプ力
@@ -148,7 +135,6 @@ private:
 	int m_knockbackDir;			//ノックバックする方向
 
 	PlayerState m_state;
-	PlayerWeapon m_weapon;
 
 	Rect m_colRect;
 };

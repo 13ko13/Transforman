@@ -34,7 +34,7 @@ public:
 	/// </summary>
 	void Gravity();
 
-	const Vector2 GetPos() const { return m_pos; }
+	Vector2 GetPos() const { return m_pos; }
 
 protected:
 	int m_handle;	//‰æ‘œ‚Ìƒnƒ“ƒhƒ‹

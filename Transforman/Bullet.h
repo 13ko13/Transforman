@@ -14,12 +14,12 @@ public:
 	virtual void Update(GameContext& ctx) override;
 	virtual void Draw(Camera camera) override;
 
-	const Vector2& GetPos() const { return m_pos; }
+	Vector2 GetPos() { return m_pos; }
 	void SetPos(const Vector2& pos) { m_pos = pos; }
 	bool GetIsAlive() { return m_isAlive; }
 	void SetIsAlive(bool isAlive) { m_isAlive = isAlive; }
 
-	const Circle& GetCircle() const { return m_circle; }
+	Circle GetCircle() const { return m_circle; }
 
 protected:
 	Vector2 m_dir;
