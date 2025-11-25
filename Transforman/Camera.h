@@ -10,7 +10,7 @@ public:
 
 	void Update(const Player& player);
 
-	Vector2 GetDrawOffset() { return m_drawOffset; };
+	const Vector2& GetDrawOffset() const { return m_drawOffset; };
 	Vector2 VLerp(const Vector2& start, const Vector2& end, float t);
 
 private:

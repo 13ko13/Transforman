@@ -16,13 +16,13 @@ public:
 	/// 中心間距離を求める
 	/// </summary>
 	/// <returns>中心距離</returns>
-	float GetDistance(Vector2& pos);
+	const float GetDistance(Vector2& pos) const;
 
 	/// <summary>
 	/// 円と矩形の当たり判定
 	/// </summary>
 	/// <returns>矩形と当たっている:true,当たっていない:false</returns>
-	bool IsCollWithRect(const Rect& rect);
+	const bool IsCollWithRect(const Rect& rect) const;
 
 	/// <summary>
 	/// 描画する際に半径を決める

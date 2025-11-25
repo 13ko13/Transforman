@@ -386,6 +386,35 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 
 }
 
+void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
+{
+	for (auto& bullet : pBullets)
+	{
+		if (!bullet->GetIsAlive())
+		{
+			//弾が存在していない場合、弾を発射する
+			if (m_isRight)
+			{
+				//右向き
+				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
+				////状態遷移
+				//m_state = PlayerState::ChargeShot;
+			}
+			else
+			{
+				//左向き
+				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
+				////状態遷移
+				//m_state = PlayerState::ChargeShot;
+			}
+			bullet->SetType(BulletType::Fire);
+			bullet->SetIsAlive(true);
+			bullet->SetIsRight(m_isRight);
+			break;	//1発撃ったらループを抜ける
+		}
+	}
+}
+
 void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 	if (m_state != PlayerState::Damage)
@@ -415,17 +444,22 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 			{
 				//チャージショット
 				ChargeShot(pBullets);
-				m_shotCooltime = shot_cooltime;
-				m_prevChargeFrame = 0;
 				m_isCharging = false;
 			}
-			else
+			else if(m_prevChargeFrame < prev_charge_time &&
+					m_weaponType == WeaponType::Charge)
 			{
 				//通常ショット
 				Shot(pBullets);
-				m_shotCooltime = shot_cooltime;
-				m_prevChargeFrame = 0;
 			}
+			else if (m_prevChargeFrame < prev_charge_time &&
+				m_weaponType == WeaponType::Fire)
+			{
+				//火炎放射
+				FireShot(pBullets);
+			}
+			m_shotCooltime = shot_cooltime;
+			m_prevChargeFrame = 0;
 		}
 	}
 }

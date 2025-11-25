@@ -3,6 +3,7 @@
 #include "Input.h"
 #include <memory>
 #include "Geometry.h"
+#include "Rect.h"
 
 enum class BulletType
 {
@@ -28,4 +29,5 @@ public:
 private:
 	bool m_isRight;
 	BulletType m_bulletType;
+	Rect m_rect;
 };

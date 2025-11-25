@@ -10,6 +10,10 @@ namespace
 	constexpr float speed = 7.0f;
 	constexpr float normal_shot_radius = 15.0f;
 	constexpr float charge_shot_radius = 25.0f;
+
+	//Fire
+	constexpr int fire_width = 3;
+	constexpr int fire_height = 4;
 }
 
 PlayerBullet::PlayerBullet() :
@@ -18,6 +22,8 @@ PlayerBullet::PlayerBullet() :
 	m_bulletType = BulletType::Normal;
 	m_circle.SetPos(m_pos);
 	m_circle.SetRadius(normal_shot_radius);
+	//¶ã‚ğŠî€‚É“–‚½‚è”»’è‚ğİ’è
+	m_rect.SetLT(m_pos.x, m_pos.y, m_pos.x + fire_width, m_pos.y + fire_height);
 }
 
 PlayerBullet::~PlayerBullet()
@@ -64,6 +70,10 @@ void PlayerBullet::Update(GameContext& ctx)
 		break;
 	case BulletType::Charge:
 		m_circle.SetRadius(charge_shot_radius);
+		break;
+	case BulletType::Fire:
+		//¶ã‚ğŠî€‚É“–‚½‚è”»’è‚ğİ’è
+		m_rect.SetLT(m_pos.x, m_pos.y, m_pos.x + fire_width, m_pos.y + fire_height);
 		break;
 	}
 }

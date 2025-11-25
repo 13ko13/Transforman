@@ -29,14 +29,14 @@ void Circle::Draw(Camera& camera)
 		m_radius, 0xffffff, 0, 1);
 }
 
-float Circle::GetDistance(Vector2& pos)
+const float Circle::GetDistance(Vector2& pos) const
 {
 	float disX = pos.x - m_pos.x;
 	float disY = pos.y - m_pos.y;
 	return std::sqrt(disX * disX + disY * disY);
 }
 
-bool Circle::IsCollWithRect(const Rect& rect)
+const bool Circle::IsCollWithRect(const Rect& rect) const
 {
 	//矩形が自分(Circle)からみてどこにあるかを見る
 	//なので矩形の中心に最も近い点を探す

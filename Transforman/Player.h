@@ -18,6 +18,13 @@ enum class PlayerState
 	Damage
 };
 
+enum class WeaponType
+{
+	Normal,
+	Charge,
+	Fire
+};
+
 class PlayerBullet;
 class Player : public Object
 {
@@ -29,7 +36,7 @@ public:
 	void Update(GameContext& ctx) override;
 	void Draw(Camera camera) override;
 
-	bool GetIsRight() const { return m_isRight; }
+	const bool GetIsRight() const { return m_isRight; }
 
 	/// <summary>
 	/// ジャンプ処理
@@ -53,6 +60,12 @@ public:
 	void ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
 	/// <summary>
+	/// 火炎放射をする処理
+	/// </summary>
+	/// <param name="pBullet">プレイヤーの弾丸を格納する共有ポインタのベクター</param>
+	void FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullet);
+
+	/// <summary>
 	/// ショットを打つ準備の処理
 	/// </summary>
 	/// <param name="input">イベント名</param>
@@ -69,7 +82,7 @@ public:
 	/// プレイヤーが死亡しているかどうかを返す
 	/// </summary>
 	/// <returns>死んでいる:true,生きている:false</returns>
-	bool GetIsDead() const { return m_isDead; }
+	const bool GetIsDead() const { return m_isDead; }
 
 	void Climb();
 
@@ -102,13 +115,13 @@ public:
 	/// 現在無敵中かどうかを返す関数
 	/// </summary>
 	/// <returns>true:無敵中,false:無敵ではない</returns>
-	bool GetIsInvincible() { return m_isInvincible; };
+	const bool GetIsInvincible() const { return m_isInvincible; };
 
 	/// <summary>
 	/// 現在弾をチャージしているかどうか
 	/// </summary>
 	/// <returns>true:チャージ中,false:チャージしていない</returns>
-	bool GetIsCharging() { return m_isCharging; }
+	const bool GetIsCharging() const { return m_isCharging; }
 
 private:
 	int m_jumpPower;//可変ジャンプ力
@@ -135,6 +148,7 @@ private:
 	int m_knockbackDir;			//ノックバックする方向
 
 	PlayerState m_state;
+	WeaponType m_weaponType;
 
 	Rect m_colRect;
 };
