@@ -55,18 +55,6 @@ private:
 	static void RemoveDeadEnemies(std::vector<std::shared_ptr<EnemyBase>>& pEnemies);
 
 	/// <summary>
-	/// “G’eƒŠƒXƒg‚©‚ç€–S‚µ‚Ä‚¢‚é’e‚ğíœ‚·‚é
-	/// </summary>
-	/// <param name="pEnemyBullets"></param>
-	static void RemoveDeadEnemyBullets(std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets);
-
-	/// <summary>
-	/// ƒvƒŒƒCƒ„[‚Ì’eƒŠƒXƒg‚©‚ç€–S‚µ‚Ä‚¢‚é’e‚ğíœ‚·‚é
-	/// </summary>
-	/// <param name="pPlayerBullets"></param>
-	static void RemoveDeadPlayerBullets(std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets);
-
-	/// <summary>
 	/// “G‚ª€–S‚µ‚Ä‚é‚©‚ğæ“¾‚·‚éŠÖ”
 	/// </summary>
 	/// <param name="pEnemy">“G‚Ìƒ|ƒCƒ“ƒ^</param>

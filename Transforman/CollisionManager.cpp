@@ -60,7 +60,7 @@ void CollisionManager::CheckCollisions(
 				//プレイヤーのノックバックする方向は左
 				dir = -1;
 			}
-			pPlayer->StartKnockback(dir);
+			pPlayer->OnKnockback(dir);
 		}
 		else
 		{
@@ -125,7 +125,7 @@ void CollisionManager::CheckCollisions(
 			//ノックバックさせる方向と
 			//プレイヤーが向く方向を設定
 			pPlayer->SetIsRight(isRight);
-			pPlayer->StartKnockback(dir);
+			pPlayer->OnKnockback(dir);
 		}
 	}
 

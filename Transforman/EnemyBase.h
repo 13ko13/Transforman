@@ -28,7 +28,7 @@ public:
 	/// <returns>矩形のポインタ</returns>
 	const Rect& GetColRect() const { return m_colRect; }
 
-	bool GetIsDead() const { return m_isDead; }
+	const bool GetIsDead() const { return m_isDead; }
 	void SetIsDead(bool isDead) { m_isDead = isDead; }
 
 private:

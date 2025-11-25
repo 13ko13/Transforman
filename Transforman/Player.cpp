@@ -58,6 +58,7 @@ Player::Player() :
 	m_knockackTimer(0),
 	m_blinkingTimer(0),
 	m_state(PlayerState::Idle),
+	m_weapon(PlayerWeapon::Normal),
 	m_prevChargeFrame(0),
 	m_animFrame(0),
 	m_animSrcX(0),
@@ -98,6 +99,21 @@ void Player::Update(GameContext& ctx)
 			m_isInvincible = false;
 		}
 	}
+
+#if _DEBUG
+	//Debugとしてボタンで能力を切り替える
+	if (ctx.input.IsTriggered("changeState"))
+	{
+		if (m_weapon == PlayerWeapon::Normal)
+		{
+			m_weapon = PlayerWeapon::Fire;
+		}
+		else
+		{
+			m_weapon = PlayerWeapon::Normal;
+		}
+	}
+#endif
 
 
 	//重力を計算
@@ -226,17 +242,18 @@ void Player::Draw(Camera camera)
 {
 #if _DEBUG
 	m_colRect.Draw(0xffffff, false, camera);
-	DrawFormatString(0, 0, 0xffffff, "frame:%d", m_frame);
-	DrawFormatString(0, 15, 0xffffff, "playerPosX:%f, Y: %f", m_pos.x, m_pos.y);
-	DrawFormatString(0, 30, 0xffffff, "isRight:%d", m_isRight);
-	DrawFormatString(0, 60, 0xffffff, "shotCoolTime:%d", m_shotCooltime);
-	DrawFormatString(0, 150, 0xffffff, "prevChargeFrame:%d", m_prevChargeFrame);
-	DrawFormatString(0, 165, 0xffffff, "ground : %d", m_isGround);
-	DrawFormatString(0, 180, 0xffffff, "jumpPower : %d", m_jumpPower);
-	DrawFormatString(0, 195, 0xffffff, "velocity(%f , %f)", m_velocity.x, m_velocity.y);
+	DrawFormatString(0, 0, 0xffffff, "Frame:%d", m_frame);
+	DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
+	DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
+	DrawFormatString(0, 60, 0xffffff, "ShotCoolTime:%d", m_shotCooltime);
+	DrawFormatString(0, 150, 0xffffff, "PrevChargeFrame:%d", m_prevChargeFrame);
+	DrawFormatString(0, 165, 0xffffff, "Ground : %d", m_isGround);
+	DrawFormatString(0, 180, 0xffffff, "JumpPower : %d", m_jumpPower);
+	DrawFormatString(0, 195, 0xffffff, "Velocity(%f , %f)", m_velocity.x, m_velocity.y);
 	DrawFormatString(0, 210, 0xffffff, "PlayerState : %d", m_state);
 	DrawFormatString(0, 225, 0xffffff, "DamageAnimFrame : %f", m_damageAnimFrame);
-	DrawFormatString(0, 240, 0xffffff, "blinkingTimer : %d", m_blinkingTimer);
+	DrawFormatString(0, 240, 0xffffff, "BlinkingTimer : %d", m_blinkingTimer);
+	DrawFormatString(0, 255, 0xffffff, "WeaponType : %d", m_weapon);
 
 #endif
 
@@ -258,10 +275,7 @@ void Player::Draw(Camera camera)
 				!m_isRight											//反転
 			);
 		}
-		else
-		{
 
-		}
 	}
 	else
 	{
@@ -386,6 +400,31 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 
 }
 
+void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
+{
+	for (auto& bullet : pBullets)
+	{
+		if (!bullet->GetIsAlive())
+		{
+			//弾が存在していない場合、弾を発射する
+			if (m_isRight)
+			{
+				//右向き
+				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
+			}
+			else
+			{
+				//左向き
+				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
+			}
+			bullet->SetType(BulletType::Fire);
+			bullet->SetIsAlive(true);
+			bullet->SetIsRight(m_isRight);
+			break;	//1発撃ったらループを抜ける
+		}
+	}
+}
+
 void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 	if (m_state != PlayerState::Damage)
@@ -411,21 +450,28 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 		}
 		if (input.IsReleased("shot"))
 		{
-			if (m_prevChargeFrame > prev_charge_time)
+			if (m_prevChargeFrame > prev_charge_time &&
+				m_weapon == PlayerWeapon::Normal)
 			{
 				//チャージショット
 				ChargeShot(pBullets);
-				m_shotCooltime = shot_cooltime;
-				m_prevChargeFrame = 0;
 				m_isCharging = false;
 			}
-			else
+			else if(m_prevChargeFrame < prev_charge_time &&
+				    m_weapon == PlayerWeapon::Normal)
 			{
 				//通常ショット
 				Shot(pBullets);
-				m_shotCooltime = shot_cooltime;
-				m_prevChargeFrame = 0;
 			}
+			else if (m_prevChargeFrame < prev_charge_time &&
+				m_weapon == PlayerWeapon::Fire)
+			{
+				FireShot(pBullets);
+			}
+			//クールタイムへ入る
+			m_shotCooltime = shot_cooltime;
+			//チャージフレームも0へリセット
+			m_prevChargeFrame = 0;
 		}
 	}
 }
@@ -466,7 +512,7 @@ void Player::Knockback()
 	}
 }
 
-void Player::StartKnockback(int dir)
+void Player::OnKnockback(int dir)
 {
 	m_state = PlayerState::Damage;//ステートを切り替える
 	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
