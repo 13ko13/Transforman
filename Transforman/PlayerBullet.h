@@ -29,5 +29,8 @@ public:
 private:
 	bool m_isRight;
 	BulletType m_bulletType;
-	Rect m_rect;
+	Rect m_rect; 
+
+	//‰Š‚ªÁ‚¦‚é‚Ü‚Å‚Ì•b”
+	float m_frameLifeTime;
 };

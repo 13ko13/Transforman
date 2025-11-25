@@ -58,6 +58,7 @@ Player::Player() :
 	m_knockackTimer(0),
 	m_blinkingTimer(0),
 	m_state(PlayerState::Idle),
+	m_weaponType(WeaponType::Normal),
 	m_prevChargeFrame(0),
 	m_animFrame(0),
 	m_animSrcX(0),
@@ -99,6 +100,23 @@ void Player::Update(GameContext& ctx)
 		}
 	}
 
+#if _DEBUG
+	//デバッグ用の武器タイプ切り替え
+	if (ctx.input.IsTriggered("changeState"))
+	{
+		if (m_weaponType == WeaponType::Normal)
+		{
+			m_weaponType = WeaponType::Fire;
+			return;
+		}
+		if (m_weaponType == WeaponType::Fire)
+		{
+			m_weaponType = WeaponType::Normal;
+			return;
+		}
+	}
+#endif
+	
 
 	//重力を計算
 	Gravity();
@@ -226,18 +244,18 @@ void Player::Draw(Camera camera)
 {
 #if _DEBUG
 	m_colRect.Draw(0xffffff, false, camera);
-	DrawFormatString(0, 0, 0xffffff, "frame:%d", m_frame);
-	DrawFormatString(0, 15, 0xffffff, "playerPosX:%f, Y: %f", m_pos.x, m_pos.y);
-	DrawFormatString(0, 30, 0xffffff, "isRight:%d", m_isRight);
-	DrawFormatString(0, 60, 0xffffff, "shotCoolTime:%d", m_shotCooltime);
-	DrawFormatString(0, 150, 0xffffff, "prevChargeFrame:%d", m_prevChargeFrame);
-	DrawFormatString(0, 165, 0xffffff, "ground : %d", m_isGround);
-	DrawFormatString(0, 180, 0xffffff, "jumpPower : %d", m_jumpPower);
-	DrawFormatString(0, 195, 0xffffff, "velocity(%f , %f)", m_velocity.x, m_velocity.y);
+	DrawFormatString(0, 0, 0xffffff, "Frame:%d", m_frame);
+	DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
+	DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
+	DrawFormatString(0, 60, 0xffffff, "ShotCoolTime:%d", m_shotCooltime);
+	DrawFormatString(0, 150, 0xffffff, "PrevChargeFrame:%d", m_prevChargeFrame);
+	DrawFormatString(0, 165, 0xffffff, "Ground : %d", m_isGround);
+	DrawFormatString(0, 180, 0xffffff, "JumpPower : %d", m_jumpPower);
+	DrawFormatString(0, 195, 0xffffff, "Velocity(%f , %f)", m_velocity.x, m_velocity.y);
 	DrawFormatString(0, 210, 0xffffff, "PlayerState : %d", m_state);
 	DrawFormatString(0, 225, 0xffffff, "DamageAnimFrame : %f", m_damageAnimFrame);
-	DrawFormatString(0, 240, 0xffffff, "blinkingTimer : %d", m_blinkingTimer);
-
+	DrawFormatString(0, 240, 0xffffff, "BlinkingTimer : %d", m_blinkingTimer);
+	DrawFormatString(0, 255, 0xffffff, "WeaponType : %d", m_weaponType);
 #endif
 
 	//ダメージ受けたときは一定時間表示する→しないを繰り返して
@@ -353,7 +371,6 @@ void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 
 void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
-
 	for (auto& bullet : pBullets)
 	{
 		if (!bullet->GetIsAlive())
@@ -383,7 +400,6 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 				m_state = PlayerState::Idle;
 			}*/
 	}
-
 }
 
 void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
@@ -447,7 +463,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 				m_isCharging = false;
 			}
 			else if(m_prevChargeFrame < prev_charge_time &&
-					m_weaponType == WeaponType::Charge)
+					m_weaponType == WeaponType::Normal)
 			{
 				//通常ショット
 				Shot(pBullets);
