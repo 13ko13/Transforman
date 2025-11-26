@@ -1,10 +1,10 @@
 #include "Application.h"
 #include "DxLib.h"
-#include "Input.h"
-#include "SceneController.h"
+#include "../General/Input.h"
+#include "../Scenes/SceneController.h"
 #include <memory>
-#include "TitleScene.h"
-#include "GameConstants.h"
+#include "../Scenes/TitleScene.h"
+#include "../General/GameConstants.h"
 
 Application::Application():
 	m_windowSize{Graphic::screen_width,Graphic::screen_height}

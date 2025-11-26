@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 #include <memory>
-#include "Circle.h"
+#include "../Collider/Circle.h"
 
 struct GameContext;
 class Bullet : public Object

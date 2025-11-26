@@ -1,6 +1,6 @@
 #include "Bullet.h"
-#include "Camera.h"
-#include "Circle.h"
+#include "../Graphics/Camera.h"
+#include "../Collider/Circle.h"
 
 Bullet::Bullet() :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),

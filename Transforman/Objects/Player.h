@@ -1,9 +1,9 @@
 #pragma once
 #include "Object.h"
-#include "Input.h"
+#include "../General/Input.h"
 #include <vector>
 #include <memory>
-#include "Rect.h"
+#include "../Collider/Rect.h"
 
 enum class PlayerState
 {

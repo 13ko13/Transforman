@@ -1,11 +1,11 @@
 #include "EnemyBullet.h"
 #include <DxLib.h>
-#include "GameConstants.h"
+#include "../General/GameConstants.h"
 #include <cmath>
 #include "Player.h"
 #include "ChargeShotBoss.h"
-#include "Camera.h"
-#include "Circle.h"
+#include "../Graphics/Camera.h"
+#include "../Collider/Circle.h"
 
 namespace
 {

@@ -2,7 +2,7 @@
 #include "Rect.h"
 #include <cmath>
 #include <DxLib.h>
-#include "Camera.h"
+#include "../Graphics/Camera.h"
 
 namespace
 {

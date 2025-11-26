@@ -1,7 +1,7 @@
 #include "Rect.h"
 #include <DxLib.h>
 #include <cassert>
-#include "Camera.h"
+#include "../Graphics/Camera.h"
 
 Rect::Rect() :
 	m_left(0.0f),

@@ -1,7 +1,7 @@
 #pragma once
 #include "Object.h"
 #include <memory>
-#include "Rect.h"
+#include "../Collider/Rect.h"
 #include <vector>
 
 // プロトタイプ宣言

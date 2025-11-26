@@ -1,8 +1,8 @@
 #include "TitleScene.h"
 #include <DxLib.h>
-#include "Input.h"
+#include "../General/Input.h"
 #include "SceneController.h"
-#include "Application.h"
+#include "../Main/Application.h"
 #include "GameScene.h"
 #include <assert.h>
 

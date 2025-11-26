@@ -1,6 +1,6 @@
 #include "Camera.h"
-#include "Player.h"
-#include "GameConstants.h"
+#include "../Objects/Player.h"
+#include "../General/GameConstants.h"
 #include <cmath>
 
 namespace

@@ -1,6 +1,6 @@
 #include "Input.h"
 #include "DxLib.h"
-#include "Fade.h"
+#include "../Graphics/Fade.h"
 #include "GameConstants.h"
 
 Input::Input() :

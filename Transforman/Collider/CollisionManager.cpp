@@ -1,9 +1,9 @@
 #include "CollisionManager.h"
-#include "PlayerBullet.h"
-#include "EnemyBullet.h"
-#include "EnemyBase.h"
-#include "Player.h"
-#include "Geometry.h"
+#include "../Objects/PlayerBullet.h"
+#include "../Objects/EnemyBullet.h"
+#include "../Objects/EnemyBase.h"
+#include "../Objects/Player.h"
+#include "../Utility/Geometry.h"
 #include <DxLib.h>
 
 void CollisionManager::CheckCollisions(

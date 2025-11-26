@@ -1,9 +1,9 @@
 #include "Player.h"
-#include "Geometry.h"
+#include "../Utility/Geometry.h"
 #include <DxLib.h>
-#include "GameConstants.h"
+#include "../General/GameConstants.h"
 #include "PlayerBullet.h"
-#include "Camera.h"
+#include "../Graphics/Camera.h"
 
 namespace
 {

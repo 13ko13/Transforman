@@ -1,8 +1,8 @@
 #include "PlayerBullet.h"
 #include <DxLib.h>
-#include "GameConstants.h"
-#include "Camera.h"
-#include "Circle.h"
+#include "../General/GameConstants.h"
+#include "../Graphics/Camera.h"
+#include "../Collider/Circle.h"
 #include "EnemyBase.h"
 
 namespace 

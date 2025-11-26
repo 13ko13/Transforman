@@ -1,9 +1,9 @@
 #pragma once
 #include "Bullet.h"
-#include "Input.h"
+#include "../General/Input.h"
 #include <memory>
-#include "Geometry.h"
-#include "Rect.h"
+#include "../Utility/Geometry.h"
+#include "../Collider/Rect.h"
 
 enum class BulletType
 {

@@ -1,10 +1,10 @@
 #include "GameScene.h"
-#include "Player.h"
-#include "PlayerBullet.h"
-#include "ChargeShotBoss.h"
-#include "EnemyBullet.h"
-#include "Camera.h"
-#include "CollisionManager.h"
+#include "../Objects/Player.h"
+#include "../Objects/PlayerBullet.h"
+#include "../Objects/ChargeShotBoss.h"
+#include "../Objects/EnemyBullet.h"
+#include "../Graphics/Camera.h"
+#include "../Collider/CollisionManager.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)

@@ -3,8 +3,8 @@
 #include <DxLib.h>
 #include "Player.h"
 #include <cassert>
-#include "Camera.h"
-#include "GameConstants.h"
+#include "../Graphics/Camera.h"
+#include "../General/GameConstants.h"
 
 namespace
 {

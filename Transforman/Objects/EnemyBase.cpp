@@ -1,5 +1,5 @@
 #include "EnemyBase.h"
-#include "Camera.h"
+#include "../Graphics/Camera.h"
 
 EnemyBase::EnemyBase() :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),
