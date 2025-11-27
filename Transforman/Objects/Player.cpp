@@ -25,7 +25,7 @@ namespace
 	constexpr int min_jump_power = 8.0f;					//最低ジャンプ力
 	constexpr float jump_scale = 1.4f;						//ジャンプ力の倍率
 
-	constexpr int shot_cooltime = 30;						//ショットのクールタイム
+	constexpr int shot_cooltime = 15;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 
@@ -55,6 +55,7 @@ Player::Player() :
 	m_isInvincible(false),
 	m_jumpPower(0),
 	m_shotCooltime(0),
+	m_flameThrowerCT(0),
 	m_knockackTimer(0),
 	m_blinkingTimer(0),
 	m_state(PlayerState::Idle),
@@ -86,9 +87,20 @@ void Player::Init()
 
 void Player::Update(GameContext& ctx)
 {
+	//フレームを更新
 	m_frame++;
+	//ポジションを更新
 	m_pos += m_velocity;
+	//アニメーションフレームの更新
 	m_animFrame++;
+
+	//クールタイムを更新して0以下になったら
+	//ショット可能状態にする
+	m_shotCooltime--;
+
+	//火炎放射もクールタイムを更新して0以下になったら
+	//放射可能状態にする
+	m_flameThrowerCT--;
 
 	//無敵中
 	if (m_isInvincible)
@@ -141,8 +153,11 @@ void Player::Update(GameContext& ctx)
 		//移動
 		Move(ctx.input);
 
-		//ショットの準備
-		PrevShot(ctx.input, ctx.p_playerBullets);
+		//クールタイムが0以下の場合ショットの準備を進める
+		if (m_shotCooltime <= 0)
+		{
+			PrevShot(ctx.input, ctx.p_playerBullets);
+		}
 
 		//壁のぼり
 		if (ctx.input.IsPressed("up"))
@@ -408,6 +423,7 @@ void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 	{
 		if (!bullet->GetIsAlive())
 		{
+			bullet->OnFlame();
 			//弾が存在していない場合、弾を発射する
 			if (m_isRight)
 			{
@@ -435,17 +451,11 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 {
 	if (m_state != PlayerState::Damage)
 	{
-		m_shotCooltime--;
-		if (m_shotCooltime < 0)
-		{
-			//クールタイムを更新して0以下になったら
-			//ショット可能状態にする
-			m_shotCooltime = 0;
-		}
 		//ボタンが一定フレーム以上
 		//長押しされたらチャージショットの判定にする
 		//チャージショットの猶予時間を超えたらチャージショット
 		//それ以外は通常ショット
+		//もしくは火炎放射
 		if (input.IsPressed("shot"))
 		{
 			m_prevChargeFrame++;
@@ -456,20 +466,23 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 		}
 		if (input.IsReleased("shot"))
 		{
-			if (m_prevChargeFrame > prev_charge_time)
+			if (m_prevChargeFrame > prev_charge_time &&
+				m_shotCooltime < 0)
 			{
 				//チャージショット
 				ChargeShot(pBullets);
 				m_isCharging = false;
 			}
 			else if(m_prevChargeFrame < prev_charge_time &&
-					m_weaponType == WeaponType::Normal)
+					m_weaponType == WeaponType::Normal &&
+					m_shotCooltime < 0)
 			{
 				//通常ショット
 				Shot(pBullets);
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
-				m_weaponType == WeaponType::Fire)
+					m_weaponType == WeaponType::Fire &&
+					m_shotCooltime < 0)
 			{
 				//火炎放射
 				FireShot(pBullets);

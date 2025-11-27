@@ -39,6 +39,7 @@ ChargeShotBoss::ChargeShotBoss() :
 
 ChargeShotBoss::~ChargeShotBoss()
 {
+	DeleteGraph(m_handle);
 }
 
 void ChargeShotBoss::Init()

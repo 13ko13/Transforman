@@ -26,11 +26,16 @@ public:
 	void SetIsRight(bool isRight) { m_isRight = isRight; }
 	void SetType(BulletType bulletType) { m_bulletType = bulletType; }
 
+	/// <summary>
+	/// ‰Î‰Š•úË‚ğ‘Å‚Â‚Æ‚¢‚¤–½—ß‚ª”ò‚Î‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚ÔŠÖ”
+	/// </summary>
+	void OnFlame();
+
 private:
 	bool m_isRight;
 	BulletType m_bulletType;
 	Rect m_rect; 
 
 	//‰Š‚ªÁ‚¦‚é‚Ü‚Å‚Ì•b”
-	float m_frameLifeTime;
+	float m_flameLifeTime;
 };
