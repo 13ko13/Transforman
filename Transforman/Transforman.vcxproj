@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Graphics\Animation.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Scenes\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="Graphics\Animation.h" />
     <ClInclude Include="Main\Application.h" />
     <ClInclude Include="Objects\Bullet.h" />

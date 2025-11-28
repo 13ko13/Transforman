@@ -127,6 +127,7 @@ private:
 	int m_jumpPower;//可変ジャンプ力
 	int m_shotCooltime;///ショットのクールタイム管理用
 	int m_flameThrowerCT;//火炎放射器のクールタイム管理用
+	int m_flameThrowCount;//火炎放射中の時間計測用
 	int m_knockackTimer;//ノックバック中のタイム管理用
 	int m_blinkingTimer;//無敵中の点滅中のタイム管理用
 

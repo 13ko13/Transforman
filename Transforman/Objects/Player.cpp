@@ -28,10 +28,12 @@ namespace
 	constexpr int shot_cooltime = 15;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
+	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
 
 	//アニメーション用のグラフのインデックス
 	constexpr int graph_index_idle = 0;
 	constexpr int graph_index_walk = 1;
+	constexpr int graph_index_shot = 2;
 	constexpr int graph_index_damage = 3;
 	constexpr int graph_index_deth = 7;
 	constexpr int graph_index_jump = 8;
@@ -39,6 +41,7 @@ namespace
 	//アニメーション関係
 	constexpr int anim_wait_frame = 7;						//次のアニメーションまでの待機時間
 	constexpr int idle_anim_frame = 4;						//アイドルアニメーションの枚数
+	constexpr int flame_anim_frame = 1;						//火炎放射中のアニメーションの枚数
 	constexpr int walk_anim_frame = 7;						//歩き状態のアニメーションの枚数
 	constexpr int damage_anim_frame = 8;					//食らい状態のアニメーション枚数
 	constexpr int deth_anim_frame = 20;						//死んだときのアニメーション枚数
@@ -56,6 +59,7 @@ Player::Player() :
 	m_jumpPower(0),
 	m_shotCooltime(0),
 	m_flameThrowerCT(0),
+	m_flameThrowCount(0),
 	m_knockackTimer(0),
 	m_blinkingTimer(0),
 	m_state(PlayerState::Idle),
@@ -68,7 +72,7 @@ Player::Player() :
 	m_damageAnimFrame(0),
 	m_knockbackDir(0)
 {
-	m_handle = LoadGraph("img/game/Player/player.png");
+	m_handle = LoadGraph("img/game/Player/transforman_player.png");
 	m_colRect.SetLT(
 		m_pos.x - size_width / 2,
 		m_pos.y - size_height / 2 + rect_offset,
@@ -133,11 +137,13 @@ void Player::Update(GameContext& ctx)
 	//重力を計算
 	Gravity();
 
-	if (m_state != PlayerState::Damage)
+	bool canAction = (m_state != PlayerState::Damage) && (m_state != PlayerState::Fire);
+	//ダメージ状態中または火炎放射中は行動できないようにする
+	if (canAction)
 	{
 		//押されている間ジャンプ力が可変する
-	//ジャンプボタンが離されるor最大ジャンプ力を超えたら強制的に
-	//ジャンプさせる
+		//ジャンプボタンが離されるor最大ジャンプ力を超えたら強制的に
+		//ジャンプさせる
 		if (ctx.input.IsPressed("jump") &&
 			m_isGround)
 		{
@@ -214,7 +220,14 @@ void Player::Update(GameContext& ctx)
 
 		break;
 	case PlayerState::Fire:
+		m_animSrcY = graph_height * graph_index_shot;
+		animMax = flame_anim_frame;
 
+		m_flameThrowCount--;
+		if (m_flameThrowCount <= 0)
+		{
+			m_state = PlayerState::Idle;
+		}
 		break;
 	case PlayerState::Damage:
 		//無敵を有効にする
@@ -348,7 +361,6 @@ void Player::Move(Input& input)
 		}
 		else
 		{
-
 			m_state = PlayerState::Idle;
 		}
 
@@ -419,30 +431,36 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 
 void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
-	for (auto& bullet : pBullets)
+	//地面についているときのみ発射OKとする
+	if (m_isGround)
 	{
-		if (!bullet->GetIsAlive())
+		for (auto& bullet : pBullets)
 		{
-			bullet->OnFlame();
-			//弾が存在していない場合、弾を発射する
-			if (m_isRight)
+			if (!bullet->GetIsAlive())
 			{
-				//右向き
-				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
-				////状態遷移
-				//m_state = PlayerState::ChargeShot;
+				bullet->OnFlame();
+				//弾が存在していない場合、弾を発射する
+				if (m_isRight)
+				{
+					//右向き
+					bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
+					////状態遷移
+					//m_state = PlayerState::ChargeShot;
+				}
+				else
+				{
+					//左向き
+					bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
+					////状態遷移
+					//m_state = PlayerState::ChargeShot;
+				}
+				bullet->SetType(BulletType::Fire);
+				bullet->SetIsAlive(true);
+				bullet->SetIsRight(m_isRight);
+				//火炎放射中の時間を計測する変数に代入
+				m_flameThrowCount = flame_motion_frame;
+				break;	//1発撃ったらループを抜ける
 			}
-			else
-			{
-				//左向き
-				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
-				////状態遷移
-				//m_state = PlayerState::ChargeShot;
-			}
-			bullet->SetType(BulletType::Fire);
-			bullet->SetIsAlive(true);
-			bullet->SetIsRight(m_isRight);
-			break;	//1発撃ったらループを抜ける
 		}
 	}
 }
@@ -486,6 +504,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 			{
 				//火炎放射
 				FireShot(pBullets);
+				m_state = PlayerState::Fire;
 			}
 			m_shotCooltime = shot_cooltime;
 			m_prevChargeFrame = 0;
