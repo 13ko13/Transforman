@@ -140,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Stages\Stage.cpp" />
     <ClCompile Include="Graphics\Animation.cpp" />
     <ClCompile Include="Main\Application.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
@@ -164,6 +166,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Stages\Stage.h" />
     <ClInclude Include="Graphics\Animation.h" />
     <ClInclude Include="Main\Application.h" />
     <ClInclude Include="Objects\Bullet.h" />

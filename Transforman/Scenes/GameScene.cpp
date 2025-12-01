@@ -5,6 +5,8 @@
 #include "../Objects/EnemyBullet.h"
 #include "../Graphics/Camera.h"
 #include "../Collider/CollisionManager.h"
+#include "../BackGround.h"
+#include "../Stages/Stage.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
@@ -47,6 +49,13 @@ GameScene::GameScene(SceneController& controller) :
 
 	//カメラの生成
 	m_pCamera = std::make_shared<Camera>();
+
+	//ステージデータのロード
+	m_pStage = std::make_shared<Stage>();
+	m_pStage->Load(1);
+
+	//背景の生成
+	m_pBackground = std::make_shared<BackGround>();
 }
 
 void GameScene::Init()
@@ -75,6 +84,8 @@ void GameScene::Update(Input& input)
 
 void GameScene::Draw()
 {
+	//背景の描画
+	m_pBackground->Draw();
 	// 各オブジェクトの描画
 	for (auto& object : m_pObjects)
 	{
