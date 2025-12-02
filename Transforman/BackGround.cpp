@@ -1,6 +1,7 @@
 #include "BackGround.h"
 #include <DxLib.h>
 #include "General/GameConstants.h"
+#include <cassert>
 
 namespace
 {
@@ -12,6 +13,8 @@ BackGround::BackGround() :
 	m_pos(0.0f,0.0f)
 {
 	m_handle = LoadGraph("img/game/Map/background.png");
+	//チェック
+	assert(m_handle >= 0);
 }
 
 BackGround::~BackGround()

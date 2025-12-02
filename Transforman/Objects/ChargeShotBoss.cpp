@@ -26,7 +26,7 @@ ChargeShotBoss::ChargeShotBoss() :
 	m_isGround(false)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
-	assert(m_handle > -1);
+	assert(m_handle >= 0);
 
 	m_pos = first_pos;
 	m_attackCooltime = attack_cooltime;

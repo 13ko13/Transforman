@@ -5,8 +5,6 @@
 class Stage
 {
 public:
-	Stage();
-	~Stage();
 
 	/// <summary>
 	/// XVˆ—

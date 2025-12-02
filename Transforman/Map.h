@@ -1,13 +1,22 @@
 #pragma once
+#include <vector>
+#include <memory>
+
+class Stage;
 class Map
 {
 public:
-	Map();
+	Map(std::shared_ptr<Stage> pStage);
 	~Map();
 
 	void Update();
 	void Draw();
 private:
-
+	std::shared_ptr<Stage> m_pStage;//ステージのポインタ
+	int m_handle;	//画像ハンドル
+	bool m_isStageEnd;//ステージの終端かどうか
+	int m_scrollX;//現在のスクロール度合い
+	int m_startChipX;//表示開始タイル
+	int m_offsetX;//スクロールの途中にチップを補正する
 };
 

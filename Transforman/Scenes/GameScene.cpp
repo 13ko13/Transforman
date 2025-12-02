@@ -7,6 +7,7 @@
 #include "../Collider/CollisionManager.h"
 #include "../BackGround.h"
 #include "../Stages/Stage.h"
+#include "../Map.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
@@ -56,6 +57,8 @@ GameScene::GameScene(SceneController& controller) :
 
 	//背景の生成
 	m_pBackground = std::make_shared<BackGround>();
+	//マップチップの生成
+	m_pMap = std::make_shared<Map>(m_pStage);
 }
 
 void GameScene::Init()
@@ -80,12 +83,17 @@ void GameScene::Update(Input& input)
 
 	// カメラの更新
 	m_pCamera->Update(*m_pPlayer);
+
+	//マップチップの更新
+	m_pMap->Update();
 }
 
 void GameScene::Draw()
 {
 	//背景の描画
-	m_pBackground->Draw();
+	//m_pBackground->Draw();
+	//マップチップの描画
+	m_pMap->Draw();
 	// 各オブジェクトの描画
 	for (auto& object : m_pObjects)
 	{

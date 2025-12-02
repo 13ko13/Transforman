@@ -39,14 +39,6 @@ namespace
 	};
 }
 
-Stage::Stage()
-{
-}
-
-Stage::~Stage()
-{
-}
-
 void Stage::Load(int stageNom)
 {
 	//ファイルのパスを保管する変数
