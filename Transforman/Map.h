@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include "Collider/Rect.h"
 
 class Stage;
+class Camera;
 class Map
 {
 public:
@@ -10,7 +12,8 @@ public:
 	~Map();
 
 	void Update();
-	void Draw();
+	void Draw(Camera camera);
+	const bool IsCollision(const Rect& hitRect) const;
 private:
 	std::shared_ptr<Stage> m_pStage;//ステージのポインタ
 	int m_handle;	//画像ハンドル

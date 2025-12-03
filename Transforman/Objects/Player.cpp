@@ -7,7 +7,7 @@
 
 namespace
 {
-	constexpr float ground = Graphic::screen_height - 100;	//地面の高さ(仮)
+	constexpr float ground = Graphic::screen_height - 220;	//地面の高さ(仮)
 	constexpr float move_speed = 3.0f;						//移動速度
 	constexpr float size_width = 40.0f;						//キャラクターの横幅
 	constexpr float size_height = 50.0f;					//キャラクターの高さ
@@ -49,12 +49,8 @@ namespace
 }
 
 Player::Player() :
-	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),
 	m_isJumping(false),
-	m_isGround(false),
-	m_isRight(false),
 	m_isCharging(false),
-	m_isDead(false),
 	m_isInvincible(false),
 	m_jumpPower(0),
 	m_shotCooltime(0),

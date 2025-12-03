@@ -7,10 +7,10 @@
 #include <DxLib.h>
 
 void CollisionManager::CheckCollisions(
-	std::shared_ptr<Player> pPlayer,
+	std::shared_ptr<Player>& pPlayer,
 	std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
 	std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets,
-	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets)
+	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets
 {
 	//プレイヤーと敵(今のところ使わない)
 	for (auto& enemy : pEnemies)
@@ -25,7 +25,7 @@ void CollisionManager::CheckCollisions(
 			CheckCollision(*pPlayer, *enemy))
 		{
 			//プレイヤーのチャージ状態をアイドルに切り替える
-			pPlayer->ChangeState(PlayerState::Idle); 
+			pPlayer->ChangeState(PlayerState::Idle);
 			printfDx("敵と当たった\n");
 			//プレイヤーのStateをダメージに変える
 			pPlayer->ChangeState(PlayerState::Damage);
@@ -121,7 +121,7 @@ void CollisionManager::CheckCollisions(
 					isRight = true;
 				}
 			}
-			
+
 			//ノックバックさせる方向と
 			//プレイヤーが向く方向を設定
 			pPlayer->SetIsRight(isRight);
@@ -131,7 +131,6 @@ void CollisionManager::CheckCollisions(
 
 	RemoveDeadEnemies(pEnemies);
 }
-
 
 bool CollisionManager::CheckCollision(const Player& player, const EnemyBase& enemy)
 {

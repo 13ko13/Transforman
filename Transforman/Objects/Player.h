@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "../Charactor.h"
 #include "../General/Input.h"
 #include <vector>
 #include <memory>
@@ -26,7 +27,7 @@ enum class WeaponType
 };
 
 class PlayerBullet;
-class Player : public Object
+class Player : public Charactor
 {
 public:
 	Player();
@@ -35,8 +36,6 @@ public:
 	void Init() override;
 	void Update(GameContext& ctx) override;
 	void Draw(Camera camera) override;
-
-	const bool GetIsRight() const { return m_isRight; }
 
 	/// <summary>
 	/// ジャンプ処理
@@ -72,18 +71,6 @@ public:
 	/// <param name="pBullets">プレイヤーの弾丸</param>
 	void PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
-	/// <summary>
-	/// 矩形の参照を返す
-	/// </summary>
-	/// <returns>参照された矩形</returns>
-	const Rect& GetColRect() const { return m_colRect; }
-
-	/// <summary>
-	/// プレイヤーが死亡しているかどうかを返す
-	/// </summary>
-	/// <returns>死んでいる:true,生きている:false</returns>
-	const bool GetIsDead() const { return m_isDead; }
-
 	void Climb();
 
 	/// <summary>
@@ -104,12 +91,6 @@ public:
 	/// </summary>
 	/// <param name="dir">ノックバックさせる方向</param>
 	void StartKnockback(int dir);
-
-	/// <summary>
-	/// 右向きか左向きかを設定する
-	/// </summary>
-	/// <param name="isRight">true:右向き,false:左向き</param>
-	void SetIsRight(bool isRight) { m_isRight = isRight; }
 
 	/// <summary>
 	/// 現在無敵中かどうかを返す関数
@@ -133,10 +114,8 @@ private:
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
-	bool m_isGround;//接地しているかどうか
-	bool m_isRight;//右を向いているかどうか
 	bool m_isCharging;//チャージショットをしているかどうか
-	bool m_isDead;//死亡しているかどうか
+	
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
@@ -151,6 +130,4 @@ private:
 
 	PlayerState m_state;
 	WeaponType m_weaponType;
-
-	Rect m_colRect;
 };

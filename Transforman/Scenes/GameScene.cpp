@@ -91,9 +91,9 @@ void GameScene::Update(Input& input)
 void GameScene::Draw()
 {
 	//背景の描画
-	//m_pBackground->Draw();
+	m_pBackground->Draw();
 	//マップチップの描画
-	m_pMap->Draw();
+	m_pMap->Draw(*m_pCamera);
 	// 各オブジェクトの描画
 	for (auto& object : m_pObjects)
 	{

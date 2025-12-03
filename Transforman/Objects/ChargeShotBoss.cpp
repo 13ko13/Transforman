@@ -21,9 +21,7 @@ namespace
 }
 
 ChargeShotBoss::ChargeShotBoss() :
-	m_attackCooltime(0),
-	m_isRight(true),
-	m_isGround(false)
+	m_attackCooltime(0)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
 	assert(m_handle >= 0);

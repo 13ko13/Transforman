@@ -17,7 +17,7 @@ public:
 	/// <param name="pPlayerBullets">プレイヤーの弾のポインタ</param>
 	/// <param name="pEnemyBullets">敵の弾のポインタ</param>
 	static void CheckCollisions(
-		std::shared_ptr<Player> pPlayer,
+		std::shared_ptr<Player>& pPlayer,
 		std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
 		std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets,
 		std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets
@@ -53,18 +53,6 @@ private:
 	/// </summary>
 	/// <param name="pEnemies"></param>
 	static void RemoveDeadEnemies(std::vector<std::shared_ptr<EnemyBase>>& pEnemies);
-
-	/// <summary>
-	/// 敵弾リストから死亡している弾を削除する
-	/// </summary>
-	/// <param name="pEnemyBullets"></param>
-	static void RemoveDeadEnemyBullets(std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets);
-
-	/// <summary>
-	/// プレイヤーの弾リストから死亡している弾を削除する
-	/// </summary>
-	/// <param name="pPlayerBullets"></param>
-	static void RemoveDeadPlayerBullets(std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets);
 
 	/// <summary>
 	/// 敵が死亡してるかを取得する関数
