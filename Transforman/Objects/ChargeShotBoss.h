@@ -8,7 +8,7 @@ class Player;
 class ChargeShotBoss : public EnemyBase
 {
 public:
-	ChargeShotBoss();
+	ChargeShotBoss(std::shared_ptr<Map> pMap);
 	~ChargeShotBoss();
 
 	void Init() override;

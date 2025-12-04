@@ -30,7 +30,7 @@ class PlayerBullet;
 class Player : public Charactor
 {
 public:
-	Player();
+	Player(std::shared_ptr<Map> pMap);
 	~Player();
 
 	void Init() override;

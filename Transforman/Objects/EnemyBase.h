@@ -14,7 +14,7 @@ struct GameContext;
 class EnemyBase : public Charactor
 {
 public:
-	EnemyBase();
+	EnemyBase(int width,int height,std::shared_ptr<Map> pMap);
 	virtual ~EnemyBase();
 
 	virtual void Init() override;

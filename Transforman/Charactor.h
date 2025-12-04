@@ -8,7 +8,7 @@ class Map;
 class Charactor :public Object
 {
 public:
-	Charactor();
+	Charactor(int width,int height,std::shared_ptr<Map> pMap);
 	virtual ~Charactor();
 	virtual void Init() override;
 	virtual void Update(GameContext& ctx) override;
@@ -16,7 +16,7 @@ public:
 	/// <summary>
 	/// マップチップと当たっていた時の処理
 	/// </summary>
-	virtual void HitMap();
+	virtual void HitMap(Rect& chipRect);
 	/// <summary>
 	/// 右向きか左向きかを設定する
 	/// </summary>
@@ -52,4 +52,7 @@ protected:
 	bool m_isDead;//死亡しているかどうか
 	bool m_isGround;//接地しているかどうか
 	bool m_isRight;//右を向いているかどうか
+
+	int m_width;//キャラクターの幅
+	int m_height;//キャラクターの高さ
 };

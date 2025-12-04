@@ -12,8 +12,13 @@
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
 {
+	//ステージデータのロード
+	m_pStage = std::make_shared<Stage>();
+	m_pStage->Load(1);
+	//マップチップの生成
+	m_pMap = std::make_shared<Map>(m_pStage);
 	// プレイヤーの生成
-	m_pPlayer = std::make_shared<Player>();
+	m_pPlayer = std::make_shared<Player>(m_pMap);
 	// プレイヤーの弾の生成
 	m_pPlayerBullets.resize(3);
 	for (auto& bullet : m_pPlayerBullets)
@@ -30,35 +35,35 @@ GameScene::GameScene(SceneController& controller) :
 	//チャージショットボス、壁のぼりボス、火炎放射ボス、植物系ボスの4体
 	m_pEnemies.resize(0);
 	//チャージショットボスを試しに追加する
-	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>();
+	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>(m_pMap);
 	m_pEnemies.push_back(m_pChargeShotBoss);
+
+	//キャラクターすべてを配列に入れる
+	for (auto& enemy : m_pEnemies)
+	{
+		m_pCharactors.push_back(enemy);
+	}
+	m_pCharactors.push_back(m_pPlayer);
 
 	//オブジェクトを継承しているクラスをすべてObjects配列に入れる
 	for (auto& bullet : m_pEnemyBullets)
 	{
 		m_pObjects.push_back(bullet);
 	}
-	for (auto& enemy : m_pEnemies)
-	{
-		m_pObjects.push_back(enemy);
-	}
-	m_pObjects.push_back(m_pPlayer);//プレイヤーの描画を最優先
 	for (auto& bullet : m_pPlayerBullets)
 	{
 		m_pObjects.push_back(bullet);
+	}
+	for (auto& charactor : m_pCharactors)
+	{
+		m_pObjects.push_back(charactor);
 	}
 
 	//カメラの生成
 	m_pCamera = std::make_shared<Camera>();
 
-	//ステージデータのロード
-	m_pStage = std::make_shared<Stage>();
-	m_pStage->Load(1);
-
 	//背景の生成
 	m_pBackground = std::make_shared<BackGround>();
-	//マップチップの生成
-	m_pMap = std::make_shared<Map>(m_pStage);
 }
 
 void GameScene::Init()

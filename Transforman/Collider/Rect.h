@@ -93,7 +93,17 @@ public:
 	/// <returns>当たってるかどうか</returns>
 	bool IsCollRect(const Rect& rect) const;
 
-private:
+	/// <summary>
+	/// 矩形が衝突されたときにその衝突された
+	/// 矩形の情報を記憶する関数
+	/// </summary>
+	/// <param name="left">矩形の左上X</param>
+	/// <param name="right">矩形の右上X</param>
+	/// <param name="top">矩形の左上Y</param>
+	/// <param name="bottom">矩形の右下Y</param>
+	void OnHit(float left,float right, float top,float bottom);
+
+public:
 	float m_left;  //左上のX座標
 	float m_right; //右下のX座標
 	float m_top;   //左上のY座標

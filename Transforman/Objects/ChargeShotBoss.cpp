@@ -20,7 +20,8 @@ namespace
 	constexpr float bullet_pos_offset = 10.0f;
 }
 
-ChargeShotBoss::ChargeShotBoss() :
+ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
+	EnemyBase(size_width,size_height,pMap),
 	m_attackCooltime(0)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
@@ -28,11 +29,6 @@ ChargeShotBoss::ChargeShotBoss() :
 
 	m_pos = first_pos;
 	m_attackCooltime = attack_cooltime;
-
-	m_colRect.SetLT(
-		m_pos.x - size_width / 2,
-		m_pos.y - size_height / 2 ,
-		size_width, size_height);
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -50,25 +46,9 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	//生きているなら行動させる
 	if (!m_isDead)
 	{
-		Gravity();
 		m_pos += m_velocity;
 
-		m_colRect.SetLT(
-			m_pos.x - size_width / 2,
-			m_pos.y - size_height / 2,
-			size_width, size_height);
-
-		//仮の地面を設定
-		if (m_pos.y >= ground)
-		{
-			m_pos.y = ground;
-			m_isGround = true;
-			m_velocity.y = 0.0f;
-		}
-		else
-		{
-			m_isGround = false;
-		}
+		Charactor::Update(ctx);
 
 		//攻撃のクールタイムを更新
 		m_attackCooltime--;
@@ -78,11 +58,6 @@ void ChargeShotBoss::Update(GameContext& ctx)
 			Attack(ctx.p_enemyBullets, ctx.player);
 			//クールタイムをリセット
 			m_attackCooltime = attack_cooltime;
-		}
-		//弾の動きを更新
-		for (auto& bullet : ctx.p_enemyBullets)
-		{
-			bullet->Update(ctx);
 		}
 	}
 }
@@ -120,7 +95,6 @@ void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 		//弾を撃つ
 		if (!bullet->GetIsAlive())
 		{
-
 			//プレイヤーの場所を取得して
 			//弾の向きを決定する
 			if (pPlayer->GetPos().x > m_pos.x)

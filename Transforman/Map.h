@@ -13,7 +13,7 @@ public:
 
 	void Update();
 	void Draw(Camera camera);
-	const bool IsCollision(const Rect& hitRect) const;
+	bool IsCollision(const Rect hitRect, Rect& chipRect);
 private:
 	std::shared_ptr<Stage> m_pStage;//ステージのポインタ
 	int m_handle;	//画像ハンドル

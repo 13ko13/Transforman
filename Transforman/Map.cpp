@@ -80,11 +80,17 @@ void Map::Draw(Camera camera)
 							srcX, srcY,
 							chip_size, chip_size,
 							1.0, 0.0, m_handle, true);
+
+#ifdef _DEBUG
+			//当たり判定
+			DrawBoxAA(posX + camera.GetDrawOffset().x, posY + camera.GetDrawOffset().y, posX + chip_size, posY + chip_size, 0x00ff00, false);
+#endif // _DEBUG
+
 		}
 	}
 }
 
-const bool Map::IsCollision(const Rect& hitRect) const
+bool Map::IsCollision(const Rect hitRect, Rect& chipRect)
 {
 	//ステージデータとマップのサイズを取得
 	const auto& stageData = m_pStage->GetAllData();
@@ -96,16 +102,20 @@ const bool Map::IsCollision(const Rect& hitRect) const
 	int chipOnScreenH = wsize.h / chip_size;
 	for (int y = 0; y < chipOnScreenH; y++)
 	{
+		//マップの高さを越えたらcontinueする
+		if (y >= mapSize.h) continue;
 		for (int x = 0; x < chipOnScreenW; x++)
 		{
+			//マップの幅を越えたらcontinueする	
+			if (x >= mapSize.w) continue;
 			//現在のチップのIDをstageDataをもとに計算する
 			auto chipID = stageData[x + y * mapSize.w];
 			//0番は透明なのでcontinueする
 			if (chipID == 0) continue;
-			int chipLeft = x * chip_size;
-			int chipRight = chipLeft + chip_size;
-			int chipTop = y * chip_size;
-			int chipBottom = chipTop + chip_size;
+			int chipLeft =static_cast<int>( x * chip_size);
+			int chipRight = static_cast<int>(chipLeft + chip_size);
+			int chipTop = static_cast<int>(y * chip_size);
+			int chipBottom = static_cast<int>(chipTop + chip_size);
 
 			//絶対に当たらないパターンをはじく
 			if (chipLeft > hitRect.GetRight()) continue;
@@ -113,6 +123,11 @@ const bool Map::IsCollision(const Rect& hitRect) const
 			if (chipTop > hitRect.GetBottom()) continue;
 			if (chipBottom < hitRect.GetTop()) continue;
 
+			//ぶつかったマップチップの矩形を設定する
+			chipRect.OnHit(static_cast<float>(chipLeft),
+				static_cast<float>(chipRight), 
+				static_cast<float>(chipTop),
+				static_cast<float>(chipBottom));
 			//上記のどれにも当てはまっていなければ当たっている
 			return true;
 		}

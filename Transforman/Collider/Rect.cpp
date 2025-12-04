@@ -77,3 +77,11 @@ bool Rect::IsCollRect(const Rect& rect) const
 	return true;
 }
 
+void Rect::OnHit(float left, float right, float top, float bottom)
+{
+	m_left = left;
+	m_right = right;
+	m_top = top;
+	m_bottom = bottom;
+}
+

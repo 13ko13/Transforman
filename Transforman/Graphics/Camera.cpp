@@ -29,16 +29,20 @@ Camera::~Camera()
 
 void Camera::Update(const Player& player)
 {
+	if (m_pos.x < 0.0f)
+	{
+		m_pos.x = 0.0f;
+	}
 	//プレイヤーの位置とカメラの位置を同じにする
 	m_pos = VLerp(m_pos, player.GetPos(), 0.1f);
 
 	//ベクトルや計算を使って、「カメラのポジションを動かす」
 	//という感覚を保ちたいので、Draw側に足しているcamera.posをいじる
 	m_drawOffset.x = m_pos.x * -1;
-	m_drawOffset.y = m_pos.y * -1;
+	//m_drawOffset.y = m_pos.y * -1;
 
 	//その時画面の中央にプレイヤーが来るようにする
 	//(camera.posが画面の中央になるようにする) 
 	m_drawOffset.x += Graphic::screen_width / 2;
-	m_drawOffset.y += Graphic::screen_height / 2;
+	//m_drawOffset.y += Graphic::screen_height / 2;
 }

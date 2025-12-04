@@ -10,7 +10,7 @@ void CollisionManager::CheckCollisions(
 	std::shared_ptr<Player>& pPlayer,
 	std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
 	std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets,
-	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets
+	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets)
 {
 	//プレイヤーと敵(今のところ使わない)
 	for (auto& enemy : pEnemies)

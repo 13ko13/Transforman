@@ -48,7 +48,8 @@ namespace
 	constexpr int jump_anim_frame = 3;						//ジャンプの時のアニメーション枚数
 }
 
-Player::Player() :
+Player::Player(std::shared_ptr<Map> pMap) :	
+	Charactor(size_width,size_height,pMap),
 	m_isJumping(false),
 	m_isCharging(false),
 	m_isInvincible(false),
@@ -69,10 +70,6 @@ Player::Player() :
 	m_knockbackDir(0)
 {
 	m_handle = LoadGraph("img/game/Player/transforman_player.png");
-	m_colRect.SetLT(
-		m_pos.x - size_width / 2,
-		m_pos.y - size_height / 2 + rect_offset,
-		size_width, size_height);
 }
 
 Player::~Player()
@@ -89,15 +86,13 @@ void Player::Update(GameContext& ctx)
 {
 	//フレームを更新
 	m_frame++;
-	//ポジションを更新
-	m_pos += m_velocity;
 	//アニメーションフレームの更新
 	m_animFrame++;
 
 	//クールタイムを更新して0以下になったら
 	//ショット可能状態にする
 	m_shotCooltime--;
-
+	Charactor::Update(ctx);
 	//火炎放射もクールタイムを更新して0以下になったら
 	//放射可能状態にする
 	m_flameThrowerCT--;
@@ -129,9 +124,6 @@ void Player::Update(GameContext& ctx)
 	}
 #endif
 	
-
-	//重力を計算
-	Gravity();
 
 	bool canAction = (m_state != PlayerState::Damage) && (m_state != PlayerState::Fire);
 	//ダメージ状態中または火炎放射中は行動できないようにする
@@ -166,18 +158,6 @@ void Player::Update(GameContext& ctx)
 		{
 			Climb();
 		}
-	}
-
-	//仮の地面を設定
-	if (m_pos.y >= ground)
-	{
-		m_pos.y = ground;
-		m_isGround = true;
-		m_velocity.y = 0.0f;
-	}
-	else
-	{
-		m_isGround = false;
 	}
 
 	//None,
@@ -256,12 +236,6 @@ void Player::Update(GameContext& ctx)
 	{
 		m_animFrame = 0.0f;
 	}
-
-	//プレイヤーの左上座標を基準にする
-	m_colRect.SetLT(
-		m_pos.x - size_width / 2,
-		m_pos.y - size_height / 2 + rect_offset,
-		size_width, size_height);
 }
 
 void Player::Draw(Camera camera)
