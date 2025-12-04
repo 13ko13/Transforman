@@ -29,10 +29,10 @@ Camera::~Camera()
 
 void Camera::Update(const Player& player)
 {
-	if (m_pos.x < 0.0f)
-	{
-		m_pos.x = 0.0f;
-	}
+	//プレイヤーの位置がステージの端まで来るとカメラの
+	//目標ポジションを端より先に行かないようにする
+
+
 	//プレイヤーの位置とカメラの位置を同じにする
 	m_pos = VLerp(m_pos, player.GetPos(), 0.1f);
 

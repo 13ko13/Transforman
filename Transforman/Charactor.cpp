@@ -42,6 +42,31 @@ void Charactor::Draw(Camera camera)
 
 void Charactor::HitMap(Rect& chipRect)
 {
+	//横方向の衝突
+	m_pos.x += m_velocity.x;
+	//bool m_isHitColSide = 
+	//常に最新の矩形情報にする
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);
+	//衝突していたら
+	if (m_pMap->IsCollision(m_colRect, chipRect))
+	{
+		//キャラが右に移動しているなら
+		if (m_velocity.x > 0.0f)
+		{
+			//衝突したら当たったチップの左を取得して
+			//そこからキャラの幅の半分だけ補正する
+			m_pos.x = chipRect.GetLeft() - m_width * 0.5f;
+		}
+		else if (m_velocity.x < 0.0f)//キャラが左に移動しているなら
+		{
+			//衝突したら当たったチップの右を取得して
+			//そこからキャラの幅の半分だけ補正する
+			m_pos.x = chipRect.GetRight() + m_width * 0.5f;
+		}
+		//最後に速度を0にする
+		m_velocity.x = 0.0f;
+	}
+
 	//斜めから当たったりしたときの優先順位をつけるために
 	//軸を分離して判定する
 	//縦方向の衝突
@@ -69,31 +94,8 @@ void Charactor::HitMap(Rect& chipRect)
 		}
 	}
 
-	//横方向の衝突
-	m_pos.x += m_velocity.x;
-	//常に最新の矩形情報にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);
-	//衝突していたら
-	if (m_pMap->IsCollision(m_colRect,chipRect))
-	{
-		//キャラが右に移動しているなら
-		if (m_velocity.x > 0.0f)
-		{
-			//衝突したら当たったチップの左を取得して
-			//そこからキャラの幅の半分だけ補正する
-			m_pos.x = chipRect.GetLeft() - m_width * 0.5f;
-		}
-		else if (m_velocity.x < 0.0f)//キャラが左に移動しているなら
-		{
-			//衝突したら当たったチップの右を取得して
-			//そこからキャラの幅の半分だけ補正する
-			m_pos.x = chipRect.GetRight() + m_width * 0.5f;
-		}
-		//最後に速度を0にする
-		m_velocity.x = 0.0f;
-	}
+	
 #ifdef _DEBUG
 	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);
 #endif // DEBUG
-
 }
