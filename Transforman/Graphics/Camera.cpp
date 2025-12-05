@@ -2,10 +2,13 @@
 #include "../Objects/Player.h"
 #include "../General/GameConstants.h"
 #include <cmath>
+#include "../Stages/Stage.h"
 
 namespace
 {
 	const Vector2 first_pos = { 0.0f,0.0f };
+	constexpr int scorp_range = 400;
+	constexpr float camera_lerp_t = 0.1f;
 }
 
 Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
@@ -16,7 +19,8 @@ Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
 	return ret;
 }
 
-Camera::Camera()
+Camera::Camera():
+	disPlayerToStageSideX(0)
 {
 	m_pos = first_pos;
 	m_drawOffset = first_pos;
@@ -27,14 +31,27 @@ Camera::~Camera()
 
 }
 
-void Camera::Update(const Player& player)
+void Camera::Update(const Player& player,const std::shared_ptr<Stage>& pStage)
 {
-	//プレイヤーの位置がステージの端まで来るとカメラの
-	//目標ポジションを端より先に行かないようにする
+	//プレイヤーの位置が、カメラの中央から一定以上
+	//離れたらカメラの目標をその範囲内に収める
+	
+	Vector2 targetPos = m_pos;
+	if (player.GetPos().x > m_pos.x + (scorp_range * 0.5f))
+	{
+		targetPos.x = player.GetPos().x - (scorp_range * 0.5f);
+	}
+	else if (player.GetPos().x < m_pos.x - (scorp_range * 0.5f))
+	{
+		targetPos.x = player.GetPos().x + (scorp_range * 0.5f);
+	}
 
 
 	//プレイヤーの位置とカメラの位置を同じにする
-	m_pos = VLerp(m_pos, player.GetPos(), 0.1f);
+	m_pos = VLerp(m_pos, targetPos, camera_lerp_t);
+	
+
+	
 
 	//ベクトルや計算を使って、「カメラのポジションを動かす」
 	//という感覚を保ちたいので、Draw側に足しているcamera.posをいじる

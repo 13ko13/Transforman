@@ -87,7 +87,7 @@ void GameScene::Update(Input& input)
 	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets);
 
 	// カメラの更新
-	m_pCamera->Update(*m_pPlayer);
+	m_pCamera->Update(*m_pPlayer,m_pStage);
 
 	//マップチップの更新
 	m_pMap->Update();
