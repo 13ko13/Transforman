@@ -83,7 +83,7 @@ void Map::Draw(Camera camera)
 
 #ifdef _DEBUG
 			//“–‚½‚è”»’è
-			DrawBoxAA(posX + camera.GetDrawOffset().x, posY + camera.GetDrawOffset().y, posX + chip_size, posY + chip_size, 0x00ff00, false);
+			DrawBoxAA(posX + camera.GetDrawOffset().x, posY + camera.GetDrawOffset().y, posX + chip_size + camera.GetDrawOffset().x, posY + chip_size + camera.GetDrawOffset().y, 0x00ff00, false);
 #endif // _DEBUG
 
 		}

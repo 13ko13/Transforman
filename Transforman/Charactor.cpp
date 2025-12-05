@@ -2,7 +2,7 @@
 #include "Graphics/Camera.h"
 #include "Map.h"
 
-Charactor::Charactor(int width, int height,std::shared_ptr<Map> pMap) :
+Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap) :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),
 	m_isGround(false),
 	m_isRight(false),
@@ -44,9 +44,8 @@ void Charactor::HitMap(Rect& chipRect)
 {
 	//横方向の衝突
 	m_pos.x += m_velocity.x;
-	//bool m_isHitColSide = 
 	//常に最新の矩形情報にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 1, m_height - 1);
 	//衝突していたら
 	if (m_pMap->IsCollision(m_colRect, chipRect))
 	{
@@ -72,8 +71,8 @@ void Charactor::HitMap(Rect& chipRect)
 	//縦方向の衝突
 	m_pos.y += m_velocity.y;
 	//常に最新の矩形情報にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);
-	if (m_pMap->IsCollision(m_colRect,chipRect))
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 10, m_height - 1);
+	if (m_pMap->IsCollision(m_colRect, chipRect))
 	{
 		//下方向(落下)
 		if (m_velocity.y > 0.0f)
@@ -94,7 +93,7 @@ void Charactor::HitMap(Rect& chipRect)
 		}
 	}
 
-	
+
 #ifdef _DEBUG
 	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);
 #endif // DEBUG

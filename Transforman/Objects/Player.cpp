@@ -13,7 +13,7 @@ namespace
 	constexpr float size_height = 50.0f;					//キャラクターの高さ
 	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
 	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
-	constexpr int rect_offset = 5;							//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
+	constexpr int rect_offset_y = 5;							//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 
 	constexpr float knockback_duration = 15.0f;				//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
@@ -265,7 +265,7 @@ void Player::Draw(Camera camera)
 		{
 			DrawRectRotaGraph(
 				static_cast<int>(m_pos.x + camera.GetDrawOffset().x),
-				static_cast<int>(m_pos.y + camera.GetDrawOffset().y), //表示位置
+				static_cast<int>(m_pos.y + camera.GetDrawOffset().y) - rect_offset_y, //表示位置
 				m_animSrcX, m_animSrcY,												//切り取り開始位置
 				graph_width, graph_height,								//切り取りサイズ
 				draw_scale, 0.0,											//拡大率、回転角度
@@ -284,7 +284,7 @@ void Player::Draw(Camera camera)
 		//無敵中じゃないときは常に表示
 		DrawRectRotaGraph(
 			static_cast<int>(m_pos.x + camera.GetDrawOffset().x),
-			static_cast<int>(m_pos.y + camera.GetDrawOffset().y), //表示位置
+			static_cast<int>(m_pos.y + camera.GetDrawOffset().y) - rect_offset_y, //表示位置
 			m_animSrcX, m_animSrcY,												//切り取り開始位置
 			graph_width, graph_height,								//切り取りサイズ
 			draw_scale, 0.0,											//拡大率、回転角度
@@ -317,6 +317,7 @@ void Player::Move(Input& input)
 	if (m_state != PlayerState::Damage)
 	{
 		Vector2 dir = { 0.0f,0.0f };//プレイヤーの速度ベクトル
+		m_velocity.x = 0.0f;
 		if (input.IsPressed("right"))
 		{
 			m_state = PlayerState::Walk;
@@ -336,7 +337,7 @@ void Player::Move(Input& input)
 
 		//ディレクションを正規化してプレイヤーのスピードをかけて
 		//ポジションに足してあげる移動処理
-		m_pos += dir.Normalized() * move_speed;
+		m_velocity += dir.Normalized() * move_speed;
 	}
 }
 
