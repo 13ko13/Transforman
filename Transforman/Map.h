@@ -5,6 +5,7 @@
 
 class Stage;
 class Camera;
+class Player;
 class Map
 {
 public:

@@ -5,7 +5,7 @@
 
 namespace
 {
-	constexpr double graph_scale = 0.8;//‰æ‘œ‚ÌŠg‘å”{—¦
+	constexpr double graph_scale = 1.0;//‰æ‘œ‚ÌŠg‘å”{—¦
 	constexpr double graph_angle = 0.0;//‰æ‘œ‚ÌŠp“x
 }
 
