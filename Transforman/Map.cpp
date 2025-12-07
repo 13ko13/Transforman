@@ -42,47 +42,29 @@ void Map::Draw(Camera camera)
 	const auto& mapSize = m_pStage->GetMapSize();
 	//ウィンドウサイズを取得
 	const auto& wsize = Application::GetInstance().GetWindowSize();
-	//画面に表示できるタイル数を計算
-	int chipOnScreenW = wsize.w / chip_size;
-	int chipOnScreenH = wsize.h / chip_size;
-
-	//カメラの画面左上ワールド座標(ピクセル)から開始列と半端オフセットを計算
-	const int worldX = static_cast<int>(camera.GetWorldOriginX());
-	const int worldY = static_cast<int>(camera.GetWorldOriginY());
-	//チップ開始列を計算
-	const int startX = std::clamp(worldX / chip_size, 0, std::max(0, mapSize.w - 1));
-	const int startY = std::clamp(worldY / chip_size, 0, std::max(0, mapSize.h - 1));
-	//チップのスクロールに対応するための半端オフセットを計算
-	const float offsetX = static_cast<float>(-(worldX % chip_size));
-	const float offsetY = 0;
-
-	//縦方向(画面に入る行のみ/端の半端も見えるようにするために+1行
-	//minで比較しないと、ステージの終端になった時に範囲外アクセスしてしまう
-	const int drawRows = std::min(chipOnScreenH + 1, mapSize.h - startY);
-	for (int y = 0; y < drawRows; y++)
+	for (int y = 0; y < mapSize.h; y++)
 	{
 		//マップの列をインデックスとして保管
 		//スクロール対応するためにstartYを足してあげる
-		const int idxY = startY + y;
 		//マップ外にアクセスしないようにcontinueする
-		if (idxY < 0 || idxY >= mapSize.h) continue;
+		if (y < 0 || y >= mapSize.h) continue;
 
-		const int drawCols = std::min(chipOnScreenW + 1, mapSize.w - startX);
-		for (int x = 0; x < drawCols; x++)
+		//const int drawCols = std::min(chipOnScreenW + 1, mapSize.w - startX);
+		for (int x = 0; x < mapSize.w; x++)
 		{
 			//スクロール対応するためにstartXを足してあげる
-			const int idxX =  startX + x;
+			//const int idxX =  startX + x;
 			//マップ外にアクセスしないようにcontinueする
-			if (idxX < 0 || idxX >= mapSize.w) continue;
+			if (x < 0 || x >= mapSize.w) continue;
 
 			//現在のチップのIDをstageDataをもとに計算する
-			auto chipID = stageData[idxX + idxY * mapSize.w];
+			auto chipID = stageData[x + y * mapSize.w];
 			//チップのIDが0の時は透明なのでチップを配置しない
 			if (chipID == 0) continue;
 
-			const float posX = static_cast<float>(x * chip_size) + offsetX +
+			const float posX = static_cast<float>(x * chip_size) +
 				camera.GetDrawOffset().x;
-			const float posY = static_cast<float>(y * chip_size) + offsetY +
+			const float posY = static_cast<float>(y * chip_size) +
 				camera.GetDrawOffset().y;
 			//どのマップチップを表示するかを計算
 			//インデックスを考慮するので余りを出して1行目以外にも対応
@@ -118,14 +100,11 @@ bool Map::IsCollision(const Rect hitRect, Rect& chipRect)
 	const auto& mapSize = m_pStage->GetMapSize();
 	//ウィンドウサイズを取得
 	const auto& wsize = Application::GetInstance().GetWindowSize();
-	//画面に表示できるタイル数を計算
-	int chipOnScreenW = wsize.w / chip_size;
-	int chipOnScreenH = wsize.h / chip_size;
-	for (int y = 0; y < chipOnScreenH; y++)
+	for (int y = 0; y < mapSize.h; y++)
 	{
 		//マップの高さを越えたらcontinueする
 		if (y >= mapSize.h) continue;
-		for (int x = 0; x < chipOnScreenW; x++)
+		for (int x = 0; x < mapSize.w; x++)
 		{
 			//マップの幅を越えたらcontinueする	
 			if (x >= mapSize.w) continue;

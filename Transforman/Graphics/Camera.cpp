@@ -7,8 +7,9 @@
 namespace
 {
 	const Vector2 first_pos = { 0.0f,0.0f };
-	constexpr int scorp_range = 100;
+	constexpr int scorp_range = 400;
 	constexpr float camera_lerp_t = 0.1f;
+	constexpr int mapchip_size = 32;
 }
 
 Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
@@ -56,9 +57,28 @@ void Camera::Update(const Player& player,const std::shared_ptr<Stage>& pStage)
 		targetPos.x = player.GetPos().x + (scorp_range * 0.5f);
 	}
 
-
 	//プレイヤーの位置とカメラの位置を同じにする
 	m_pos = VLerp(m_pos, targetPos, camera_lerp_t);
+
+	//ステージの端が見えたらそこからカメラを移動させない
+	//ステージデータ取得
+	const auto& mapSize = pStage->GetMapSize();
+	//画面の半分
+	const int screenHalfW = Graphic::screen_width * 0.5f;//640
+	//カメラの位置がステージの端から画面サイズの半分を
+	//引いた場所についたらカメラの位置を補正する
+	const int cameraEndPosX = pStage->GetMapSize().w * mapchip_size - screenHalfW;
+	const int cameraStartPosX = screenHalfW;
+	//カメラの終端位置と開始位置を指定する
+	//その範囲内に収める
+	if (m_pos.x > cameraEndPosX)
+	{
+		m_pos.x = cameraEndPosX;
+	}
+	else if (m_pos.x < cameraStartPosX)
+	{
+		m_pos.x = cameraStartPosX;
+	}
 
 	//ベクトルや計算を使って、「カメラのポジションを動かす」
 	//という感覚を保ちたいので、Draw側に足しているcamera.posをいじる

@@ -160,13 +160,14 @@ void PlayerBullet::Draw(Camera camera)
 			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
 			break;
-			
+
 		case BulletType::Fire:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_rect.Draw(0xffffff,false,camera);
-			DrawFormatString(0, 270, 0xffffff, "FlameLifeTime : %f",m_flameLifeTime);
+			m_rect.Draw(0xffffff, false, camera);
+			DrawFormatString(0, 270, 0xffffff, "FlameLifeTime : %f", m_flameLifeTime);
 #endif
+			break;
 		}
 	}
 }
