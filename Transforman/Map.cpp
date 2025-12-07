@@ -95,44 +95,44 @@ void Map::Draw(Camera camera)
 
 bool Map::IsCollision(const Rect hitRect, Rect& chipRect)
 {
-	//ステージデータとマップのサイズを取得
-	const auto& stageData = m_pStage->GetAllData();
-	const auto& mapSize = m_pStage->GetMapSize();
-	//ウィンドウサイズを取得
-	const auto& wsize = Application::GetInstance().GetWindowSize();
-	for (int y = 0; y < mapSize.h; y++)
-	{
-		//マップの高さを越えたらcontinueする
-		if (y >= mapSize.h) continue;
-		for (int x = 0; x < mapSize.w; x++)
-		{
-			//マップの幅を越えたらcontinueする	
-			if (x >= mapSize.w) continue;
-			//現在のチップのIDをstageDataをもとに計算する
-			auto chipID = stageData[x + y * mapSize.w];
-			//0番は透明なのでcontinueする
-			if (chipID == 0) continue;
-			int chipLeft = static_cast<int>(x * chip_size);
-			int chipRight = static_cast<int>(chipLeft + chip_size);
-			int chipTop = static_cast<int>(y * chip_size);
-			int chipBottom = static_cast<int>(chipTop + chip_size);
+	////ステージデータとマップのサイズを取得
+	//const auto& stageData = m_pStage->GetAllData();
+	//const auto& mapSize = m_pStage->GetMapSize();
+	////ウィンドウサイズを取得
+	//const auto& wsize = Application::GetInstance().GetWindowSize();
+	//for (int y = 0; y < mapSize.h; y++)
+	//{
+	//	//マップの高さを越えたらcontinueする
+	//	if (y >= mapSize.h) continue;
+	//	for (int x = 0; x < mapSize.w; x++)
+	//	{
+	//		//マップの幅を越えたらcontinueする	
+	//		if (x >= mapSize.w) continue;
+	//		//現在のチップのIDをstageDataをもとに計算する
+	//		auto chipID = stageData[x + y * mapSize.w];
+	//		//0番は透明なのでcontinueする
+	//		if (chipID == 0) continue;
+	//		int chipLeft = static_cast<int>(x * chip_size);
+	//		int chipRight = static_cast<int>(chipLeft + chip_size);
+	//		int chipTop = static_cast<int>(y * chip_size);
+	//		int chipBottom = static_cast<int>(chipTop + chip_size);
 
-			//絶対に当たらない場合
-			if (chipLeft > hitRect.GetRight()) continue;
-			if (chipTop > hitRect.GetBottom()) continue;
-			if (chipRight < hitRect.GetLeft()) continue;
-			if (chipBottom < hitRect.GetTop()) continue;
+	//		//絶対に当たらない場合
+	//		if (chipLeft > hitRect.GetRight()) continue;
+	//		if (chipTop > hitRect.GetBottom()) continue;
+	//		if (chipRight < hitRect.GetLeft()) continue;
+	//		if (chipBottom < hitRect.GetTop()) continue;
 
-			//ぶつかったマップチップの矩形を設定する
-			chipRect.m_left = static_cast<float>(chipLeft);
-			chipRect.m_right = static_cast<float>(chipRight);
-			chipRect.m_top = static_cast<float>(chipTop);
-			chipRect.m_bottom = static_cast<float>(chipBottom);
+	//		//ぶつかったマップチップの矩形を設定する
+	//		chipRect.m_left = static_cast<float>(chipLeft);
+	//		chipRect.m_right = static_cast<float>(chipRight);
+	//		chipRect.m_top = static_cast<float>(chipTop);
+	//		chipRect.m_bottom = static_cast<float>(chipBottom);
 
-			//いずれかのチップに当たっていたら終了する
-			return true;
-		}
-	}
-	//どれにも当たっていない
+	//		//いずれかのチップに当たっていたら終了する
+	//		return true;
+	//	}
+	//}
+	////どれにも当たっていない
 	return false;
 }

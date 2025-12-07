@@ -45,20 +45,8 @@ Camera::~Camera()
 
 void Camera::Update(const Player& player,const std::shared_ptr<Stage>& pStage)
 {
-	//プレイヤーの位置が、カメラの中央から一定以上
-	//離れたらカメラの目標をその範囲内に収める
-	Vector2 targetPos = m_pos;
-	if (player.GetPos().x > m_pos.x + (scorp_range * 0.5f))
-	{
-		targetPos.x = player.GetPos().x - (scorp_range * 0.5f);
-	}
-	else if (player.GetPos().x < m_pos.x - (scorp_range * 0.5f))
-	{
-		targetPos.x = player.GetPos().x + (scorp_range * 0.5f);
-	}
-
 	//プレイヤーの位置とカメラの位置を同じにする
-	m_pos = VLerp(m_pos, targetPos, camera_lerp_t);
+	m_pos = VLerp(m_pos, player.GetPos(), camera_lerp_t);
 
 	//ステージの端が見えたらそこからカメラを移動させない
 	//ステージデータ取得

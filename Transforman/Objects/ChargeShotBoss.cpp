@@ -15,7 +15,7 @@ namespace
 	constexpr int graph_width = 48;	//画像1枚の幅
 	constexpr int graph_height = 32;//画像1枚の高さ
 
-	const Vector2 first_pos = { 500.0f,500.0f };
+	const Vector2 first_pos = { 2380.0f,500.0f };
 	constexpr int attack_cooltime = 60;//攻撃のクールタイム
 	constexpr float bullet_pos_offset = 10.0f;
 }
