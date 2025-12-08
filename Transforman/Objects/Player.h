@@ -35,7 +35,9 @@ public:
 
 	void Init() override;
 	void Update(GameContext& ctx) override;
-	void Draw(Camera camera) override;
+	void Draw(std::shared_ptr<Camera> pCamera) override;
+
+	void OnArriveEnemy();
 
 	/// <summary>
 	/// ジャンプ処理
@@ -115,7 +117,7 @@ private:
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
 	bool m_isCharging;//チャージショットをしているかどうか
-	
+	bool m_isArrive;//ボス部屋に到着したかどうか
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数

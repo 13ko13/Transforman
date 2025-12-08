@@ -25,7 +25,7 @@ void Bullet::Update(GameContext&)
 
 }
 
-void Bullet::Draw(Camera camera)
+void Bullet::Draw(std::shared_ptr<Camera> pCamera)
 {
 
 }

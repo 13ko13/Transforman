@@ -135,7 +135,7 @@ void PlayerBullet::Update(GameContext& ctx)
 	}
 }
 
-void PlayerBullet::Draw(Camera camera)
+void PlayerBullet::Draw(std::shared_ptr<Camera> pCamera)
 {
 	if (m_isAlive)
 	{
@@ -144,7 +144,7 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Normal:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_circle.Draw(camera);
+			m_circle.Draw(pCamera);
 
 			DrawFormatString(
 				0, 45, 0xffffff,
@@ -156,7 +156,7 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Charge:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_circle.Draw(camera);
+			m_circle.Draw(pCamera);
 			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
 			break;
@@ -164,7 +164,7 @@ void PlayerBullet::Draw(Camera camera)
 		case BulletType::Fire:
 #if _DEBUG
 			//“–‚½‚è”»’è‚ð•`‰æ‚·‚é
-			m_rect.Draw(0xffffff, false, camera);
+			m_rect.Draw(0xffffff, false, pCamera);
 			DrawFormatString(0, 270, 0xffffff, "FlameLifeTime : %f", m_flameLifeTime);
 #endif
 			break;

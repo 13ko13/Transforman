@@ -15,9 +15,9 @@ public:
 	GameManager();
 	~GameManager();
 
-	void Update(std::shared_ptr<Player>& pPlayer,
-				std::shared_ptr<Stage>& pStage);
-	void Draw();
+	void Update(std::shared_ptr<Player> pPlayer,
+				std::shared_ptr<Stage> pStage,
+				std::shared_ptr<Camera> camera);
 
 private:
 	bool m_isArrive;//プレイヤーがボスの場所に到着したかどうか

@@ -13,7 +13,7 @@ public:
 
 	void Init() override;
 	void Update(GameContext& ctx) override;
-	void Draw(Camera camera) override;
+	void Draw(std::shared_ptr<Camera> pCamera) override;
 
 	void Attack() override;
 	void Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,

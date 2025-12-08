@@ -16,6 +16,7 @@ class Stage;
 class BackGround;
 class Map;
 class Charactor;
+class GameManager;
 class GameScene : public Scene
 {
 public:
@@ -37,5 +38,6 @@ private:
 	std::shared_ptr<BackGround> m_pBackground;//背景
 	std::shared_ptr<Map> m_pMap;//マップチップ
 	std::vector<std::shared_ptr<Charactor>> m_pCharactors;//キャラクターの配列
+	std::shared_ptr<GameManager> m_pGameManager;//ゲームマネージャー
 };
 

@@ -12,7 +12,7 @@ public:
 
 	virtual void Init() override;
 	virtual void Update(GameContext& ctx) override;
-	virtual void Draw(Camera camera) override;
+	virtual void Draw(std::shared_ptr<Camera> pCamera) override;
 
 	const Vector2& GetPos() const { return m_pos; }
 	void SetPos(const Vector2& pos) { m_pos = pos; }

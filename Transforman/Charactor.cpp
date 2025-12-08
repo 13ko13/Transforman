@@ -36,7 +36,7 @@ void Charactor::Update(GameContext& ctx)
 	}
 }
 
-void Charactor::Draw(Camera camera)
+void Charactor::Draw(std::shared_ptr<Camera> pCamera)
 {
 }
 

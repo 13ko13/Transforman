@@ -20,12 +20,12 @@ Circle::~Circle()
 {
 }
 
-void Circle::Draw(Camera& camera)
+void Circle::Draw(std::shared_ptr<Camera> pCamera)
 {
 	//“–‚½‚è”»’è‚ð•`‰æ
 	DrawCircle(
-		m_pos.x + camera.GetDrawOffset().x,
-		m_pos.y + camera.GetDrawOffset().y, 
+		m_pos.x + pCamera->GetDrawOffset().x,
+		m_pos.y + pCamera->GetDrawOffset().y,
 		m_radius, 0xffffff, 0, 1);
 }
 

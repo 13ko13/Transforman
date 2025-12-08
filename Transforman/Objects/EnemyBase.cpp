@@ -21,7 +21,7 @@ void EnemyBase::Update(GameContext& ctx)
 
 }
 
-void EnemyBase::Draw(Camera camera)
+void EnemyBase::Draw(std::shared_ptr<Camera> pCamera)
 {
 
 }

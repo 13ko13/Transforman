@@ -52,6 +52,7 @@ Player::Player(std::shared_ptr<Map> pMap) :
 	Charactor(size_width,size_height,pMap),
 	m_isJumping(false),
 	m_isCharging(false),
+	m_isArrive(false),
 	m_isInvincible(false),
 	m_jumpPower(0),
 	m_shotCooltime(0),
@@ -236,12 +237,21 @@ void Player::Update(GameContext& ctx)
 	{
 		m_animFrame = 0.0f;
 	}
+
+	//ボス部屋に到着している場合
+	//そこから出られないように
+	//プレイヤーを押し戻しする
+	if (m_isArrive && 
+		m_pos.x < Graphic::screen_width + size_width * 0.5f)
+	{
+		m_pos.x = Graphic::screen_width + size_width * 0.5f;
+	}
 }
 
-void Player::Draw(Camera camera)
+void Player::Draw(std::shared_ptr<Camera> pCamera)
 {
 #if _DEBUG
-	m_colRect.Draw(0xffffff, false, camera);
+	m_colRect.Draw(0xffffff, false, pCamera);
 	DrawFormatString(0, 0, 0xffffff, "Frame:%d", m_frame);
 	DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
@@ -264,8 +274,8 @@ void Player::Draw(Camera camera)
 		if (m_blinkingTimer % 5 == 0)
 		{
 			DrawRectRotaGraph(
-				static_cast<int>(m_pos.x + camera.GetDrawOffset().x),
-				static_cast<int>(m_pos.y + camera.GetDrawOffset().y) - rect_offset_y, //表示位置
+				static_cast<int>(m_pos.x + pCamera->GetDrawOffset().x),
+				static_cast<int>(m_pos.y + pCamera->GetDrawOffset().y) - rect_offset_y, //表示位置
 				m_animSrcX, m_animSrcY,												//切り取り開始位置
 				graph_width, graph_height,								//切り取りサイズ
 				draw_scale, 0.0,											//拡大率、回転角度
@@ -283,8 +293,8 @@ void Player::Draw(Camera camera)
 	{
 		//無敵中じゃないときは常に表示
 		DrawRectRotaGraph(
-			static_cast<int>(m_pos.x + camera.GetDrawOffset().x),
-			static_cast<int>(m_pos.y + camera.GetDrawOffset().y) - rect_offset_y, //表示位置
+			static_cast<int>(m_pos.x + pCamera->GetDrawOffset().x),
+			static_cast<int>(m_pos.y + pCamera->GetDrawOffset().y) - rect_offset_y, //表示位置
 			m_animSrcX, m_animSrcY,												//切り取り開始位置
 			graph_width, graph_height,								//切り取りサイズ
 			draw_scale, 0.0,											//拡大率、回転角度
@@ -294,6 +304,11 @@ void Player::Draw(Camera camera)
 		);
 	}
 	
+}
+
+void Player::OnArriveEnemy()
+{
+	m_isArrive = true;
 }
 
 void Player::Jump(Input& input)

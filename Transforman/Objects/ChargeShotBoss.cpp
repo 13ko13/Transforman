@@ -62,19 +62,19 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	}
 }
 
-void ChargeShotBoss::Draw(Camera camera)
+void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 {
 	//生きているなら描画
 	if (!m_isDead)
 	{
 #if _DEBUG
-		m_colRect.Draw(0xaaffff, false, camera);
+		m_colRect.Draw(0xaaffff, false, pCamera);
 		DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCooltime);
 #endif
 		//キャラクターを表示
 		DrawRectRotaGraph(
-			m_pos.x + camera.GetDrawOffset().x,
-			m_pos.y + camera.GetDrawOffset().y,
+			m_pos.x + pCamera->GetDrawOffset().x,
+			m_pos.y + pCamera->GetDrawOffset().y,
 			0, 0, graph_width,
 			graph_height,
 			4.0, 0.0,

@@ -19,7 +19,7 @@ public:
 
 	virtual void Init() override;
 	virtual void Update(GameContext& ctx) override;
-	virtual void Draw(Camera camera) override;
+	virtual void Draw(std::shared_ptr<Camera> pCamera) override;
 
 	virtual void Attack() abstract;
 private:

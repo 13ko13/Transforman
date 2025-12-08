@@ -1,5 +1,6 @@
 #pragma once
 #include "../Utility/Geometry.h"
+#include <memory>
 
 class Camera;
 class Circle;
@@ -24,7 +25,7 @@ public:
 	/// </summary>
 	/// <param name="Color">矩形の色</param>
 	/// <param name="isFill">矩形の中身を塗りつぶすかどうか</param>
-	void Draw(unsigned int Color, bool isFill,Camera camera);
+	void Draw(unsigned int Color, bool isFill,std::shared_ptr<Camera> pCamera);
 
 	/// <summary>
 	/// 左上の座標と幅高さを指定

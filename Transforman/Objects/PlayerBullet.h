@@ -21,7 +21,7 @@ public:
 
 	void Init() override;
 	void Update(GameContext& ctx) override;
-	void Draw(Camera camera) override;
+	void Draw(std::shared_ptr<Camera> pCamera) override;
 
 	void SetIsRight(bool isRight) { m_isRight = isRight; }
 	void SetType(BulletType bulletType) { m_bulletType = bulletType; }

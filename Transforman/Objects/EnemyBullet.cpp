@@ -55,12 +55,12 @@ void EnemyBullet::Update(GameContext& ctx)
 	}
 }
 
-void EnemyBullet::Draw(Camera camera)
+void EnemyBullet::Draw(std::shared_ptr<Camera> pCamera)
 {
 #if _DEBUG
 	if (m_isAlive)
 	{
-		m_circle.Draw(camera);
+		m_circle.Draw(pCamera);
 		
 
 		DrawFormatString(0, 115, 0xffffff,"EnemyBulletPos X : %f , Y : %f", m_pos.x, m_pos.y);

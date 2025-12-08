@@ -32,10 +32,26 @@ float Camera::GetWorldOriginY() const
 	return m_pos.y - static_cast<float>(Graphic::screen_height) * 0.5f;
 }
 
-Camera::Camera()
+void Camera::OnArriveEnemy(std::shared_ptr<Player> pPlayer, std::shared_ptr<Stage> pStage)
 {
-	m_pos = first_pos;
-	m_drawOffset = first_pos;
+	//画面の半分
+	const int screenHalfW = Graphic::screen_width * 0.5f;//640
+	//カメラの位置がステージの端から画面サイズの半分を
+	//引いた場所についたらカメラの位置を補正する
+	const int posX = pStage->GetMapSize().w * mapchip_size - screenHalfW;
+	const int posY = pPlayer->GetPos().y;
+	Vector2 cameraEndPos = { posX,posY };
+	//カメラの位置をボス部屋に合わせる
+	m_pos = VLerp(m_pos, cameraEndPos, 0.03f);
+	m_isArrive = true;
+}
+
+Camera::Camera() :
+	m_pos(first_pos),
+	m_isArrive(false),
+	m_drawOffset(first_pos)
+{
+	
 }
 
 Camera::~Camera()
@@ -43,10 +59,13 @@ Camera::~Camera()
 
 }
 
-void Camera::Update(const Player& player,const std::shared_ptr<Stage>& pStage)
+void Camera::Update(const std::shared_ptr<Player> pPlayer, const std::shared_ptr<Stage>& pStage)
 {
-	//プレイヤーの位置とカメラの位置を同じにする
-	m_pos = VLerp(m_pos, player.GetPos(), camera_lerp_t);
+	if (!m_isArrive)
+	{
+		//プレイヤーの位置とカメラの位置を同じにする
+		m_pos = VLerp(m_pos, pPlayer->GetPos(), camera_lerp_t);
+	}
 
 	//ステージの端が見えたらそこからカメラを移動させない
 	//ステージデータ取得

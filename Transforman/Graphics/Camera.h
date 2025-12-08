@@ -4,13 +4,14 @@
 
 class Player;
 class Stage;
+class GameManager;
 class Camera
 {
 public:
 	Camera();
 	~Camera();
 
-	void Update(const Player& player,const std::shared_ptr<Stage>& pStage);
+	void Update(const std::shared_ptr<Player> pPlayer,const std::shared_ptr<Stage>& pStage);
 
 	const Vector2& GetDrawOffset() const { return m_drawOffset; };
 	Vector2 VLerp(const Vector2& start, const Vector2& end, float t);
@@ -20,8 +21,11 @@ public:
 	float GetWorldOriginX() const;
 	float GetWorldOriginY() const;
 
+	void OnArriveEnemy(std::shared_ptr<Player> pPlayer,std::shared_ptr<Stage> pStage);
+
 private:
 	Vector2 m_pos;	//実際のカメラのポジション
 	Vector2 m_drawOffset;	//全てのDrawObjectに足す値
+	bool m_isArrive;//ボスの場所に到着したかどうか
 };
 

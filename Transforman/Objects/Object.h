@@ -27,7 +27,7 @@ public:
 
 	virtual void Init() abstract;
 	virtual void Update(GameContext& ctx) abstract;
-	virtual void Draw(Camera camera) abstract;
+	virtual void Draw(std::shared_ptr<Camera> pCamera) abstract;
 
 	/// <summary>
 	/// d—Í‚ğŒvZ‚·‚éŠÖ”

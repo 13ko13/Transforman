@@ -17,14 +17,14 @@ Rect::~Rect()
 
 }
 
-void Rect::Draw(unsigned int Color, bool isFill,Camera camera)
+void Rect::Draw(unsigned int Color, bool isFill,std::shared_ptr<Camera> pCamera)
 {
 	//デバッグ用の矩形の描画
 	DrawBox(static_cast<int>(
-		m_left + camera.GetDrawOffset().x),
-		static_cast<int>(m_top + camera.GetDrawOffset().y), 
-		static_cast<int>(m_right + camera.GetDrawOffset().x),
-		static_cast<int>(m_bottom + camera.GetDrawOffset().y), 
+		m_left + pCamera->GetDrawOffset().x),
+		static_cast<int>(m_top + pCamera->GetDrawOffset().y),
+		static_cast<int>(m_right + pCamera->GetDrawOffset().x),
+		static_cast<int>(m_bottom + pCamera->GetDrawOffset().y),
 		GetColor(255, 0, 0), false);
 }
 
