@@ -29,9 +29,17 @@ Input::Input() :
 
 	m_inputTable["jump"] = { {PeripheralType::keyboard,KEY_INPUT_SPACE},//キーボード:スペースキー
 							{PeripheralType::pad1,PAD_INPUT_B	} };	//パッド:Bボタン
-
-	m_inputTable["changeState"] = { {PeripheralType::keyboard,KEY_INPUT_S},//キーボード:S
+#ifdef _DEBUG
+	//デバッグ用キー
+	//プレイヤーのステート切り替え
+	m_inputTable["changeState(player)"] = { {PeripheralType::keyboard,KEY_INPUT_S & KEY_INPUT_P},//キーボード:SとP
 							{PeripheralType::pad1,PAD_INPUT_X	} };	//パッド:Xボタン
+	m_inputTable["changeState(enemy)"] = { {PeripheralType::keyboard,KEY_INPUT_S & KEY_INPUT_E},//キーボード:SとE
+							{PeripheralType::pad1,PAD_INPUT_X	} };	//パッド:Xボタン
+
+#endif // _DEBUG
+
+	
 
 
 	//あらかじめ入力データのための枠を開けておく

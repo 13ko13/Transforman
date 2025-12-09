@@ -18,8 +18,9 @@ public:
 	void Attack() override;
 	void Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 				std::shared_ptr<Player> pPlayer);
+	void OnArrive() override;
 
 private:
-	int m_attackCooltime;
+	int m_attackCoolTime;//攻撃までのクールタイム
 };
 

@@ -3,6 +3,7 @@
 #include "../General/GameConstants.h"
 #include <cmath>
 #include "../Stages/Stage.h"
+#include <DxLib.h>
 
 namespace
 {
@@ -42,7 +43,7 @@ void Camera::OnArriveEnemy(std::shared_ptr<Player> pPlayer, std::shared_ptr<Stag
 	const int posY = pPlayer->GetPos().y;
 	Vector2 cameraEndPos = { posX,posY };
 	//カメラの位置をボス部屋に合わせる
-	m_pos = VLerp(m_pos, cameraEndPos, 0.03f);
+	m_pos = VLerp(m_pos, cameraEndPos, 0.05f);
 	m_isArrive = true;
 }
 

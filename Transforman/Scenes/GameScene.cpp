@@ -97,7 +97,7 @@ void GameScene::Update(Input& input)
 	m_pMap->Update();
 
 	//ゲームマネージャー更新
-	m_pGameManager->Update(m_pPlayer,m_pStage,m_pCamera);
+	m_pGameManager->Update(m_pPlayer,m_pStage,m_pCamera,m_pChargeShotBoss);
 }
 
 void GameScene::Draw()

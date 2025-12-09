@@ -22,6 +22,7 @@ public:
 	float GetWorldOriginY() const;
 
 	void OnArriveEnemy(std::shared_ptr<Player> pPlayer,std::shared_ptr<Stage> pStage);
+	Vector2 GetPos() { return m_pos; };
 
 private:
 	Vector2 m_pos;	//実際のカメラのポジション

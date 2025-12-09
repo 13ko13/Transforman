@@ -121,7 +121,6 @@ private:
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
-	float m_animFrame;		//現在のアニメーションのフレーム数
 	int m_animSrcX;		  //現在のアニメーションの横の切り取り位置
 	int m_animSrcY;		  //現在のアニメーションの縦の切り取り位置
 	int m_animIdx;			//現在のアニメーションのインデックス

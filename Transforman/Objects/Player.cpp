@@ -63,7 +63,6 @@ Player::Player(std::shared_ptr<Map> pMap) :
 	m_state(PlayerState::Idle),
 	m_weaponType(WeaponType::Normal),
 	m_prevChargeFrame(0),
-	m_animFrame(0),
 	m_animSrcX(0),
 	m_animSrcY(0),
 	m_animIdx(0),
@@ -94,6 +93,8 @@ void Player::Update(GameContext& ctx)
 	//ショット可能状態にする
 	m_shotCooltime--;
 	Charactor::Update(ctx);
+	Rect chipRect;	//当たったマップチップの矩形
+	HitMap(chipRect);//マップとの接地判定
 	//火炎放射もクールタイムを更新して0以下になったら
 	//放射可能状態にする
 	m_flameThrowerCT--;
@@ -110,7 +111,7 @@ void Player::Update(GameContext& ctx)
 
 #if _DEBUG
 	//デバッグ用の武器タイプ切り替え
-	if (ctx.input.IsTriggered("changeState"))
+	if (ctx.input.IsTriggered("changeState(player)"))
 	{
 		if (m_weaponType == WeaponType::Normal)
 		{

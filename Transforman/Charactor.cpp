@@ -27,8 +27,7 @@ void Charactor::Update(GameContext& ctx)
 	m_isGround = false;
 	Gravity();
 
-	Rect chipRect;	//当たったマップチップの矩形
-	HitMap(chipRect);//マップとの接地判定
+
 
 	if (m_isGround)
 	{

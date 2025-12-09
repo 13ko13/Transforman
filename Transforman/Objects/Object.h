@@ -38,7 +38,8 @@ public:
 
 protected:
 	int m_handle;	//画像のハンドル
-	int m_frame;
+	int m_frame;//現在のフレーム数
+	int m_animFrame;		//現在のアニメーションのフレーム数
 
 	Vector2 m_pos;
 	Vector2 m_velocity;

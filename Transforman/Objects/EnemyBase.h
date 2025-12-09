@@ -22,8 +22,20 @@ public:
 	virtual void Draw(std::shared_ptr<Camera> pCamera) override;
 
 	virtual void Attack() abstract;
+	virtual void OnArrive() abstract;
 private:
 
 protected:
+	int m_appearTime;//出現中のタイム計測
+	bool m_isAppear;//自分が出現しているかどうか
+
+	enum class State
+	{
+		Appear,
+		Idle,
+		Rush,
+		Shot,
+	};
+	State m_state;//状態
 };
 
