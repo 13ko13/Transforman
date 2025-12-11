@@ -20,7 +20,7 @@ void EnemyBase::Init()
 
 void EnemyBase::Update(GameContext& ctx)
 {
-
+	
 }
 
 void EnemyBase::Draw(std::shared_ptr<Camera> pCamera)

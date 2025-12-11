@@ -4,6 +4,7 @@
 #include "../Graphics/Camera.h"
 #include "../Collider/Circle.h"
 #include "EnemyBase.h"
+#include "../Stages/Stage.h"
 
 namespace 
 {
@@ -15,6 +16,8 @@ namespace
 	constexpr int fire_width = 150;
 	constexpr int fire_height = 30;
 	constexpr float flame_life_time = 30.0f;//炎の残る時間
+	
+	constexpr int chip_size = 32;//マップチップのサイズ
 }
 
 PlayerBullet::PlayerBullet() :
@@ -42,8 +45,6 @@ void PlayerBullet::Init()
 
 void PlayerBullet::Update(GameContext& ctx)
 {
-	
-
 	switch (m_bulletType)
 	{
 	case BulletType::Normal:
@@ -67,9 +68,11 @@ void PlayerBullet::Update(GameContext& ctx)
 			Vector2 shotVelocity = m_dir * speed;
 			m_pos = m_pos + shotVelocity;
 
-			//画面外に出てしまった場合は存在状態を
+			//ステージ外に出てしまった場合は存在状態を
 			//保持している変数にfalseを代入
-			if (m_pos.x < 0 || m_pos.x > Graphic::screen_width)
+			const auto& mapSize = ctx.pStage->GetMapSize();
+			if (m_pos.x < 0 - normal_shot_radius||
+				m_pos.x > mapSize.w * chip_size + normal_shot_radius)
 			{
 				m_isAlive = false;
 			}
@@ -98,7 +101,11 @@ void PlayerBullet::Update(GameContext& ctx)
 
 			//画面外に出てしまった場合は存在状態を
 			//保持している変数にfalseを代入
-			if (m_pos.x < 0 || m_pos.x > Graphic::screen_width)
+			//ステージ外に出てしまった場合は存在状態を
+			//保持している変数にfalseを代入
+			const auto& mapSize = ctx.pStage->GetMapSize();
+			if (m_pos.x < 0 - normal_shot_radius ||
+				m_pos.x > mapSize.w * chip_size + normal_shot_radius)
 			{
 				m_isAlive = false;
 			}

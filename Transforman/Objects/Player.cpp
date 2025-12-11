@@ -4,11 +4,13 @@
 #include "../General/GameConstants.h"
 #include "PlayerBullet.h"
 #include "../Graphics/Camera.h"
+#include <cassert>
 
 namespace
 {
 	constexpr float ground = Graphic::screen_height - 220;	//地面の高さ(仮)
-	constexpr float move_speed = 3.0f;						//移動速度
+	constexpr int move_speed = 3.0f;						//移動速度
+	constexpr int debug_speed = 10;							//デバッグ用でプレイヤーのスピードを変えたときの値
 	constexpr float size_width = 40.0f;						//キャラクターの横幅
 	constexpr float size_height = 50.0f;					//キャラクターの高さ
 	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
@@ -48,8 +50,8 @@ namespace
 	constexpr int jump_anim_frame = 3;						//ジャンプの時のアニメーション枚数
 }
 
-Player::Player(std::shared_ptr<Map> pMap) :	
-	Charactor(size_width,size_height,pMap),
+Player::Player(std::shared_ptr<Map> pMap) :
+	Charactor(size_width, size_height, pMap),
 	m_isJumping(false),
 	m_isCharging(false),
 	m_isArrive(false),
@@ -70,6 +72,7 @@ Player::Player(std::shared_ptr<Map> pMap) :
 	m_knockbackDir(0)
 {
 	m_handle = LoadGraph("img/game/Player/transforman_player.png");
+	assert(m_handle >= 0);
 }
 
 Player::~Player()
@@ -125,7 +128,7 @@ void Player::Update(GameContext& ctx)
 		}
 	}
 #endif
-	
+
 
 	bool canAction = (m_state != PlayerState::Damage) && (m_state != PlayerState::Fire);
 	//ダメージ状態中または火炎放射中は行動できないようにする
@@ -152,7 +155,7 @@ void Player::Update(GameContext& ctx)
 		//クールタイムが0以下の場合ショットの準備を進める
 		if (m_shotCooltime <= 0)
 		{
-			PrevShot(ctx.input, ctx.p_playerBullets);
+			PrevShot(ctx.input, ctx.pPlayerBullets);
 		}
 
 		//壁のぼり
@@ -200,7 +203,7 @@ void Player::Update(GameContext& ctx)
 	case PlayerState::Fire:
 		m_animSrcY = graph_height * graph_index_shot;
 		animMax = flame_anim_frame;
-
+		m_velocity.x = 0.0f;
 		m_flameThrowCount--;
 		if (m_flameThrowCount <= 0)
 		{
@@ -242,7 +245,7 @@ void Player::Update(GameContext& ctx)
 	//ボス部屋に到着している場合
 	//そこから出られないように
 	//プレイヤーを押し戻しする
-	if (m_isArrive && 
+	if (m_isArrive &&
 		m_pos.x < Graphic::screen_width + size_width * 0.5f)
 	{
 		m_pos.x = Graphic::screen_width + size_width * 0.5f;
@@ -304,7 +307,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 			!m_isRight											//反転
 		);
 	}
-	
+
 }
 
 void Player::OnArriveEnemy()
@@ -350,10 +353,17 @@ void Player::Move(Input& input)
 		{
 			m_state = PlayerState::Idle;
 		}
-
+		int speed = move_speed;
+#ifdef _DEBUG
+		//デバッグ用のプレイヤーのスピードアップ
+		if (input.IsPressed("playerSpeedUp"))
+		{
+			speed = debug_speed;
+		}
+#endif // _DEBUG
 		//ディレクションを正規化してプレイヤーのスピードをかけて
 		//ポジションに足してあげる移動処理
-		m_velocity += dir.Normalized() * move_speed;
+		m_velocity += dir.Normalized() * speed;
 	}
 }
 
@@ -478,16 +488,16 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 				ChargeShot(pBullets);
 				m_isCharging = false;
 			}
-			else if(m_prevChargeFrame < prev_charge_time &&
-					m_weaponType == WeaponType::Normal &&
-					m_shotCooltime < 0)
+			else if (m_prevChargeFrame < prev_charge_time &&
+				m_weaponType == WeaponType::Normal &&
+				m_shotCooltime < 0)
 			{
 				//通常ショット
 				Shot(pBullets);
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
-					m_weaponType == WeaponType::Fire &&
-					m_shotCooltime < 0)
+				m_weaponType == WeaponType::Fire &&
+				m_shotCooltime < 0)
 			{
 				//火炎放射
 				FireShot(pBullets);

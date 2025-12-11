@@ -33,10 +33,11 @@ Input::Input() :
 	//デバッグ用キー
 	//プレイヤーのステート切り替え
 	m_inputTable["changeState(player)"] = { {PeripheralType::keyboard,KEY_INPUT_S & KEY_INPUT_P},//キーボード:SとP
-							{PeripheralType::pad1,PAD_INPUT_X	} };	//パッド:Xボタン
+							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_Y} };	//パッド:Xボタン
 	m_inputTable["changeState(enemy)"] = { {PeripheralType::keyboard,KEY_INPUT_S & KEY_INPUT_E},//キーボード:SとE
-							{PeripheralType::pad1,PAD_INPUT_X	} };	//パッド:Xボタン
-
+							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_A} };	//パッド:Xボタン
+	m_inputTable["playerSpeedUp"] = { {PeripheralType::keyboard,KEY_INPUT_W },//キーボード:W
+							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_B } };//パッド:XボタンとBボタン
 #endif // _DEBUG
 
 	

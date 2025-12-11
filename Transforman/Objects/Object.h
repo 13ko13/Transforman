@@ -8,14 +8,16 @@ class Player;
 class EnemyBullet;
 class PlayerBullet;
 class Input;
+class Stage;
 /// <summary>
 /// 継承しているクラスのUpdateで使用可能な引数の構造体
 /// </summary>
 struct GameContext
 {
-	std::vector<std::shared_ptr<EnemyBullet>>& p_enemyBullets;
-	std::vector<std::shared_ptr<PlayerBullet>>& p_playerBullets;
+	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets;
+	std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets;
 	std::shared_ptr<Player> player;
+	std::shared_ptr<Stage> pStage;
 	Input& input;
 };
 

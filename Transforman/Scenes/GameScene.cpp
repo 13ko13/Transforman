@@ -47,6 +47,10 @@ GameScene::GameScene(SceneController& controller) :
 	m_pCharactors.push_back(m_pPlayer);
 
 	//オブジェクトを継承しているクラスをすべてObjects配列に入れる
+	for (auto& charactor : m_pCharactors)
+	{
+		m_pObjects.push_back(charactor);
+	}
 	for (auto& bullet : m_pEnemyBullets)
 	{
 		m_pObjects.push_back(bullet);
@@ -54,10 +58,6 @@ GameScene::GameScene(SceneController& controller) :
 	for (auto& bullet : m_pPlayerBullets)
 	{
 		m_pObjects.push_back(bullet);
-	}
-	for (auto& charactor : m_pCharactors)
-	{
-		m_pObjects.push_back(charactor);
 	}
 
 	//カメラの生成
@@ -81,7 +81,7 @@ void GameScene::Init()
 
 void GameScene::Update(Input& input)
 {
-	GameContext ctx{m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,input};
+	GameContext ctx{m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input};
 	// 各オブジェクトの更新
 	for (auto& object : m_pObjects)
 	{

@@ -20,6 +20,7 @@ namespace
 	constexpr int appear_time = 30;//出現からノーマルに遷移するまでの時間
 	constexpr float bullet_pos_offset = 10.0f;
 	constexpr float appear_gravity = 6.0f;//出現中の重力
+	constexpr float move_speed = 4.0f;
 	//アニメーション関連
 	constexpr int graph_idx_idle = 0;//待機状態
 	constexpr int graph_idx_appear = 0;//出現状態(画像がないので1アイドルと同じ状態)
@@ -29,6 +30,7 @@ namespace
 	constexpr int anim_wait_frame = 8;//次のアニメーションまでの待機時間
 	constexpr int anim_wait_rush = 3;//突進中のアニメーション待機時間
 	constexpr int idle_anim_frame = 4;//待機状態のアニメーション枚数
+
 	constexpr int appear_anim_frame = 4;//出現中のアニメーション枚数
 	constexpr int rush_anim_frame = 4;//突進中のアニメーション枚数
 	constexpr int shot_anim_frame = 10;//弾撃ちアニメーションの枚数
@@ -59,12 +61,26 @@ void ChargeShotBoss::Update(GameContext& ctx)
 {
 	m_animFrame++;
 
+	//常にプレイヤーの方向を見る
+	const float playerPosX = ctx.player->GetPos().x;
+	//プレイヤーが右にいるなら
+	if (m_pos.x < playerPosX)
+	{
+		//右を見る
+		m_isRight = true;
+	}
+	else//プレイヤーが左にいるなら
+	{
+		//左を見る
+		m_isRight = false;
+	}
+
 	//攻撃のクールタイムを更新
 	m_attackCoolTime--;
 	//攻撃のクールタイムが0以下になったら攻撃 
 	if (m_attackCoolTime <= 0 && !m_isDead)
 	{
-		Attack(ctx.p_enemyBullets, ctx.player);
+		Attack(ctx.pEnemyBullets, ctx.player);
 		//クールタイムをリセット
 		m_attackCoolTime = attack_cooltime;
 	}
@@ -75,7 +91,16 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	//ボタンでステート切り替え
 	if (ctx.input.IsTriggered("changeState(enemy)"))
 	{
-		m_state = State::Rush;
+		if (m_state == State::Idle)
+		{
+			m_state = State::Rush;
+			return;
+		}
+		if (m_state == State::Rush)
+		{
+			m_state = State::Idle;
+			return;
+		}
 	}
 #endif // DEBUG
 
@@ -121,8 +146,18 @@ void ChargeShotBoss::Update(GameContext& ctx)
 			HitMap(chipRect);//マップとの接地判定
 
 			Charactor::Update(ctx);
-			//とりあえず動かす
-			m_velocity.x = -5.0f;
+			Vector2 dir = { 0.0f,0.0f };
+			//右を向いているなら右方向を持つ
+			if (m_isRight)
+			{
+				dir.x = 1.0f;
+			}
+			else//左を向いているなら左方向を持つ
+			{
+				dir.x = -1.0f;
+			}
+
+			m_velocity += dir.Normalized() * move_speed;
 		}
 		break;
 	case State::Shot:
@@ -182,8 +217,8 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 #if _DEBUG
 		m_colRect.Draw(0xaaffff, false, pCamera);
 		DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCoolTime);
-		DrawFormatString(0, 290, 0xffffff, "ChargeBossPosY:%f", m_pos.y);
-		DrawFormatString(0, 305, 0xffffff, "ChargeBossPosVelocityY:%f", m_velocity.y);
+		DrawFormatString(0, 290, 0xffffff, "ChargeBossPosX:%f", m_pos.x);
+		DrawFormatString(0, 305, 0xffffff, "ChargeBossPosVelocityX:%f", m_velocity.x);
 #endif
 		//キャラクターを表示
 		DrawRectRotaGraph(
