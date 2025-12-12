@@ -70,7 +70,7 @@ void Charactor::HitMap(Rect& chipRect)
 	//c•ûŒü‚ÌÕ“Ë
 	m_pos.y += m_velocity.y;
 	//í‚ÉÅV‚Ì‹éŒ`î•ñ‚É‚·‚é
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 10, m_height - 1);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 1, m_height - 1);
 	if (m_pMap->IsCollision(m_colRect, chipRect))
 	{
 		//‰º•ûŒü(—Ž‰º)

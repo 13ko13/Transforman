@@ -81,7 +81,7 @@ void GameScene::Init()
 
 void GameScene::Update(Input& input)
 {
-	GameContext ctx{m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input};
+	GameContext ctx{m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input,m_pCamera};
 	// 各オブジェクトの更新
 	for (auto& object : m_pObjects)
 	{

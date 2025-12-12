@@ -9,7 +9,7 @@
 namespace
 {
 	constexpr float ground = Graphic::screen_height - 220;	//地面の高さ(仮)
-	constexpr int move_speed = 3.0f;						//移動速度
+	constexpr int move_speed = 5;						//移動速度
 	constexpr int debug_speed = 10;							//デバッグ用でプレイヤーのスピードを変えたときの値
 	constexpr float size_width = 40.0f;						//キャラクターの横幅
 	constexpr float size_height = 50.0f;					//キャラクターの高さ
@@ -23,8 +23,8 @@ namespace
 
 	constexpr double   draw_scale = 1.5;					//描画スケール			
 
-	constexpr int max_jump_power = 10.0f;					//最大ジャンプ力
-	constexpr int min_jump_power = 8.0f;					//最低ジャンプ力
+	constexpr int max_jump_power = 11;					//最大ジャンプ力
+	constexpr int min_jump_power = 8;					//最低ジャンプ力
 	constexpr float jump_scale = 1.4f;						//ジャンプ力の倍率
 
 	constexpr int shot_cooltime = 15;						//ショットのクールタイム

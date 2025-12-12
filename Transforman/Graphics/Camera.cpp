@@ -11,6 +11,8 @@ namespace
 	constexpr int scorp_range = 400;
 	constexpr float camera_lerp_t = 0.1f;
 	constexpr int mapchip_size = 32;
+	constexpr int shake_frame = 30;//カメラを揺らす時間
+	constexpr int shake_power = 7;//カメラを揺らすときの力
 }
 
 Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
@@ -19,6 +21,25 @@ Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
 	ret.x = std::lerp(start.x, end.x, t);
 	ret.y = std::lerp(start.y, end.y, t);
 	return ret;
+}
+
+void Camera::OnImpact(bool isVertical)
+{
+	//カメラを揺らす時間を設定
+	m_shakingFrame = shake_frame;
+}
+
+void Camera::Impact()
+{
+	m_shakingFrame--;
+	if (m_shakingFrame > 0)
+	{
+		//0からshake_powerの2倍を用意(右から左まで行くにはshake_powerの2倍必要だから)
+		//そこからshake_powerを引くことでマイナス側も用意する
+		//揺れる範囲は shake_power ～  -shake_power
+		m_pos.y += GetRand(shake_power * 2) - shake_power;
+		m_pos.x += GetRand(shake_power * 2) - shake_power;
+	}
 }
 
 float Camera::GetWorldOriginX() const
@@ -50,9 +71,10 @@ void Camera::OnArriveEnemy(std::shared_ptr<Player> pPlayer, std::shared_ptr<Stag
 Camera::Camera() :
 	m_pos(first_pos),
 	m_isArrive(false),
-	m_drawOffset(first_pos)
+	m_drawOffset(first_pos),
+	m_shakingFrame(0)
 {
-	
+
 }
 
 Camera::~Camera()
@@ -96,4 +118,6 @@ void Camera::Update(const std::shared_ptr<Player> pPlayer, const std::shared_ptr
 	//(camera.posが画面の中央になるようにする) 
 	m_drawOffset.x += Graphic::screen_width / 2;
 	//m_drawOffset.y += Graphic::screen_height / 2;
+
+	Impact();
 }

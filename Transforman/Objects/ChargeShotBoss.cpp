@@ -5,28 +5,30 @@
 #include <cassert>
 #include "../Graphics/Camera.h"
 #include "../General/GameConstants.h"
+#include "../Stages/Stage.h"
 
 namespace
 {
 	constexpr float ground = Graphic::screen_height - 100;	//地面の高さ(仮)
 
-	constexpr int size_width = 128;//幅
-	constexpr int size_height = 128;//高さ
+	constexpr int size_width = 143;//幅
+	constexpr int size_height = 117;//高さ
 	constexpr int graph_width = 48;	//画像1枚の幅
 	constexpr int graph_height = 32;//画像1枚の高さ
+	constexpr float draw_offset_y = 20.0f;//キャラクターの描画オフセット
 
-	const Vector2 first_pos = { 2380.0f,-32 };
+	const Vector2 first_pos = { 2380.0f,-32.0f };
 	constexpr int attack_cooltime = 60;//攻撃のクールタイム
 	constexpr int appear_time = 30;//出現からノーマルに遷移するまでの時間
 	constexpr float bullet_pos_offset = 10.0f;
 	constexpr float appear_gravity = 6.0f;//出現中の重力
-	constexpr float move_speed = 4.0f;
+	constexpr float move_speed = 6.0f;
 	//アニメーション関連
 	constexpr int graph_idx_idle = 0;//待機状態
 	constexpr int graph_idx_appear = 0;//出現状態(画像がないので1アイドルと同じ状態)
 	constexpr int graph_idx_rush = 0;//突進状態(画像がないので1アイドルと同じ状態)
 	constexpr int graph_idx_shot = 1;//弾撃ち状態
-	
+
 	constexpr int anim_wait_frame = 8;//次のアニメーションまでの待機時間
 	constexpr int anim_wait_rush = 3;//突進中のアニメーション待機時間
 	constexpr int idle_anim_frame = 4;//待機状態のアニメーション枚数
@@ -34,11 +36,13 @@ namespace
 	constexpr int appear_anim_frame = 4;//出現中のアニメーション枚数
 	constexpr int rush_anim_frame = 4;//突進中のアニメーション枚数
 	constexpr int shot_anim_frame = 10;//弾撃ちアニメーションの枚数
+	constexpr int chip_size = 32;		//マップチップのサイズ
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap),
-	m_attackCoolTime(0)
+	m_attackCoolTime(0),
+	m_isRushing(false)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
 	assert(m_handle >= 0);
@@ -62,17 +66,21 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	m_animFrame++;
 
 	//常にプレイヤーの方向を見る
-	const float playerPosX = ctx.player->GetPos().x;
+	const float playerPosX = ctx.pPlayer->GetPos().x;
 	//プレイヤーが右にいるなら
-	if (m_pos.x < playerPosX)
+	//突進中は突進している方向を向くようにする
+	if (!m_isRushing)
 	{
-		//右を見る
-		m_isRight = true;
-	}
-	else//プレイヤーが左にいるなら
-	{
-		//左を見る
-		m_isRight = false;
+		if (m_pos.x < playerPosX)
+		{
+			//右を見る
+			m_isRight = true;
+		}
+		else//プレイヤーが左にいるなら
+		{
+			//左を見る
+			m_isRight = false;
+		}
 	}
 
 	//攻撃のクールタイムを更新
@@ -80,7 +88,7 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	//攻撃のクールタイムが0以下になったら攻撃 
 	if (m_attackCoolTime <= 0 && !m_isDead)
 	{
-		Attack(ctx.pEnemyBullets, ctx.player);
+		Attack(ctx.pEnemyBullets, ctx.pPlayer);
 		//クールタイムをリセット
 		m_attackCoolTime = attack_cooltime;
 	}
@@ -103,6 +111,11 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		}
 	}
 #endif // DEBUG
+
+
+	//突進は画面端に到達するまで行う
+			//当たったらステートをアイドルに戻す
+	int stageEnd = ctx.pStage->GetMapSize().w * chip_size;//ステージの終わり
 
 	switch (m_state)
 	{
@@ -146,18 +159,43 @@ void ChargeShotBoss::Update(GameContext& ctx)
 			HitMap(chipRect);//マップとの接地判定
 
 			Charactor::Update(ctx);
-			Vector2 dir = { 0.0f,0.0f };
-			//右を向いているなら右方向を持つ
-			if (m_isRight)
+
+			bool isColWall = m_pos.x < stageEnd - Graphic::screen_width + size_width / 2 ||
+				m_pos.x > stageEnd - chip_size - size_width / 2;//ボス部屋の端の壁に当たったかどうか
+			if (!isColWall && !m_isRushing)
 			{
-				dir.x = 1.0f;
-			}
-			else//左を向いているなら左方向を持つ
-			{
-				dir.x = -1.0f;
+
+				Vector2 dir = { 0.0f,0.0f };
+				//右を向いているなら右方向を持つ
+				if (m_isRight)
+				{
+					dir.x = 1.0f;
+				}
+				else//左を向いているなら左方向を持つ
+				{
+					dir.x = -1.0f;
+				}
+				m_isRushing = true;
+				m_velocity += dir.Normalized() * move_speed;
 			}
 
-			m_velocity += dir.Normalized() * move_speed;
+			//ボスが壁がない左端をすり抜けないように押し戻す
+			if (m_pos.x < stageEnd - Graphic::screen_width + size_width / 2)
+			{
+				m_pos.x = stageEnd - Graphic::screen_width + size_width / 2;
+				m_velocity.x = 0.0f;
+				//ステートをアイドルに戻す
+				m_state = State::Idle;
+				m_isRushing = false;
+				ctx.pCamera->OnImpact(false);
+			}
+			else if (m_pos.x > stageEnd - chip_size - size_width / 2 - 1)
+			{
+				//ステートをアイドルに戻す
+				m_state = State::Idle;
+				m_isRushing = false;
+				ctx.pCamera->OnImpact(false);
+			}
 		}
 		break;
 	case State::Shot:
@@ -219,14 +257,16 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		DrawFormatString(0, 80, 0xffffff, "AttackCooltime:%d", m_attackCoolTime);
 		DrawFormatString(0, 290, 0xffffff, "ChargeBossPosX:%f", m_pos.x);
 		DrawFormatString(0, 305, 0xffffff, "ChargeBossPosVelocityX:%f", m_velocity.x);
+		DrawFormatString(0, 320, 0xffffff, "ChargeBossState:%d", m_state);
+
 #endif
 		//キャラクターを表示
 		DrawRectRotaGraph(
 			m_pos.x + pCamera->GetDrawOffset().x,
-			m_pos.y + pCamera->GetDrawOffset().y,
+			m_pos.y + pCamera->GetDrawOffset().y - draw_offset_y,
 			srcX, srcY,
-			graph_width,graph_height,
-			4.0, 0.0,
+			graph_width, graph_height,
+			5.0, 0.0,
 			m_handle, true, !m_isRight);
 	}
 }

@@ -9,6 +9,7 @@ class EnemyBullet;
 class PlayerBullet;
 class Input;
 class Stage;
+class Camera;
 /// <summary>
 /// 継承しているクラスのUpdateで使用可能な引数の構造体
 /// </summary>
@@ -16,9 +17,10 @@ struct GameContext
 {
 	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets;
 	std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets;
-	std::shared_ptr<Player> player;
+	std::shared_ptr<Player> pPlayer;
 	std::shared_ptr<Stage> pStage;
 	Input& input;
+	std::shared_ptr<Camera> pCamera;
 };
 
 class Object

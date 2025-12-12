@@ -22,5 +22,6 @@ public:
 
 private:
 	int m_attackCoolTime;//攻撃までのクールタイム
+	bool m_isRushing;
 };
 

@@ -26,7 +26,7 @@ namespace
 	constexpr int bullet_anim_num = 5;//弾のアニメーション枚数
 }
 
-EnemyBullet::EnemyBullet() 
+EnemyBullet::EnemyBullet()
 {
 	m_state = EnemyState::Normal;
 	m_circle.SetPos(m_pos);
@@ -90,20 +90,20 @@ void EnemyBullet::Draw(std::shared_ptr<Camera> pCamera)
 		int srcX = animNo * graph_width;
 		int srcY = 10 * graph_height;
 
-		DrawRectRotaGraph(static_cast<int>(m_pos.x + pCamera->GetDrawOffset().x +2.0f),
-							static_cast<int>(m_pos.y -2.0f),
-							srcX, srcY,
-							graph_width, graph_height,
-							3.0, 0.0, m_handle, true);
+		DrawRectRotaGraph(static_cast<int>(m_pos.x + pCamera->GetDrawOffset().x + 2.0f),
+			static_cast<int>(m_pos.y - 2.0f),
+			srcX, srcY,
+			graph_width, graph_height,
+			3.0, 0.0, m_handle, true);
 
 #if _DEBUG
 		m_circle.Draw(pCamera);
-		DrawFormatString(0, 115, 0xffffff,"EnemyBulletPos X : %f , Y : %f", m_pos.x, m_pos.y);
+		DrawFormatString(0, 115, 0xffffff, "EnemyBulletPos X : %f , Y : %f", m_pos.x, m_pos.y);
 		DrawFormatString(0, 130, 0xffffff, "ShotDir : %f , %f", m_dir.x, m_dir.y);
 		DrawFormatString(0, 95, 0xffffff, "EnemyBulletAlive : %d", m_isAlive);
-	}
+
 #endif 
-	
+	}
 }
 
 void EnemyBullet::Movement()
