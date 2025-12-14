@@ -27,8 +27,6 @@ void Charactor::Update(GameContext& ctx)
 	m_isGround = false;
 	Gravity();
 
-
-
 	if (m_isGround)
 	{
 		m_velocity.y = 0.0f;

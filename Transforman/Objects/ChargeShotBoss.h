@@ -22,6 +22,7 @@ public:
 
 private:
 	int m_attackCoolTime;//攻撃までのクールタイム
+	int m_prevRushTime;//突進準備中の現在のフレーム数
 	bool m_isRushing;
 };
 

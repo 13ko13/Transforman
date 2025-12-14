@@ -27,6 +27,15 @@ void Circle::Draw(std::shared_ptr<Camera> pCamera)
 		m_pos.x + pCamera->GetDrawOffset().x,
 		m_pos.y + pCamera->GetDrawOffset().y,
 		m_radius, 0xffffff, 0, 1);
+#ifdef _DEBUG
+	DrawFormatString(0, 335, 0xffffff, "circlePos        : %f, %f", m_pos.x, m_pos.y);
+#endif
+}
+
+void Circle::SetPos(const Vector2& pos)
+{
+	m_pos.x = pos.x;
+	m_pos.y = pos.y;
 }
 
 const float Circle::GetDistance(Vector2& pos) const

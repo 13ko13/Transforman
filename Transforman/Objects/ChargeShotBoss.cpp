@@ -11,8 +11,8 @@ namespace
 {
 	constexpr float ground = Graphic::screen_height - 100;	//地面の高さ(仮)
 
-	constexpr int size_width = 143;//幅
-	constexpr int size_height = 117;//高さ
+	constexpr int size_width = 144;//幅
+	constexpr int size_height = 118;//高さ
 	constexpr int graph_width = 48;	//画像1枚の幅
 	constexpr int graph_height = 32;//画像1枚の高さ
 	constexpr float draw_offset_y = 20.0f;//キャラクターの描画オフセット
@@ -22,15 +22,19 @@ namespace
 	constexpr int appear_time = 30;//出現からノーマルに遷移するまでの時間
 	constexpr float bullet_pos_offset = 10.0f;
 	constexpr float appear_gravity = 6.0f;//出現中の重力
-	constexpr float move_speed = 6.0f;
+	constexpr float move_speed = 6.0f;//通常移動の速さ
+	constexpr float prev_rush_speed = 0.0001f;//突進準備中のほんの少し動く時のスピード
+
+	constexpr int prev_rush_frame = 120;//突進準備中の時間
 	//アニメーション関連
 	constexpr int graph_idx_idle = 0;//待機状態
 	constexpr int graph_idx_appear = 0;//出現状態(画像がないので1アイドルと同じ状態)
 	constexpr int graph_idx_rush = 0;//突進状態(画像がないので1アイドルと同じ状態)
 	constexpr int graph_idx_shot = 1;//弾撃ち状態
 
-	constexpr int anim_wait_frame = 8;//次のアニメーションまでの待機時間
-	constexpr int anim_wait_rush = 3;//突進中のアニメーション待機時間
+	constexpr int anim_wait_frame = 10;//次のアニメーションまでの待機時間
+	constexpr int anim_wait_prev_rush = 4;//突進準備中の次のアニメーションまでの待機時間
+	constexpr int anim_wait_rush = 4;//突進中のアニメーション待機時間
 	constexpr int idle_anim_frame = 4;//待機状態のアニメーション枚数
 
 	constexpr int appear_anim_frame = 4;//出現中のアニメーション枚数
@@ -42,6 +46,7 @@ namespace
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap),
 	m_attackCoolTime(0),
+	m_prevRushTime(0),
 	m_isRushing(false)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
@@ -85,7 +90,7 @@ void ChargeShotBoss::Update(GameContext& ctx)
 
 	//攻撃のクールタイムを更新
 	m_attackCoolTime--;
-	//攻撃のクールタイムが0以下になったら攻撃 
+	//攻撃のクールタイムが0以下になったら攻撃
 	if (m_attackCoolTime <= 0 && !m_isDead)
 	{
 		Attack(ctx.pEnemyBullets, ctx.pPlayer);
@@ -101,7 +106,8 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	{
 		if (m_state == State::Idle)
 		{
-			m_state = State::Rush;
+			m_state = State::PrevRush;
+			m_prevRushTime = prev_rush_frame;
 			return;
 		}
 		if (m_state == State::Rush)
@@ -150,6 +156,41 @@ void ChargeShotBoss::Update(GameContext& ctx)
 			Charactor::Update(ctx);
 		}
 		break;
+	case State::PrevRush:
+		//生きているなら行動させる
+		if (!m_isDead)
+		{
+			m_prevRushTime--;
+			animMax = rush_anim_frame;
+			//壁にぶつかった瞬間が取れず、条件文的に壁より左にいれば
+			//常にカメラが揺れてしまうので、突進準備状態を作って
+			//準備中なら、という条件を追加する
+			Rect chipRect;	//当たったマップチップの矩形
+			HitMap(chipRect);//マップとの接地判定
+			Charactor::Update(ctx);
+
+			//二回連続で突進が行われる際に
+			//ほんの少しだけ移動させて壁との当たり判定が
+			//常に行われないようにする
+			Vector2 dir = { 0.0f,0.0f };
+			//右を向いているなら右方向を持つ
+			if (m_isRight)
+			{
+				dir.x = 1.0f;
+			}
+			else//左を向いているなら左方向を持つ
+			{
+				dir.x = -1.0f;
+			}
+			m_velocity += dir.Normalized() * prev_rush_speed;
+
+			if (m_prevRushTime < 0)
+			{
+				m_velocity.x = 0.0f;
+				m_state = State::Rush;
+			}
+		}
+		break;
 	case State::Rush:
 		animMax = rush_anim_frame;
 		//生きているなら行動させる
@@ -161,10 +202,9 @@ void ChargeShotBoss::Update(GameContext& ctx)
 			Charactor::Update(ctx);
 
 			bool isColWall = m_pos.x < stageEnd - Graphic::screen_width + size_width / 2 ||
-				m_pos.x > stageEnd - chip_size - size_width / 2;//ボス部屋の端の壁に当たったかどうか
+				m_pos.x >= stageEnd - chip_size - size_width / 2 ;//ボス部屋の端の壁に当たったかどうか
 			if (!isColWall && !m_isRushing)
 			{
-
 				Vector2 dir = { 0.0f,0.0f };
 				//右を向いているなら右方向を持つ
 				if (m_isRight)
@@ -183,18 +223,16 @@ void ChargeShotBoss::Update(GameContext& ctx)
 			if (m_pos.x < stageEnd - Graphic::screen_width + size_width / 2)
 			{
 				m_pos.x = stageEnd - Graphic::screen_width + size_width / 2;
+				//壁にぶつかった判定で、velを0にする
 				m_velocity.x = 0.0f;
-				//ステートをアイドルに戻す
-				m_state = State::Idle;
-				m_isRushing = false;
-				ctx.pCamera->OnImpact(false);
 			}
-			else if (m_pos.x > stageEnd - chip_size - size_width / 2 - 1)
+
+			if (isColWall)
 			{
 				//ステートをアイドルに戻す
 				m_state = State::Idle;
 				m_isRushing = false;
-				ctx.pCamera->OnImpact(false);
+				ctx.pCamera->OnImpact();
 			}
 		}
 		break;
@@ -212,14 +250,21 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		//1枚目の画像に戻す
 		if (m_animFrame >= animMax * anim_wait_frame)
 		{
-			m_animFrame = 0.0f;
+			m_animFrame = 0;
+		}
+		break;
+	case State::PrevRush:
+		//Rush状態より早いアニメーションを行う
+		if (m_animFrame >= animMax * anim_wait_prev_rush)
+		{
+			m_animFrame = 0;
 		}
 		break;
 	case State::Rush:
 		//突進中のみアニメーションを早くする
 		if (m_animFrame >= animMax * anim_wait_rush)
 		{
-			m_animFrame = 0.0f;
+			m_animFrame = 0;
 		}
 		break;
 	}
@@ -296,7 +341,7 @@ void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 			{
 				bullet->SetDir({ -1.0f,0.0f });
 				//弾の初期位置を設定
-				bullet->SetPos({ m_pos.x - size_height / 2, m_pos.y });
+				bullet->SetPos({ m_pos.x - size_width / 2, m_pos.y });
 			}
 			bullet->SetIsAlive(true);
 		}

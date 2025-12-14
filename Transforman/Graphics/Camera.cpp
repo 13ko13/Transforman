@@ -23,7 +23,7 @@ Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
 	return ret;
 }
 
-void Camera::OnImpact(bool isVertical)
+void Camera::OnImpact()
 {
 	//ƒJƒƒ‰‚ğ—h‚ç‚·ŠÔ‚ğİ’è
 	m_shakingFrame = shake_frame;

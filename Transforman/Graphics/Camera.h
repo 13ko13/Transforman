@@ -18,8 +18,7 @@ public:
 	/// <summary>
 	/// ƒJƒƒ‰‚ªÕŒ‚‚ğó‚¯‚½‚Æ‚«‚ÌŠÖ”
 	/// </summary>
-	/// <param name="isVertical">true:c‚É—h‚ç‚·,false:‰¡‚É—h‚ç‚·</param>
-	void OnImpact(bool isVertical);
+	void OnImpact();
 	/// <summary>
 	/// 
 	/// </summary>

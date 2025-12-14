@@ -11,7 +11,7 @@ public:
 	~Circle();
 
 	void Draw(std::shared_ptr<Camera> pCamera);
-	void SetPos(const Vector2& pos) { m_pos = pos; }
+	void SetPos(const Vector2& pos);
 	/// <summary>
 	/// ’†SŠÔ‹——£‚ğ‹‚ß‚é
 	/// </summary>

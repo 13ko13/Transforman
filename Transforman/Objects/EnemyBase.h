@@ -31,10 +31,11 @@ protected:
 
 	enum class State
 	{
-		Appear,
-		Idle,
-		Rush,
-		Shot,
+		Appear,//出現
+		Idle,//待機
+		PrevRush,//突進準備
+		Rush,//突進
+		Shot,//弾
 	};
 	State m_state;//状態
 };
