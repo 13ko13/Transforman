@@ -24,11 +24,6 @@ void CollisionManager::CheckCollisions(
 			!enemy->GetIsDead() &&
 			CheckCollision(*pPlayer, *enemy))
 		{
-			//プレイヤーのチャージ状態をアイドルに切り替える
-			pPlayer->ChangeState(PlayerState::Idle);
-			printfDx("敵と当たった\n");
-			//プレイヤーのStateをダメージに変える
-			pPlayer->ChangeState(PlayerState::Damage);
 			//プレイヤーが右と左どちらから
 			//攻撃を受けたかで渡す
 			// ノックバックする方向を決める
@@ -60,7 +55,8 @@ void CollisionManager::CheckCollisions(
 				//プレイヤーのノックバックする方向は左
 				dir = -1;
 			}
-			pPlayer->StartKnockback(dir);
+			pPlayer->OnKnockback(dir);
+			printfDx("敵と当たった\n");
 		}
 		else
 		{
@@ -100,8 +96,7 @@ void CollisionManager::CheckCollisions(
 		{
 			//弾の存在を消す
 			bullet->SetIsAlive(false);
-			//プレイヤーのStateをダメージに変える
-			pPlayer->ChangeState(PlayerState::Damage);
+			//プレイヤーにノックバックする方向を伝える
 			int dir = 0;
 			bool isRight = false;
 			for (auto& enemy : pEnemies)
@@ -121,11 +116,10 @@ void CollisionManager::CheckCollisions(
 					isRight = true;
 				}
 			}
-
 			//ノックバックさせる方向と
 			//プレイヤーが向く方向を設定
 			pPlayer->SetIsRight(isRight);
-			pPlayer->StartKnockback(dir);
+			pPlayer->OnKnockback(dir);
 		}
 	}
 
