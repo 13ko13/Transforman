@@ -14,14 +14,52 @@ public:
 	void Init() override;
 	void Update(GameContext& ctx) override;
 	void Draw(std::shared_ptr<Camera> pCamera) override;
-
-	void Attack() override;
-	void Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
-				std::shared_ptr<Player> pPlayer);
+	
+	/// <summary>
+	/// プレイヤーが到着したときに呼び出される関数
+	/// </summary>
 	void OnArrive() override;
 
+	
 private:
 	int m_prevRushTime;//突進準備中の現在のフレーム数
 	bool m_isRushing;//突進中かどうか
+	int m_actionCooldown;//次の行動までのフレーム数
+
+private:
+	void Attack() override;
+	/// <summary>
+	/// 敵の行動を決める関数
+	/// </summary>
+	/// <param name="pBullets">敵弾の配列のポインタ</param>
+	/// <param name="pPlayer">プレイヤーのポインタ</param>
+	void Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
+		std::shared_ptr<Player> pPlayer);
+	/// <summary>
+	/// 敵が弾を撃ったときの関数
+	/// </summary>
+	/// <param name="pBullets"></param>
+	/// <param name="pPlayer"></param>
+	void ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
+		std::shared_ptr<Player> pPlayer);
+	/// <summary>
+	/// 敵が突進した時の関数
+	/// </summary>
+	/// <param name="ctx"></param>
+	void RushUpdate(GameContext& ctx);
+	/// <summary>
+	/// 突進準備中の関数
+	/// </summary>
+	/// <param name="ctx"></param>
+	void PrevRushUpdate(GameContext& ctx);
+	/// <summary>
+	/// ボス出現中の関数
+	/// </summary>
+	void AppearUpdate();
+	/// <summary>
+	/// アイドル状態の関数
+	/// </summary>
+	/// <param name="ctx">オブジェクトクラスを継承しているオブジェクトの構造体</param>
+	void IdleUpdate(GameContext& ctx);
 };
 
