@@ -45,7 +45,6 @@ namespace
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap),
-	m_attackCoolTime(0),
 	m_prevRushTime(0),
 	m_isRushing(false)
 {
@@ -53,7 +52,6 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	assert(m_handle >= 0);
 
 	m_pos = first_pos;
-	m_attackCoolTime = attack_cooltime;
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -69,6 +67,8 @@ void ChargeShotBoss::Init()
 void ChargeShotBoss::Update(GameContext& ctx)
 {
 	m_animFrame++;
+	//ランダムな攻撃方法をとる
+	Attack(ctx.pEnemyBullets, ctx.pPlayer);
 
 	//常にプレイヤーの方向を見る
 	const float playerPosX = ctx.pPlayer->GetPos().x;
@@ -86,16 +86,6 @@ void ChargeShotBoss::Update(GameContext& ctx)
 			//左を見る
 			m_isRight = false;
 		}
-	}
-
-	//攻撃のクールタイムを更新
-	m_attackCoolTime--;
-	//攻撃のクールタイムが0以下になったら攻撃
-	if (m_attackCoolTime <= 0 && !m_isDead)
-	{
-		Attack(ctx.pEnemyBullets, ctx.pPlayer);
-		//クールタイムをリセット
-		m_attackCoolTime = attack_cooltime;
 	}
 
 	int animMax = 0;//アニメーション最大枚数
@@ -118,9 +108,6 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	}
 #endif // DEBUG
 
-
-	//突進は画面端に到達するまで行う
-			//当たったらステートをアイドルに戻す
 	int stageEnd = ctx.pStage->GetMapSize().w * chip_size;//ステージの終わり
 
 	switch (m_state)
@@ -324,6 +311,10 @@ void ChargeShotBoss::Attack()
 void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 	std::shared_ptr<Player> pPlayer)
 {
+	//ランダムな確率でチャージショットと
+	//突進を出してくるようにする
+	int stateShot = 4;
+	int stateRush = 2;
 	for (auto& bullet : pBullets)
 	{
 		//弾を撃つ

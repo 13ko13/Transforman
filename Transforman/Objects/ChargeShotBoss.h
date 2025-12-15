@@ -21,8 +21,7 @@ public:
 	void OnArrive() override;
 
 private:
-	int m_attackCoolTime;//攻撃までのクールタイム
 	int m_prevRushTime;//突進準備中の現在のフレーム数
-	bool m_isRushing;
+	bool m_isRushing;//突進中かどうか
 };
 
