@@ -9,22 +9,21 @@
 namespace
 {
 	constexpr float ground = Graphic::screen_height - 220;	//地面の高さ(仮)
-	constexpr int move_speed = 5;						//移動速度
+	constexpr int move_speed = 5;							//移動速度
 	constexpr int debug_speed = 10;							//デバッグ用でプレイヤーのスピードを変えたときの値
 	constexpr float size_width = 40.0f;						//キャラクターの横幅
 	constexpr float size_height = 50.0f;					//キャラクターの高さ
 	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
 	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
-	constexpr int rect_offset_y = 5;							//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
+	constexpr int rect_offset_y = 5;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 
 	constexpr float knockback_duration = 15.0f;				//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
+	constexpr double   draw_scale = 1.5;					//描画スケール		
 
-	constexpr double   draw_scale = 1.5;					//描画スケール			
-
-	constexpr int max_jump_power = 11;					//最大ジャンプ力
-	constexpr int min_jump_power = 8;					//最低ジャンプ力
+	constexpr int max_jump_power = 12;						//最大ジャンプ力
+	constexpr int min_jump_power = 8;						//最低ジャンプ力
 	constexpr float jump_scale = 1.4f;						//ジャンプ力の倍率
 
 	constexpr int shot_cooltime = 15;						//ショットのクールタイム
@@ -419,10 +418,6 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			bullet->SetIsRight(m_isRight);
 			break;	//1発撃ったらループを抜ける
 		}
-		/*	else
-			{
-				m_state = PlayerState::Idle;
-			}*/
 	}
 }
 
@@ -545,8 +540,12 @@ void Player::Knockback()
 	}
 }
 
-void Player::StartKnockback(int dir)
+void Player::OnKnockback(int dir)
 {
+	//チャージ状態や、火炎放射中だと
+	//引き継がれたままダメージを受けるので
+	//一度アイドルにリセットする
+	m_state = PlayerState::Idle;
 	m_state = PlayerState::Damage;//ステートを切り替える
 	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
 	m_knockbackDir = dir;//ノックバックする方向を代入
