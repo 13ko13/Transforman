@@ -12,8 +12,8 @@
 
 namespace
 {
-	constexpr float radius = 5.0f;
-	constexpr float speed = 3.0f;
+	constexpr float radius = 20.0f;
+	constexpr float speed = 7.0f;
 	constexpr int way_num = 5;
 	constexpr float angle_30 = DX_PI_F / 6.0f;
 	constexpr int bullet_num = 128;

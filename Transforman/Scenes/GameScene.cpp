@@ -47,10 +47,6 @@ GameScene::GameScene(SceneController& controller) :
 	m_pCharactors.push_back(m_pPlayer);
 
 	//オブジェクトを継承しているクラスをすべてObjects配列に入れる
-	for (auto& charactor : m_pCharactors)
-	{
-		m_pObjects.push_back(charactor);
-	}
 	for (auto& bullet : m_pEnemyBullets)
 	{
 		m_pObjects.push_back(bullet);
@@ -59,6 +55,11 @@ GameScene::GameScene(SceneController& controller) :
 	{
 		m_pObjects.push_back(bullet);
 	}
+	for (auto& charactor : m_pCharactors)
+	{
+		m_pObjects.push_back(charactor);
+	}
+	
 
 	//カメラの生成
 	m_pCamera = std::make_shared<Camera>();
