@@ -42,18 +42,6 @@ void Camera::Impact()
 	}
 }
 
-float Camera::GetWorldOriginX() const
-{
-	//画面左上(ワールド) = カメラ中心X - 画面幅/2
-	return m_pos.x - static_cast<float>(Graphic::screen_width) * 0.5f;
-}
-
-float Camera::GetWorldOriginY() const
-{
-	//今回は縦スクロールしないが、これからのために作っておく
-	return m_pos.y - static_cast<float>(Graphic::screen_height) * 0.5f;
-}
-
 void Camera::OnArriveEnemy(std::shared_ptr<Player> pPlayer, std::shared_ptr<Stage> pStage)
 {
 	//画面の半分
