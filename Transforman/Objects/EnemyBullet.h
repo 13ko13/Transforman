@@ -20,12 +20,7 @@ public:
 
 	void Init() override;
 	void Update(GameContext& ctx) override;
-	void Draw(std::shared_ptr<Camera> pCamera) override;
-
-	/// <summary>
-	/// 弾自身の移動
-	/// </summary>
-	void Movement();
+	void Draw(std::shared_ptr<Camera> pCamera) override;	
 
 	/// <summary>
 	/// 方向ベクトルを設定します。
@@ -33,6 +28,13 @@ public:
 	/// <param name="dir">設定する方向ベクトル。</param>
 	void SetDir(const Vector2& dir) { m_dir = dir; }
 private:
+	//変数
 	EnemyState m_state;
+
+	//関数
+	/// <summary>
+	/// 弾自身の移動
+	/// </summary>
+	void Movement();
 };
 

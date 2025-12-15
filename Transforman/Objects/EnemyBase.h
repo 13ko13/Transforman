@@ -31,6 +31,7 @@ protected:
 
 	enum class State
 	{
+		None,//‰½‚à‚µ‚È‚¢
 		Appear,//oŒ»
 		Idle,//‘Ò‹@
 		PrevRush,//“Ëi€”õ
