@@ -15,12 +15,12 @@ namespace
 	constexpr float size_height = 50.0f;					//キャラクターの高さ
 	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
 	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
-	constexpr int rect_offset_y = 5;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
+	constexpr int rect_offset_y = 12;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 
 	constexpr float knockback_duration = 15.0f;				//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
-	constexpr double   draw_scale = 1.5;					//描画スケール		
+	constexpr double draw_scale = 2.0f;						//描画スケール		
 
 	constexpr int max_jump_power = 12;						//最大ジャンプ力
 	constexpr int min_jump_power = 8;						//最低ジャンプ力

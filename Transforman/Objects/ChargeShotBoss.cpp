@@ -290,7 +290,7 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 		Charactor::Update(ctx);
 
 		bool isColWall = m_pos.x < stageEnd - Graphic::screen_width + size_width / 2 ||
-			m_pos.x >= stageEnd - chip_size - size_width / 2;//ボス部屋の端の壁に当たったかどうか
+			m_pos.x >= stageEnd - chip_size * 2 - size_width / 2;//ボス部屋の端の壁に当たったかどうか
 		if (!isColWall && !m_isRushing)
 		{
 			Vector2 dir = { 0.0f,0.0f };

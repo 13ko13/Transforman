@@ -1,4 +1,3 @@
-#define NOMINMAX
 #include "Map.h"
 #include "Stages/Stage.h"
 #include <DxLib.h>
