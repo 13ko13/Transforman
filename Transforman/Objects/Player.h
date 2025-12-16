@@ -60,7 +60,7 @@ public:
 
 private:
 	//変数一覧
-	int m_jumpPower;//可変ジャンプ力
+	int m_jumpFrame;//ジャンプ力
 	int m_shotCooltime;///ショットのクールタイム管理用
 	int m_flameThrowerCT;//火炎放射器のクールタイム管理用
 	int m_flameThrowCount;//火炎放射中の時間計測用
@@ -69,6 +69,7 @@ private:
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
+	bool m_isPrevJump;//ジャンプ準備中かどうか
 	bool m_isCharging;//チャージショットをしているかどうか
 	bool m_isArrive;//ボス部屋に到着したかどうか
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか

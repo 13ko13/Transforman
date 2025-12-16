@@ -22,9 +22,12 @@ namespace
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
 	constexpr double draw_scale = 2.0f;						//描画スケール		
 
-	constexpr int max_jump_power = 12;						//最大ジャンプ力
-	constexpr int min_jump_power = 8;						//最低ジャンプ力
-	constexpr float jump_scale = 1.4f;						//ジャンプ力の倍率
+	constexpr int small_jump_frame = 8;						//小ジャンプのフレーム数
+	constexpr int medium_jump_frame = 8;					//中ジャンプのフレーム数
+	constexpr float small_jump_power = 4.0f;				//小ジャンプの高さ
+	constexpr float medium_jump_power = 8.0f;				//中ジャンプの高さ
+	constexpr float big_jump_power = 12.0f;					//大ジャンプの高さ
+	constexpr float jump_power = 1.0f;
 
 	constexpr int shot_cooltime = 15;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
@@ -52,10 +55,11 @@ namespace
 Player::Player(std::shared_ptr<Map> pMap) :
 	Charactor(size_width, size_height, pMap),
 	m_isJumping(false),
+	m_isPrevJump(false),
 	m_isCharging(false),
 	m_isArrive(false),
 	m_isInvincible(false),
-	m_jumpPower(0),
+	m_jumpFrame(0),
 	m_shotCooltime(0),
 	m_flameThrowerCT(0),
 	m_flameThrowCount(0),
@@ -133,19 +137,13 @@ void Player::Update(GameContext& ctx)
 	//ダメージ状態中または火炎放射中は行動できないようにする
 	if (canAction)
 	{
-		//押されている間ジャンプ力が可変する
-		//ジャンプボタンが離されるor最大ジャンプ力を超えたら強制的に
-		//ジャンプさせる
-		if (ctx.input.IsPressed("jump") &&
-			m_isGround)
+		Jump(ctx.input);
+		//地面についている間はm_jumpFrameを0にする
+		if (m_isGround)
 		{
-			m_jumpPower--;
-		}
-		if ((ctx.input.IsReleased("jump") ||
-			abs(m_jumpPower) > max_jump_power) &&
-			m_isGround)
-		{
-			Jump(ctx.input);
+			if (m_isPrevJump) return;
+
+			m_jumpFrame = 0;
 		}
 
 		//移動
@@ -155,12 +153,6 @@ void Player::Update(GameContext& ctx)
 		if (m_shotCooltime <= 0)
 		{
 			PrevShot(ctx.input, ctx.pPlayerBullets);
-		}
-
-		//壁のぼり
-		if (ctx.input.IsPressed("up"))
-		{
-			Climb();
 		}
 	}
 
@@ -261,7 +253,6 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	DrawFormatString(0, 60, 0xffffff, "ShotCoolTime:%d", m_shotCooltime);
 	DrawFormatString(0, 150, 0xffffff, "PrevChargeFrame:%d", m_prevChargeFrame);
 	DrawFormatString(0, 165, 0xffffff, "Ground : %d", m_isGround);
-	DrawFormatString(0, 180, 0xffffff, "JumpPower : %d", m_jumpPower);
 	DrawFormatString(0, 195, 0xffffff, "Velocity(%f , %f)", m_velocity.x, m_velocity.y);
 	DrawFormatString(0, 210, 0xffffff, "PlayerState : %d", m_state);
 	DrawFormatString(0, 225, 0xffffff, "DamageAnimFrame : %f", m_damageAnimFrame);
@@ -316,18 +307,41 @@ void Player::OnArriveEnemy()
 
 void Player::Jump(Input& input)
 {
-	m_state = PlayerState::Jump;
-	//プレイヤーが一瞬しか押さないと全くジャンプしないので
-	// 一定以下のフレームしか押されなかったら
-	//最低ジャンプ力をきめて
-	//そのジャンプ力で飛ぶ
-	if (abs(m_jumpPower) < min_jump_power)
+	//ジャンプ中は処理を飛ばす
+	if (!m_isGround) return;
+	//ボタンを押したらフレーム数を計測し始める
+	if (input.IsTriggered("jump"))
 	{
-		m_jumpPower = -min_jump_power;
+		m_isPrevJump = true;
 	}
-	m_velocity.y += static_cast<float>(m_jumpPower * jump_scale);
-	m_pos.y += m_velocity.y;
-	m_jumpPower = 0;
+	//ジャンプを押していないなら飛ばす
+	if (!m_isPrevJump) return;
+	m_jumpFrame++;
+
+	//ジャンプの高さを決める
+	float jumpHeight = jump_power;
+	//ボタンを離した瞬間にジャンプを行う
+	if (!input.IsReleased("jump")) return;
+
+	//小ジャンプ
+	if (m_jumpFrame < small_jump_frame)
+	{
+		jumpHeight = small_jump_power;
+	}
+	//中ジャンプ
+	else if (m_jumpFrame < medium_jump_frame)
+	{
+		jumpHeight = medium_jump_power;
+	}
+	//大ジャンプ
+	else
+	{
+		jumpHeight = big_jump_power;
+	}
+	//上への向きと速度
+	m_velocity.y -= jump_power * jumpHeight;
+	m_isGround = false;
+	m_isPrevJump = false;
 }
 
 void Player::Move(Input& input)
@@ -424,36 +438,35 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 	//地面についているときのみ発射OKとする
-	if (m_isGround)
+	if (!m_isGround) return;
+
+	for (auto& bullet : pBullets)
 	{
-		for (auto& bullet : pBullets)
+		if (bullet->GetIsAlive()) return;
+
+		bullet->OnFlame();
+		//弾が存在していない場合、弾を発射する
+		if (m_isRight)
 		{
-			if (!bullet->GetIsAlive())
-			{
-				bullet->OnFlame();
-				//弾が存在していない場合、弾を発射する
-				if (m_isRight)
-				{
-					//右向き
-					bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
-					////状態遷移
-					//m_state = PlayerState::ChargeShot;
-				}
-				else
-				{
-					//左向き
-					bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
-					////状態遷移
-					//m_state = PlayerState::ChargeShot;
-				}
-				bullet->SetType(BulletType::Fire);
-				bullet->SetIsAlive(true);
-				bullet->SetIsRight(m_isRight);
-				//火炎放射中の時間を計測する変数に代入
-				m_flameThrowCount = flame_motion_frame;
-				break;	//1発撃ったらループを抜ける
-			}
+			//右向き
+			bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
+			////状態遷移
+			//m_state = PlayerState::ChargeShot;
 		}
+		else
+		{
+			//左向き
+			bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
+			////状態遷移
+			//m_state = PlayerState::ChargeShot;
+		}
+		bullet->SetType(BulletType::Fire);
+		bullet->SetIsAlive(true);
+		bullet->SetIsRight(m_isRight);
+		//火炎放射中の時間を計測する変数に代入
+		m_flameThrowCount = flame_motion_frame;
+		break;	//1発撃ったらループを抜ける
+
 	}
 }
 
