@@ -3,7 +3,7 @@
 
 namespace
 {
-	constexpr float gravity = 0.8f;
+	constexpr float gravity = 1.0f;
 }
 
 Object::Object(const Vector2& pos,const Vector2& vel) :

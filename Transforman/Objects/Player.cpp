@@ -22,12 +22,8 @@ namespace
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
 	constexpr double draw_scale = 2.0f;						//描画スケール		
 
-	constexpr int small_jump_frame = 8;						//小ジャンプのフレーム数
-	constexpr int medium_jump_frame = 8;					//中ジャンプのフレーム数
-	constexpr float small_jump_power = 4.0f;				//小ジャンプの高さ
-	constexpr float medium_jump_power = 8.0f;				//中ジャンプの高さ
-	constexpr float big_jump_power = 12.0f;					//大ジャンプの高さ
-	constexpr float jump_power = 1.0f;
+	constexpr int max_jump_frame = 15;						//最大ジャンプ入力時間
+	constexpr float jump_power = 12.0f;						//ジャンプ力
 
 	constexpr int shot_cooltime = 15;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
@@ -98,6 +94,38 @@ void Player::Update(GameContext& ctx)
 	//クールタイムを更新して0以下になったら
 	//ショット可能状態にする
 	m_shotCooltime--;
+
+	bool canAction = (m_state != PlayerState::Damage) && (m_state != PlayerState::Fire);
+	//ダメージ状態中または火炎放射中は行動できないようにする
+	if (canAction)
+	{
+		//移動
+		Move(ctx.input);
+		//ジャンプを長押ししていて、地面についているなら
+		//ジャンプ中
+		if (ctx.input.IsPressed("jump"))
+		{
+			if (m_isGround)
+			{
+				m_isJumping = true;
+			}
+			Jump();
+		}
+		else
+		{
+			//ジャンプが入力されていないなら
+			//ジャンプ中を解除
+			m_jumpFrame = 0;
+			m_isJumping = false;
+		}
+
+		//クールタイムが0以下の場合ショットの準備を進める
+		if (m_shotCooltime <= 0)
+		{
+			PrevShot(ctx.input, ctx.pPlayerBullets);
+		}
+	}
+
 	Charactor::Update(ctx);
 	Rect chipRect;	//当たったマップチップの矩形
 	HitMap(chipRect);//マップとの接地判定
@@ -131,31 +159,6 @@ void Player::Update(GameContext& ctx)
 		}
 	}
 #endif
-
-
-	bool canAction = (m_state != PlayerState::Damage) && (m_state != PlayerState::Fire);
-	//ダメージ状態中または火炎放射中は行動できないようにする
-	if (canAction)
-	{
-		Jump(ctx.input);
-		//地面についている間はm_jumpFrameを0にする
-		if (m_isGround)
-		{
-			if (m_isPrevJump) return;
-
-			m_jumpFrame = 0;
-		}
-
-		//移動
-		Move(ctx.input);
-
-		//クールタイムが0以下の場合ショットの準備を進める
-		if (m_shotCooltime <= 0)
-		{
-			PrevShot(ctx.input, ctx.pPlayerBullets);
-		}
-	}
-
 	//None,
 	//Idle,
 	//Walk,
@@ -224,7 +227,6 @@ void Player::Update(GameContext& ctx)
 		}
 		break;
 	}
-
 	//現在のアニメーションのフレーム数が
 	//現在のステートの描画枚数を超えたら
 	//現在のアニメーションのフレーム数を0にする
@@ -232,6 +234,7 @@ void Player::Update(GameContext& ctx)
 	{
 		m_animFrame = 0.0f;
 	}
+	
 
 	//ボス部屋に到着している場合
 	//そこから出られないように
@@ -250,6 +253,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	DrawFormatString(0, 0, 0xffffff, "Frame:%d", m_frame);
 	DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
+	DrawFormatString(0, 45, 0xffffff, "JumpFrame : %d", m_jumpFrame);
 	DrawFormatString(0, 60, 0xffffff, "ShotCoolTime:%d", m_shotCooltime);
 	DrawFormatString(0, 150, 0xffffff, "PrevChargeFrame:%d", m_prevChargeFrame);
 	DrawFormatString(0, 165, 0xffffff, "Ground : %d", m_isGround);
@@ -305,43 +309,17 @@ void Player::OnArriveEnemy()
 	m_isArrive = true;
 }
 
-void Player::Jump(Input& input)
+void Player::Jump()
 {
-	//ジャンプ中は処理を飛ばす
-	if (!m_isGround) return;
-	//ボタンを押したらフレーム数を計測し始める
-	if (input.IsTriggered("jump"))
-	{
-		m_isPrevJump = true;
-	}
-	//ジャンプを押していないなら飛ばす
-	if (!m_isPrevJump) return;
+	//ジャンプを長押ししていないなら飛ばす
+	if (!m_isJumping) return;
+
 	m_jumpFrame++;
-
-	//ジャンプの高さを決める
-	float jumpHeight = jump_power;
-	//ボタンを離した瞬間にジャンプを行う
-	if (!input.IsReleased("jump")) return;
-
-	//小ジャンプ
-	if (m_jumpFrame < small_jump_frame)
-	{
-		jumpHeight = small_jump_power;
-	}
-	//中ジャンプ
-	else if (m_jumpFrame < medium_jump_frame)
-	{
-		jumpHeight = medium_jump_power;
-	}
-	//大ジャンプ
-	else
-	{
-		jumpHeight = big_jump_power;
-	}
-	//上への向きと速度
-	m_velocity.y -= jump_power * jumpHeight;
 	m_isGround = false;
-	m_isPrevJump = false;
+	if (m_jumpFrame < max_jump_frame)
+	{
+		m_velocity.y = -jump_power;
+	}
 }
 
 void Player::Move(Input& input)

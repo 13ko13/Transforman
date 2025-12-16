@@ -91,7 +91,7 @@ private:
 	/// <summary>
 	/// ƒWƒƒƒ“ƒvˆ—
 	/// </summary>
-	void Jump(Input& input);
+	void Jump();
 
 	/// <summary>
 	/// ˆÚ“®ˆ—
