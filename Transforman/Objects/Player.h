@@ -58,6 +58,11 @@ public:
 	/// <returns>true:チャージ中,false:チャージしていない</returns>
 	const bool GetIsCharging() const { return m_isCharging; }
 
+	/// <summary>
+	/// ボス戦開始時に呼ぶ関数
+	/// </summary>
+	void OnStart();
+
 private:
 	//変数一覧
 	int m_jumpFrame;//ジャンプ力
@@ -73,6 +78,7 @@ private:
 	bool m_isCharging;//チャージショットをしているかどうか
 	bool m_isArrive;//ボス部屋に到着したかどうか
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
+	bool m_isCanAction;//プレイヤーが現在行動可能かどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
 	int m_animSrcX;		  //現在のアニメーションの横の切り取り位置

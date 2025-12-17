@@ -19,12 +19,21 @@ public:
 	/// プレイヤーが到着したときに呼び出される関数
 	/// </summary>
 	void OnArrive() override;
-
-	
+	/// <summary>
+	/// ボス戦が始まっているかどうかを返す関数
+	/// </summary>
+	/// <returns>true:始まっている,false:始まっていない</returns>
+	bool GetIsStart() { return m_isStart; }
+	/// <summary>
+	/// 現在のチャージショットボスのステートを取得する
+	/// </summary>
+	/// <returns>チャージショットボスのステート</returns>
+	const int GetState() const { return static_cast<int>(m_state); }
 private:
 	int m_prevRushTime;//突進準備中の現在のフレーム数
 	bool m_isRushing;//突進中かどうか
 	int m_actionCooldown;//次の行動までのフレーム数
+	bool m_isStart;//ボス戦が始まっているかどうか
 
 private:
 	void Attack() override;

@@ -55,6 +55,7 @@ Player::Player(std::shared_ptr<Map> pMap) :
 	m_isCharging(false),
 	m_isArrive(false),
 	m_isInvincible(false),
+	m_isCanAction(true),
 	m_jumpFrame(0),
 	m_shotCooltime(0),
 	m_flameThrowerCT(0),
@@ -95,9 +96,8 @@ void Player::Update(GameContext& ctx)
 	//ショット可能状態にする
 	m_shotCooltime--;
 
-	bool canAction = (m_state != PlayerState::Damage) && (m_state != PlayerState::Fire);
 	//ダメージ状態中または火炎放射中は行動できないようにする
-	if (canAction)
+	if (m_isCanAction)
 	{
 		//移動
 		Move(ctx.input);
@@ -195,6 +195,8 @@ void Player::Update(GameContext& ctx)
 
 		break;
 	case PlayerState::Fire:
+		//行動不能にする
+		m_isCanAction = false;
 		m_animSrcY = graph_height * graph_index_shot;
 		animMax = flame_anim_frame;
 		m_velocity.x = 0.0f;
@@ -202,6 +204,7 @@ void Player::Update(GameContext& ctx)
 		if (m_flameThrowCount <= 0)
 		{
 			m_state = PlayerState::Idle;
+			m_isCanAction = true;
 		}
 		break;
 	case PlayerState::Damage:
@@ -209,6 +212,8 @@ void Player::Update(GameContext& ctx)
 		m_isInvincible = true;
 		//ノックバックさせる
 		Knockback();
+		//行動不能にする
+		m_isCanAction = false;
 		//画像の縦切り取り位置
 		m_animSrcY = graph_height * graph_index_damage;
 		//アニメーションの一番最後のフレーム数を保存
@@ -223,6 +228,7 @@ void Player::Update(GameContext& ctx)
 			//idleに戻った後の無敵時間を設定
 			m_blinkingTimer = max_blink_time;
 			m_damageAnimFrame = 0;
+			m_isCanAction = true;
 			m_state = PlayerState::Idle;
 		}
 		break;
@@ -234,7 +240,7 @@ void Player::Update(GameContext& ctx)
 	{
 		m_animFrame = 0.0f;
 	}
-	
+
 
 	//ボス部屋に到着している場合
 	//そこから出られないように
@@ -262,6 +268,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	DrawFormatString(0, 225, 0xffffff, "DamageAnimFrame : %f", m_damageAnimFrame);
 	DrawFormatString(0, 240, 0xffffff, "BlinkingTimer : %d", m_blinkingTimer);
 	DrawFormatString(0, 255, 0xffffff, "WeaponType : %d", m_weaponType);
+	DrawFormatString(0, 385, 0xffffff, "IsCanAction : %d", m_isCanAction);
 #endif
 
 	//ダメージ受けたときは一定時間表示する→しないを繰り返して
@@ -307,10 +314,14 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 void Player::OnArriveEnemy()
 {
 	m_isArrive = true;
+	m_isCanAction = false;
+	m_velocity.x = 0.0f;
+	m_state = PlayerState::Idle;
 }
 
 void Player::Jump()
 {
+	if (m_state == PlayerState::Damage) return;
 	//ジャンプを長押ししていないなら飛ばす
 	if (!m_isJumping) return;
 
@@ -324,38 +335,40 @@ void Player::Jump()
 
 void Player::Move(Input& input)
 {
-	if (m_state != PlayerState::Damage)
+	//ダメージを受けているときと炎を放っているときは
+	//処理を行わない
+	if (m_state == PlayerState::Damage ||
+		m_state == PlayerState::Fire) return;
+
+	Vector2 dir = { 0.0f,0.0f };//プレイヤーの速度ベクトル
+	m_velocity.x = 0.0f;
+	if (input.IsPressed("right"))
 	{
-		Vector2 dir = { 0.0f,0.0f };//プレイヤーの速度ベクトル
-		m_velocity.x = 0.0f;
-		if (input.IsPressed("right"))
-		{
-			m_state = PlayerState::Walk;
-			dir.x = 1.0f;
-			m_isRight = true;
-		}
-		else if (input.IsPressed("left"))
-		{
-			m_state = PlayerState::Walk;
-			dir.x = -1.0f;
-			m_isRight = false;
-		}
-		else
-		{
-			m_state = PlayerState::Idle;
-		}
-		int speed = move_speed;
-#ifdef _DEBUG
-		//デバッグ用のプレイヤーのスピードアップ
-		if (input.IsPressed("playerSpeedUp"))
-		{
-			speed = debug_speed;
-		}
-#endif // _DEBUG
-		//ディレクションを正規化してプレイヤーのスピードをかけて
-		//ポジションに足してあげる移動処理
-		m_velocity += dir.Normalized() * speed;
+		m_state = PlayerState::Walk;
+		dir.x = 1.0f;
+		m_isRight = true;
 	}
+	else if (input.IsPressed("left"))
+	{
+		m_state = PlayerState::Walk;
+		dir.x = -1.0f;
+		m_isRight = false;
+	}
+	else
+	{
+		m_state = PlayerState::Idle;
+	}
+	int speed = move_speed;
+#ifdef _DEBUG
+	//デバッグ用のプレイヤーのスピードアップ
+	if (input.IsPressed("playerSpeedUp"))
+	{
+		speed = debug_speed;
+	}
+#endif // _DEBUG
+	//ディレクションを正規化してプレイヤーのスピードをかけて
+	//ポジションに足してあげる移動処理
+	m_velocity += dir.Normalized() * speed;
 }
 
 void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
@@ -395,15 +408,11 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			{
 				//右向き
 				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
-				////状態遷移
-				//m_state = PlayerState::ChargeShot;
 			}
 			else
 			{
 				//左向き
 				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
-				////状態遷移
-				//m_state = PlayerState::ChargeShot;
 			}
 			bullet->SetType(BulletType::Charge);
 			bullet->SetIsAlive(true);
@@ -544,4 +553,10 @@ void Player::OnKnockback(int dir)
 	//ノックバックするための方向と速度を代入する
 	m_velocity.x = m_knockbackDir * knockback_speed;
 	m_velocity.y = knockback_jump;
+}
+
+void Player::OnStart()
+{
+	//行動可能にする
+	m_isCanAction = true;
 }

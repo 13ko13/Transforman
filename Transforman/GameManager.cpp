@@ -31,7 +31,21 @@ void GameManager::Update(std::shared_ptr<Player> pPlayer,
 	{
 		m_isArrive = true;
 		pCamera->OnArriveEnemy(pPlayer, pStage);
-		pPlayer->OnArriveEnemy();
+
+		//到着して、ボスが出現中の間はプレイヤーは行動不能にする
+		bool isStart = pChargeBoss->GetIsStart();
+		if (isStart)
+		{
+			pPlayer->OnStart();
+		}
+		else
+		{
+			if (pChargeBoss->GetState() == 1)
+			{
+				pPlayer->OnArriveEnemy();
+			}
+		}
+
 
 		//ボスの出現演出を行う(一度だけ)
 		//画面の半分

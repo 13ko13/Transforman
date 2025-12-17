@@ -17,7 +17,7 @@ namespace
 
 	const Vector2 first_pos = { 2380.0f,-32.0f };
 	constexpr int attack_cooltime = 60;//攻撃のクールタイム
-	constexpr int appear_time = 30;//出現からノーマルに遷移するまでの時間
+	constexpr int appear_time = 60;//出現からノーマルに遷移するまでの時間
 	constexpr float bullet_pos_offset = 10.0f;
 	constexpr float appear_gravity = 6.0f;//出現中の重力
 	constexpr float move_speed = 6.0f;//通常移動の速さ
@@ -46,7 +46,8 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap),
 	m_prevRushTime(0),
 	m_actionCooldown(0),
-	m_isRushing(false)
+	m_isRushing(false),
+	m_isStart(false)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeShot.png");
 	assert(m_handle >= 0);
@@ -192,8 +193,8 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 	{
 #if _DEBUG
 		m_colRect.Draw(0xaaffff, false, pCamera);
-		DrawFormatString(0, 290, 0xffffff, "ChargeBossPosX:%f", m_pos.x);
-		DrawFormatString(0, 305, 0xffffff, "ChargeBossPosVelocityX:%f", m_velocity.x);
+		DrawFormatString(0, 290, 0xffffff, "ChargeBossPosX:%f,Y:%f", m_pos.x,m_velocity.y);
+		DrawFormatString(0, 305, 0xffffff, "ChargeBossPosVelocityX:%f,Y:%f", m_velocity.x,m_velocity.y);
 		DrawFormatString(0, 320, 0xffffff, "ChargeBossState:%d", m_state);
 		DrawFormatString(0, 370, 0xffffff, "PrevRushTime:%d", m_prevRushTime);
 
@@ -375,6 +376,7 @@ void ChargeShotBoss::AppearUpdate()
 	{
 		m_state = State::Idle;
 		m_velocity.y = 0.0f;
+		m_isStart = true;
 	}
 }
 
