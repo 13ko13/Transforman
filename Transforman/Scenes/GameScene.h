@@ -17,6 +17,7 @@ class BackGround;
 class Map;
 class Charactor;
 class GameManager;
+class Text;
 class GameScene : public Scene
 {
 public:

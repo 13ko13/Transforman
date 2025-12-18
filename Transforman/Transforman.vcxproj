@@ -156,6 +156,8 @@
     <ClCompile Include="Graphics\Fade.cpp" />
     <ClCompile Include="Scenes\GameScene.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextManager.cpp" />
+    <ClCompile Include="Scenes\TextScene.cpp" />
     <ClCompile Include="Utility\Geometry.cpp" />
     <ClCompile Include="General\Input.cpp" />
     <ClCompile Include="Main\main.cpp" />
@@ -186,6 +188,8 @@
     <ClInclude Include="General\GameConstants.h" />
     <ClInclude Include="Scenes\GameScene.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="TextManager.h" />
+    <ClInclude Include="Scenes\TextScene.h" />
     <ClInclude Include="Utility\Geometry.h" />
     <ClInclude Include="General\Input.h" />
     <ClInclude Include="Objects\Object.h" />

@@ -9,6 +9,7 @@
 #include "../Stages/Stage.h"
 #include "../Map.h"
 #include "../GameManager.h"
+#include "../Text.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
@@ -60,7 +61,6 @@ GameScene::GameScene(SceneController& controller) :
 		m_pObjects.push_back(charactor);
 	}
 	
-
 	//カメラの生成
 	m_pCamera = std::make_shared<Camera>();
 
@@ -106,7 +106,7 @@ void GameScene::Draw()
 	//背景の描画
 	m_pBackground->Draw();
 	//マップチップの描画
-	m_pMap->Draw(*m_pCamera);
+	m_pMap->Draw(*m_pCamera); 
 	// 各オブジェクトの描画
 	for (auto& object : m_pObjects)
 	{
