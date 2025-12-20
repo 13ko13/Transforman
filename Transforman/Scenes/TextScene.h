@@ -1,23 +1,39 @@
 #pragma once
 #include "Scene.h"
+#include <string>
 
 class TextScene :  public Scene
 {
 public:
-	TextScene(SceneController& controller);
+	//1ページ分のデータ(画像パス)
+	struct PageDesc
+	{
+		std::string imagePath;//ファイルパス
+	};
+
+	TextScene(SceneController& controller,const std::vector<PageDesc>& pages);
+	~TextScene();//ロードした画像の破棄
 	void Update(Input& input) override;
 	void Draw()override;
 
 private:
-	int m_lookIdx;//現在どの画像をみているか
-	using UpdateFunc_t = void(TextScene::*)(Input&);
-	UpdateFunc_t m_update;
-	void AppearUpdate(Input& input);//テキスト出現中
-	void NormalUpdate(Input& input);//テキスト表示中
-	void DisppearUpdate(Input& input);//テキスト消失中
+	//ロード済みページ(画像ハンドルとサイズ)
+	struct PageRuntime
+	{
+		int imageHandle = -1;//LoadGraphのハンドル
+		int imgW = 0;//画像幅
+		int imgH = 0;//画像高さ
+	};
 
-	using DrawFunc_t = void(TextScene::*)(Input&);
-	DrawFunc_t m_draw;
-	void IntervalDraw();
+	//画像を中央に表示(必要なら枠内にフィット)
+	void DrawCurrentImage();
+
+	//ページ遷移
+	void NextPage();//R1
+	void PrevPage();//L1
+
+private:
+	std::vector<PageRuntime> m_pages;//ロード済みページ配列
+	int m_currentIndex = 0;//現在ページ番号
 };
 

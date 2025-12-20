@@ -29,6 +29,15 @@ Input::Input() :
 
 	m_inputTable["jump"] = { {PeripheralType::keyboard,KEY_INPUT_SPACE},//キーボード:スペースキー
 							{PeripheralType::pad1,PAD_INPUT_B	} };	//パッド:Bボタン
+
+	m_inputTable["close"] = { {PeripheralType::keyboard,KEY_INPUT_ESCAPE},//キーボード:スペースキー
+							{PeripheralType::pad1,PAD_INPUT_B	} };	//パッド:Bボタン
+
+	m_inputTable["next"] = { {PeripheralType::keyboard,KEY_INPUT_E},//キーボード:Eキー
+							{PeripheralType::pad1,PAD_INPUT_R	} };//パッド:R1ボタン
+
+	m_inputTable["back"] = { {PeripheralType::keyboard,KEY_INPUT_Q},//キーボード:Qキー
+							{PeripheralType::pad1,PAD_INPUT_L	} };//パッド:L1ボタン
 #ifdef _DEBUG
 	//デバッグ用キー
 	//プレイヤーのステート切り替え
