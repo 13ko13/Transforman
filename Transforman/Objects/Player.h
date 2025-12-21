@@ -14,7 +14,7 @@ enum class PlayerState
 	Shot,
 	Jump,
 	ChargeShot,
-	Climb,
+	Parry,
 	Fire,
 	Damage
 };
@@ -23,7 +23,7 @@ enum class WeaponType
 {
 	Normal,
 	Charge,
-	Fire
+	Fire,
 };
 
 class PlayerBullet;
@@ -71,6 +71,8 @@ private:
 	int m_flameThrowCount;//火炎放射中の時間計測用
 	int m_knockackTimer;//ノックバック中のタイム管理用
 	int m_blinkingTimer;//無敵中の点滅中のタイム管理用
+	int m_parryCooltime;//パリィを打てるまでのクールタイム管理用
+	int m_iFrameTimer;//パリィ後の無敵中の時間
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
@@ -128,7 +130,10 @@ private:
 	/// <param name="pBullets">プレイヤーの弾丸</param>
 	void PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets);
 
-	void Climb();
+	/// <summary>
+	/// パリィの処理
+	/// </summary>
+	void OnParry();
 
 	/// <summary>
 	/// Stateを切り替える
@@ -140,5 +145,5 @@ private:
 	/// ダメージを食らった時のノックバックモーション
 	/// </summary>
 	/// <param name="isHIt">当たっている:true,当たっていない:false</param>
-	void Knockback();
+	void UpdateKnockback();
 };

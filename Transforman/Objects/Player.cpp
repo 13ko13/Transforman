@@ -16,11 +16,11 @@ namespace
 	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
 	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
 	constexpr int rect_offset_y = 12;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
+	constexpr double draw_scale = 2.0f;						//描画スケール	
 
 	constexpr float knockback_duration = 15.0f;				//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
-	constexpr double draw_scale = 2.0f;						//描画スケール		
 
 	constexpr int max_jump_frame = 15;						//最大ジャンプ入力時間
 	constexpr float jump_power = 12.0f;						//ジャンプ力
@@ -29,6 +29,9 @@ namespace
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
+
+	constexpr int parry_i_frame = 30;						//パリィ後の無敵時間
+	constexpr int parry_cooltime = 600;						//パリィのクールタイム
 
 	//アニメーション用のグラフのインデックス
 	constexpr int graph_index_idle = 0;
@@ -69,7 +72,9 @@ Player::Player(std::shared_ptr<Map> pMap) :
 	m_animSrcY(0),
 	m_animIdx(0),
 	m_damageAnimFrame(0),
-	m_knockbackDir(0)
+	m_knockbackDir(0),
+	m_parryCooltime(0),
+	m_iFrameTimer(0)
 {
 	m_handle = LoadGraph("img/game/Player/transforman_player.png");
 	assert(m_handle >= 0);
@@ -95,6 +100,9 @@ void Player::Update(GameContext& ctx)
 	//クールタイムを更新して0以下になったら
 	//ショット可能状態にする
 	m_shotCooltime--;
+	//クールタイムを更新して0以下になったら
+	//パリィ可能状態にする
+	m_parryCooltime--;
 
 	//ダメージ状態中または火炎放射中は行動できないようにする
 	if (m_isCanAction)
@@ -109,6 +117,7 @@ void Player::Update(GameContext& ctx)
 			{
 				m_isJumping = true;
 			}
+			//ジャンプ
 			Jump();
 		}
 		else
@@ -123,6 +132,15 @@ void Player::Update(GameContext& ctx)
 		if (m_shotCooltime <= 0)
 		{
 			PrevShot(ctx.input, ctx.pPlayerBullets);
+		}
+
+		//プレイヤーがパリィボタンを押したらパリィを発動
+		if (ctx.input.IsTriggered("parry") && 
+			m_parryCooltime < 0)
+		{
+			//状態をパリィに変更
+			m_state = PlayerState::Parry;
+			OnParry();
 		}
 	}
 
@@ -191,8 +209,9 @@ void Player::Update(GameContext& ctx)
 		m_animSrcY = graph_height * graph_index_jump;
 		animMax = jump_anim_frame;
 		break;
-	case PlayerState::Climb:
-
+	case PlayerState::Parry:
+		//パリィ更新処理
+		m_isInvincible = true;
 		break;
 	case PlayerState::Fire:
 		//行動不能にする
@@ -211,7 +230,7 @@ void Player::Update(GameContext& ctx)
 		//無敵を有効にする
 		m_isInvincible = true;
 		//ノックバックさせる
-		Knockback();
+		UpdateKnockback();
 		//行動不能にする
 		m_isCanAction = false;
 		//画像の縦切り取り位置
@@ -504,9 +523,10 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 	}
 }
 
-void Player::Climb()
+void Player::OnParry()
 {
-
+	m_parryCooltime = parry_cooltime;
+	m_iFrameTimer = parry_i_frame;
 }
 
 void Player::ChangeState(PlayerState state)
@@ -514,7 +534,7 @@ void Player::ChangeState(PlayerState state)
 	m_state = state;
 }
 
-void Player::Knockback()
+void Player::UpdateKnockback()
 {
 	//残りノックバック時間を減らしていく
 	m_knockackTimer--;

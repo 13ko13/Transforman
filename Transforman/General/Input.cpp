@@ -38,13 +38,16 @@ Input::Input() :
 
 	m_inputTable["back"] = { {PeripheralType::keyboard,KEY_INPUT_Q},//キーボード:Qキー
 							{PeripheralType::pad1,PAD_INPUT_L	} };//パッド:L1ボタン
+
+	m_inputTable["parry"] = { {PeripheralType::keyboard,KEY_INPUT_X},//キーボード:Xキー
+							{PeripheralType::pad1,PAD_INPUT_X	} };//パッド:Xボタン
 #ifdef _DEBUG
 	//デバッグ用キー
 	//プレイヤーのステート切り替え
 	m_inputTable["changeState(player)"] = { {PeripheralType::keyboard,KEY_INPUT_S & KEY_INPUT_P},//キーボード:SとP
-							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_Y} };	//パッド:Xボタン
+							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_Y} };	//パッド:XとYボタン
 	m_inputTable["changeState(enemy)"] = { {PeripheralType::keyboard,KEY_INPUT_S & KEY_INPUT_E},//キーボード:SとE
-							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_A} };	//パッド:Xボタン
+							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_A} };	//パッド:XとAボタン
 	m_inputTable["playerSpeedUp"] = { {PeripheralType::keyboard,KEY_INPUT_W },//キーボード:W
 							{PeripheralType::pad1,PAD_INPUT_X & PAD_INPUT_B } };//パッド:XボタンとBボタン
 #endif // _DEBUG
