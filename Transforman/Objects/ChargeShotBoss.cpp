@@ -111,6 +111,11 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	switch (m_state)
 	{
 	case State::None:
+		if (!m_isDead)
+		{
+			Rect chipRect;	//当たったマップチップの矩形
+			HitMap(chipRect);//マップとの接地判定
+		}
 		break;
 	case State::Appear:
 		animMax = appear_anim_frame;

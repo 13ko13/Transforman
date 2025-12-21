@@ -92,6 +92,11 @@ void Player::Init()
 
 void Player::Update(GameContext& ctx)
 {
+#if _DEBUG
+	//デバッグ処理
+	Debug(ctx.input);
+#endif
+
 	//フレームを更新
 	m_frame++;
 	//アニメーションフレームの更新
@@ -136,7 +141,9 @@ void Player::Update(GameContext& ctx)
 
 		//プレイヤーがパリィボタンを押したらパリィを発動
 		if (ctx.input.IsTriggered("parry") && 
-			m_parryCooltime < 0)
+			m_parryCooltime < 0 &&
+			m_isGround &&
+			m_state != PlayerState::Damage)
 		{
 			//状態をパリィに変更
 			m_state = PlayerState::Parry;
@@ -160,23 +167,7 @@ void Player::Update(GameContext& ctx)
 			m_isInvincible = false;
 		}
 	}
-
-#if _DEBUG
-	//デバッグ用の武器タイプ切り替え
-	if (ctx.input.IsTriggered("changeState(player)"))
-	{
-		if (m_weaponType == WeaponType::Normal)
-		{
-			m_weaponType = WeaponType::Fire;
-			return;
-		}
-		if (m_weaponType == WeaponType::Fire)
-		{
-			m_weaponType = WeaponType::Normal;
-			return;
-		}
-	}
-#endif
+	
 	//None,
 	//Idle,
 	//Walk,
@@ -212,6 +203,12 @@ void Player::Update(GameContext& ctx)
 	case PlayerState::Parry:
 		//パリィ更新処理
 		m_isInvincible = true;
+		m_iFrameTimer--;
+		if (m_iFrameTimer < 0)
+		{
+			//ステートを戻す
+			m_state = PlayerState::Idle;
+		}
 		break;
 	case PlayerState::Fire:
 		//行動不能にする
@@ -288,6 +285,8 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	DrawFormatString(0, 240, 0xffffff, "BlinkingTimer : %d", m_blinkingTimer);
 	DrawFormatString(0, 255, 0xffffff, "WeaponType : %d", m_weaponType);
 	DrawFormatString(0, 385, 0xffffff, "IsCanAction : %d", m_isCanAction);
+	DrawFormatString(0, 400, 0xffffff, "ParryTimer : %d", m_iFrameTimer);
+	DrawFormatString(0, 415, 0xffffff, "ParryCooltime : %d", m_parryCooltime);
 #endif
 
 	//ダメージ受けたときは一定時間表示する→しないを繰り返して
@@ -340,7 +339,8 @@ void Player::OnArriveEnemy()
 
 void Player::Jump()
 {
-	if (m_state == PlayerState::Damage) return;
+	if (m_state == PlayerState::Damage ||
+		m_state == PlayerState::Parry) return;
 	//ジャンプを長押ししていないなら飛ばす
 	if (!m_isJumping) return;
 
@@ -354,10 +354,12 @@ void Player::Jump()
 
 void Player::Move(Input& input)
 {
-	//ダメージを受けているときと炎を放っているときは
+	//ダメージを受けているときと炎を放っているときと
+	//パリィを行っているときは
 	//処理を行わない
 	if (m_state == PlayerState::Damage ||
-		m_state == PlayerState::Fire) return;
+		m_state == PlayerState::Fire ||
+		m_state == PlayerState::Parry) return;
 
 	Vector2 dir = { 0.0f,0.0f };//プレイヤーの速度ベクトル
 	m_velocity.x = 0.0f;
@@ -527,6 +529,7 @@ void Player::OnParry()
 {
 	m_parryCooltime = parry_cooltime;
 	m_iFrameTimer = parry_i_frame;
+	m_velocity.x = 0.0f;
 }
 
 void Player::ChangeState(PlayerState state)
@@ -557,6 +560,28 @@ void Player::UpdateKnockback()
 		{
 			m_velocity.x = 0.0f;
 		}
+	}
+}
+
+void Player::Debug(Input& input)
+{
+	//デバッグ用の武器タイプ切り替え
+	if (input.IsTriggered("changeState(player)"))
+	{
+		if (m_weaponType == WeaponType::Normal)
+		{
+			m_weaponType = WeaponType::Fire;
+			return;
+		}
+		if (m_weaponType == WeaponType::Fire)
+		{
+			m_weaponType = WeaponType::Normal;
+			return;
+		}
+	}
+	if (input.IsTriggered("parry"))
+	{
+		m_parryCooltime = -1;
 	}
 }
 

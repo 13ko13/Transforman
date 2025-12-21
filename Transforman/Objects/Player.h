@@ -146,4 +146,9 @@ private:
 	/// </summary>
 	/// <param name="isHIt">当たっている:true,当たっていない:false</param>
 	void UpdateKnockback();
+	
+	/// <summary>
+	/// デバッグ時に使う処理
+	/// </summary>
+	void Debug(Input& input);
 };

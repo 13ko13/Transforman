@@ -11,6 +11,8 @@ Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap) :
 	m_height(height)
 {
 	m_pMap = pMap;
+	//“–‚½‚è”»’è‚ğ‰Šú‰»
+	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 1, m_height - 1);
 }
 
 Charactor::~Charactor()

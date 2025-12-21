@@ -143,6 +143,7 @@
     <ClCompile Include="Charactor.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Objects\ParryBoss.cpp" />
     <ClCompile Include="Stages\Stage.cpp" />
     <ClCompile Include="Graphics\Animation.cpp" />
     <ClCompile Include="Main\Application.cpp" />
@@ -155,8 +156,6 @@
     <ClCompile Include="Objects\EnemyBullet.cpp" />
     <ClCompile Include="Graphics\Fade.cpp" />
     <ClCompile Include="Scenes\GameScene.cpp" />
-    <ClCompile Include="Text.cpp" />
-    <ClCompile Include="TextManager.cpp" />
     <ClCompile Include="Scenes\TextScene.cpp" />
     <ClCompile Include="Utility\Geometry.cpp" />
     <ClCompile Include="General\Input.cpp" />
@@ -174,6 +173,7 @@
     <ClInclude Include="Charactor.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Objects\ParryBoss.h" />
     <ClInclude Include="Stages\Stage.h" />
     <ClInclude Include="Graphics\Animation.h" />
     <ClInclude Include="Main\Application.h" />
@@ -187,8 +187,6 @@
     <ClInclude Include="Graphics\Fade.h" />
     <ClInclude Include="General\GameConstants.h" />
     <ClInclude Include="Scenes\GameScene.h" />
-    <ClInclude Include="Text.h" />
-    <ClInclude Include="TextManager.h" />
     <ClInclude Include="Scenes\TextScene.h" />
     <ClInclude Include="Utility\Geometry.h" />
     <ClInclude Include="General\Input.h" />

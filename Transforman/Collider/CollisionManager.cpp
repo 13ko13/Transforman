@@ -56,7 +56,7 @@ void CollisionManager::CheckCollisions(
 				dir = -1;
 			}
 			pPlayer->OnKnockback(dir);
-			printfDx("“G‚Æ“–‚½‚Á‚½\n");
+			printfDx("“G‚ÆƒvƒŒƒCƒ„[‚ª“–‚½‚Á‚½\n");
 		}
 		else
 		{
