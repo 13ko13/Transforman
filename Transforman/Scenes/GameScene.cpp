@@ -9,7 +9,6 @@
 #include "../Stages/Stage.h"
 #include "../Map.h"
 #include "../GameManager.h"
-#include "../Text.h"
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)

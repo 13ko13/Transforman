@@ -148,6 +148,7 @@ void Player::Update(GameContext& ctx)
 			//状態をパリィに変更
 			m_state = PlayerState::Parry;
 			OnParry();
+			printfDx("パリィをした");
 		}
 	}
 
