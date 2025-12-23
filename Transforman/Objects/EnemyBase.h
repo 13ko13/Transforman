@@ -4,6 +4,7 @@
 #include <memory>
 #include "../Collider/Rect.h"
 #include <vector>
+#include "../Graphics/Animation.h"
 
 // プロトタイプ宣言
 class Player;
@@ -39,5 +40,7 @@ protected:
 		Shot,//弾
 	};
 	State m_state;//状態
+
+	Animation m_idleAnim;
 };
 

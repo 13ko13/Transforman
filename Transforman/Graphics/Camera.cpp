@@ -91,11 +91,11 @@ void Camera::Update(const std::shared_ptr<Player> pPlayer, const std::shared_ptr
 	//その範囲内に収める
 	if (m_pos.x > cameraEndPosX)
 	{
-		m_pos.x = cameraEndPosX;
+		m_pos.x = static_cast<float>(cameraEndPosX);
 	}
 	else if (m_pos.x < cameraStartPosX)
 	{
-		m_pos.x = cameraStartPosX;
+		m_pos.x = static_cast<float>(cameraStartPosX);
 	}
 
 	//ベクトルや計算を使って、「カメラのポジションを動かす」

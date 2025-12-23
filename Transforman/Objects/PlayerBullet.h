@@ -4,6 +4,7 @@
 #include <memory>
 #include "../Utility/Geometry.h"
 #include "../Collider/Rect.h"
+#include "../Graphics/Animation.h"
 
 enum class BulletType
 {
@@ -30,12 +31,16 @@ public:
 	/// 火炎放射を打つという命令が飛ばされたときに呼ぶ関数
 	/// </summary>
 	void OnFlame();
-
+	
 private:
+	int m_animFrame;//アニメーション中の時間
 	bool m_isRight;
 	BulletType m_bulletType;
-	Rect m_rect; 
+	Rect m_rect;
 
 	//炎が消えるまでの秒数
 	float m_flameLifeTime;
+	
+	//アニメーション
+	Animation m_normalAnim;
 };

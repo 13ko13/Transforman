@@ -18,7 +18,7 @@ namespace
 	constexpr int rect_offset_y = 12;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 	constexpr double draw_scale = 2.0f;						//描画スケール	
 
-	constexpr float knockback_duration = 15.0f;				//ノックバックする時間
+	constexpr int knockback_duration = 15.0f;				//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
 

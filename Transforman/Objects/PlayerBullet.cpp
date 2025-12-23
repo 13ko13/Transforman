@@ -5,12 +5,21 @@
 #include "../Collider/Circle.h"
 #include "EnemyBase.h"
 #include "../Stages/Stage.h"
+#include <cassert>
 
 namespace 
 {
 	constexpr float speed = 7.0f;
 	constexpr float normal_shot_radius = 15.0f;
 	constexpr float charge_shot_radius = 25.0f;
+
+	//アニメーション
+	constexpr int anim_idx_y = 0;
+	constexpr int max_normal_anim_num = 4;
+	constexpr int one_anim_frame = 5;
+	constexpr int graph_width = 16;
+	constexpr int graph_height = 16;
+	constexpr float draw_scale = 3.0f;
 
 	//Fire
 	constexpr int fire_width = 150;
@@ -21,6 +30,7 @@ namespace
 }
 
 PlayerBullet::PlayerBullet() :
+	m_animFrame(0),
 	m_isRight(false),
 	m_flameLifeTime(0.0f)
 {
@@ -31,6 +41,9 @@ PlayerBullet::PlayerBullet() :
 	m_rect.SetLT(
 		m_pos.x ,m_pos.y ,
 		fire_width, fire_height);
+	//画像をロード
+	m_handle = LoadGraph("img/game/bullet/player_bullet.png");
+	assert(m_handle >= 0);
 }
 
 PlayerBullet::~PlayerBullet()
@@ -40,7 +53,7 @@ PlayerBullet::~PlayerBullet()
 
 void PlayerBullet::Init()
 {
-		
+	m_normalAnim.Init(m_handle, 0, { graph_width ,graph_height }, max_normal_anim_num, one_anim_frame,draw_scale, true);
 }
 
 void PlayerBullet::Update(GameContext& ctx)
@@ -76,6 +89,8 @@ void PlayerBullet::Update(GameContext& ctx)
 			{
 				m_isAlive = false;
 			}
+			//アニメーションの更新
+			m_normalAnim.Update();
 		}
 		break;
 	case BulletType::Charge:
@@ -158,6 +173,10 @@ void PlayerBullet::Draw(std::shared_ptr<Camera> pCamera)
 				"PlayerBulletPos X:%f , Y:%f",
 				m_pos.x, m_pos.y);
 #endif
+			//アニメーションのdraw
+			m_normalAnim.Draw(
+				{ m_pos.x + pCamera->GetDrawOffset().x,
+				m_pos.y + pCamera->GetDrawOffset().y }, m_isRight);
 			break;
 
 		case BulletType::Charge:

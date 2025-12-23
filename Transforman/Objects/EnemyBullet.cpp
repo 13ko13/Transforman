@@ -76,7 +76,7 @@ void EnemyBullet::Update(GameContext& ctx)
 	//現在のアニメーションのフレーム数を0にする
 	if (m_animFrame >= bullet_anim_num * anim_wait_frame)
 	{
-		m_animFrame = 0.0f;
+		m_animFrame = 0;
 	}
 }
 
