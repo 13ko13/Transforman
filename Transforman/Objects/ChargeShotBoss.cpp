@@ -56,6 +56,7 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	assert(m_handle >= 0);
 
 	m_pos = first_pos;
+	m_state = State::None;
 }
 
 ChargeShotBoss::~ChargeShotBoss()

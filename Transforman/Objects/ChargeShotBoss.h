@@ -33,13 +33,24 @@ private:
 	int m_GroundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数
 	bool m_isRushing;//突進中かどうか
-	bool m_isDescent;//降下中かどうか
 	int m_actionCooldown;//次の行動までのフレーム数
 	bool m_isStart;//ボス戦が始まっているかどうか
 
 	Animation m_rushAnim;
 	Animation m_prevRushAnim;
 	Animation m_shotAnim;
+
+
+	enum class State
+	{
+		None,//何もしない
+		Appear,//出現
+		Idle,//待機
+		PrevRush,//突進準備
+		Rush,//突進
+		Shot,//弾
+	};
+	State m_state;//状態
 
 private:
 	void Attack() override;

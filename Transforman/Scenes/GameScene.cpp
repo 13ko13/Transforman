@@ -68,6 +68,9 @@ GameScene::GameScene(SceneController& controller) :
 
 	//ゲームマネージャーの生成
 	m_pGameManager = std::make_shared<GameManager>();
+
+	//当たり判定マネージャーの生成
+	m_pColManager = std::make_shared<CollisionManager>();
 }
 
 void GameScene::Init()

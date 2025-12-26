@@ -30,17 +30,6 @@ protected:
 	int m_appearTime;//出現中のタイム計測
 	bool m_isAppear;//自分が出現しているかどうか
 
-	enum class State
-	{
-		None,//何もしない
-		Appear,//出現
-		Idle,//待機
-		PrevRush,//突進準備
-		Rush,//突進
-		Shot,//弾
-	};
-	State m_state;//状態
-
 	Animation m_idleAnim;
 };
 

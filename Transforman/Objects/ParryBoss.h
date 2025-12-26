@@ -6,10 +6,18 @@ public:
 	ParryBoss(std::shared_ptr<Map> pMap);
 	~ParryBoss();
 
-	void Update();
-	void Draw();
+	void Init() override;
+	void Update(GameContext& ctx) override;
+	void Draw(std::shared_ptr<Camera> pCamera) override;
 
+	/// <summary>
+	/// プレイヤーが到着したときに呼び出される関数
+	/// </summary>
+	void OnArrive() override;
 private:
-
+	/// <summary>
+	/// 攻撃行動を行う関数
+	/// </summary>
+	void Attack() override;
 };
 
