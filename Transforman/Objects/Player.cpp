@@ -53,7 +53,6 @@ namespace
 
 Player::Player(std::shared_ptr<Map> pMap) :
 	Charactor(size_width, size_height, pMap),
-	m_isJumping(false),
 	m_isPrevJump(false),
 	m_isCharging(false),
 	m_isArrive(false),

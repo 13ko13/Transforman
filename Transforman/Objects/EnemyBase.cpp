@@ -6,7 +6,7 @@ EnemyBase::EnemyBase(int width,int height,std::shared_ptr<Map> pMap):
 	m_appearTime(0),
 	m_isAppear(false)
 {
-	
+	m_state = State::None;
 }
 
 EnemyBase::~EnemyBase()

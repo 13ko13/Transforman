@@ -15,9 +15,10 @@ GameScene::GameScene(SceneController& controller) :
 {
 	//ステージデータのロード
 	m_pStage = std::make_shared<Stage>();
-	m_pStage->Load(1);
+	m_pStage->Load(2);
 	//マップチップの生成
 	m_pMap = std::make_shared<Map>(m_pStage);
+	m_pMap->SetStageType(StageType::Stage2);
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_pMap);
 	// プレイヤーの弾の生成
@@ -27,7 +28,7 @@ GameScene::GameScene(SceneController& controller) :
 		bullet = std::make_shared<PlayerBullet>();
 	}
 	// 敵の弾の生成
-	m_pEnemyBullets.resize(20);
+	m_pEnemyBullets.resize(20); 
 	for (auto& bullet : m_pEnemyBullets)
 	{
 		bullet = std::make_shared<EnemyBullet>();

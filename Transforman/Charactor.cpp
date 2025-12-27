@@ -4,6 +4,7 @@
 
 Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap) :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),
+	m_isJumping(false),
 	m_isGround(false),
 	m_isRight(false),
 	m_isDead(false),
@@ -89,9 +90,9 @@ void Charactor::HitMap(Rect& chipRect)
 			m_pos.y = chipRect.GetBottom() + m_height * 0.5f;
 			//ビタッと止まらないように少しずつvelocityを減少させる
 			m_velocity.y *= -0.1f;
+			m_isJumping = false;//ジャンプを終了させる
 		}
 	}
-
 
 #ifdef _DEBUG
 	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);

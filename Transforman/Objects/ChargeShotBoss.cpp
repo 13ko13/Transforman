@@ -49,14 +49,13 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	m_prevRushTime(0),
 	m_actionCooldown(0),
 	m_isRushing(false),
-	m_isStart(false),
 	m_GroundNum(0)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeshot_boss.png");
 	assert(m_handle >= 0);
 
 	m_pos = first_pos;
-	m_state = State::None;
+	m_bossState = ChargeShotBossState::None;
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -106,21 +105,21 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	}
 
 #ifdef _DEBUG
-	//ボタンでステート切り替え
-	if (ctx.input.IsTriggered("changeState(enemy)"))
-	{
-		if (m_state == State::Idle)
-		{
-			m_state = State::PrevRush;
-			m_prevRushTime = prev_rush_frame;
-			return;
-		}
-		if (m_state == State::Rush)
-		{
-			m_state = State::Idle;
-			return;
-		}
-	}
+	////ボタンでステート切り替え
+	//if (ctx.input.IsTriggered("changeState(enemy)"))
+	//{
+	//	if (m_state == State::Idle)
+	//	{
+	//		m_state = State::PrevRush;
+	//		m_prevRushTime = prev_rush_frame;
+	//		return;
+	//	}
+	//	if (m_state == State::Rush)
+	//	{
+	//		m_state = State::Idle;
+	//		return;
+	//	}
+	//}
 #endif // DEBUG
 
 	//ステートごとの行動

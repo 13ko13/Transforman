@@ -24,12 +24,23 @@ public:
 
 	virtual void Attack() abstract;
 	virtual void OnArrive() abstract;
+	/// <summary>
+	/// ボス戦が始まっているかどうかを返す関数
+	/// </summary>
+	/// <returns>true:始まっている,false:始まっていない</returns>
+	bool GetIsStart() { return m_isStart; }
 private:
-
+	enum class State
+	{
+		None,//何もしない
+		Appear,//出現
+		Idle,//待機
+	};
 protected:
+	State m_state;//状態
 	int m_appearTime;//出現中のタイム計測
 	bool m_isAppear;//自分が出現しているかどうか
-
+	bool m_isStart;//ボス戦が始まっているかどうか
 	Animation m_idleAnim;
 };
 

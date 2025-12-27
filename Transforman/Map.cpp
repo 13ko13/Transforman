@@ -7,7 +7,6 @@
 #include "Objects/Player.h"
 #include <algorithm>
 
-
 namespace
 {
 	constexpr int chip_size = 32;
@@ -21,9 +20,17 @@ Map::Map(std::shared_ptr<Stage> pStage) :
 	m_startChipX(0.0f),
 	m_offsetX(0.0f)
 {
-	m_handle = LoadGraph("img/game/map/mapchip_2.png");
+	//ステージ1のマップチップの読み込み
+	int handle = -1;
+	handle = LoadGraph("img/game/map/mapchip_1.png");
+	m_handles.push_back(handle);
 	//チェック
-	assert(m_handle >= 0);
+	assert(handle >= 0);
+
+	//ステージ2のマップチップの読み込み
+	handle = LoadGraph("img/game/map/mapchip_2.png");
+	m_handles.push_back(handle);
+	assert(handle >= 0);
 }
 
 Map::~Map()
@@ -75,19 +82,35 @@ void Map::Draw(Camera camera)
 			//最後に、これは切り取り位置なのでサイズをかけてあげる
 			int srcY = (chipID / graph_chip_row) * chip_size;
 			
-			//描画
-			DrawRectRotaGraph(
-							posX + chip_size / 2,
-							posY + chip_size / 2,
-							srcX, srcY,
-							chip_size, chip_size,
-							1.0, 0.0, m_handle, true);
+			switch (m_stageType)
+			{
+			case StageType::Stage1:
+				//描画
+				DrawRectRotaGraph(
+					posX + chip_size / 2,
+					posY + chip_size / 2,
+					srcX, srcY,
+					chip_size, chip_size,
+					1.0, 0.0,
+					m_handles[static_cast<int>(StageType::Stage1)], true);//ステージ1のマップチップを描画
+				break;
+			case StageType::Stage2:
+				//描画
+				DrawRectRotaGraph(
+					posX + chip_size / 2,
+					posY + chip_size / 2,
+					srcX, srcY,
+					chip_size, chip_size,
+					1.0, 0.0,
+					m_handles[static_cast<int>(StageType::Stage2)], true);//ステージ2のマップチップを描画
+				break;
+			}
+			
 
 #ifdef _DEBUG
 			//当たり判定
 			DrawBoxAA(posX, posY, posX + chip_size, posY + chip_size, 0x00ff00, false);
 #endif // _DEBUG
-
 		}
 	}
 }
