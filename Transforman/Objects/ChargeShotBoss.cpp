@@ -55,7 +55,7 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 	assert(m_handle >= 0);
 
 	m_pos = first_pos;
-	m_bossState = ChargeShotBossState::None;
+	m_chargeBossState = ChargeShotBossState::None;
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -105,71 +105,53 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	}
 
 #ifdef _DEBUG
-	////ボタンでステート切り替え
-	//if (ctx.input.IsTriggered("changeState(enemy)"))
-	//{
-	//	if (m_state == State::Idle)
-	//	{
-	//		m_state = State::PrevRush;
-	//		m_prevRushTime = prev_rush_frame;
-	//		return;
-	//	}
-	//	if (m_state == State::Rush)
-	//	{
-	//		m_state = State::Idle;
-	//		return;
-	//	}
-	//}
+	//ボタンでステート切り替え
+	if (ctx.input.IsTriggered("changeState(enemy)"))
+	{
+		//ステートを順番に切り替える
+		//intで計算したものをまたenumにキャストして代入する
+		m_chargeBossState =
+			static_cast<ChargeShotBossState>((static_cast<int>(m_chargeBossState) + 1)
+				% static_cast<int>(ChargeShotBossState::StateMax));
+
+		//共通ステートはNoneにする
+		m_state = State::None;
+	}
 #endif // DEBUG
 
-	//ステートごとの行動
-	switch (m_state)
+	EnemyBase::Update(ctx);
+	
+	//チャージショットボス固有の行動
+	switch (m_chargeBossState)
 	{
-	case State::None:
-		if (!m_isDead)
-		{
-			Rect chipRect;	//当たったマップチップの矩形
-			HitMap(chipRect);//マップとの接地判定
-			//押し戻しはしているが地面についていない判定にする(ごり押し)
-			m_isGround = false;
-		}
+	case ChargeShotBossState::None:
 		break;
-	case State::Appear:
-		AppearUpdate();
-		break;
-	case State::Idle:
-		IdleUpdate(ctx);
-		break;
-	case State::PrevRush:
+	case ChargeShotBossState::PrevRush:
 		PrevRushUpdate(ctx);
 		break;
-	case State::Rush:
+	case ChargeShotBossState::Rush:
 		RushUpdate(ctx);
 		break;
-	case State::Shot:
+	case ChargeShotBossState::Shot:
 		ShotUpdate(ctx.pEnemyBullets, ctx.pPlayer);
 		break;
 	}
 
-	if (m_state == State::Appear ||
-		m_state == State::Idle)
+	if (m_chargeBossState == ChargeShotBossState::None)
 	{
-		//アニメーション更新
-		//全枚数のアニメーションを終えたら
-		//1枚目の画像に戻す
-		m_idleAnim.Update();
+		//何もしない
 	}
-	else if (m_state == State::PrevRush)
+	else if (m_chargeBossState == ChargeShotBossState::PrevRush)
 	{
 		//Rush状態より早いアニメーションを行う
 		m_prevRushAnim.Update();
 	}
-	else if (m_state == State::Rush)
+	else if (m_chargeBossState == ChargeShotBossState::Rush)
 	{
 		//突進中のみアニメーションを早くする
 		m_rushAnim.Update();
 	}
-	else if (m_state == State::Shot)
+	else if (m_chargeBossState == ChargeShotBossState::Shot)
 	{
 		//ショットアニメーション更新
 		m_shotAnim.Update();
@@ -188,6 +170,7 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		DrawFormatString(0, 320, 0xffffff, "ChargeBossState:%d", m_state);
 		DrawFormatString(0, 370, 0xffffff, "PrevRushTime:%d", m_prevRushTime);
 		DrawFormatString(0, 430, 0xffffff, "ChargeBossIsGround:%d", m_isGround);
+		DrawFormatString(0, 445, 0xffffff, "ChargeBossIsDead:%d", m_isDead);
 
 #endif
 
@@ -197,22 +180,21 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		m_shotAnim.SetOffset({ 0,-draw_offset_y });
 
 		Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
-		//アニメーションの描画
-		switch (m_state)
+		
+		EnemyBase::Draw(pCamera);
+
+		//チャージショットボス固有のアニメーション描画
+		switch (m_chargeBossState)
 		{
-		case State::Appear:
-			m_idleAnim.Draw(drawPos, !m_isRight);
+		case ChargeShotBossState::None:
 			break;
-		case State::Idle:
-			m_idleAnim.Draw(drawPos, !m_isRight);
-			break;
-		case State::Rush:
+		case ChargeShotBossState::Rush:
 			m_rushAnim.Draw(drawPos, !m_isRight);
 			break;
-		case State::PrevRush:
+		case ChargeShotBossState::PrevRush:
 			m_prevRushAnim.Draw(drawPos, !m_isRight);
 			break;
-		case State::Shot:
+		case ChargeShotBossState::Shot:
 			m_shotAnim.Draw(drawPos, !m_isRight);
 			break;
 		}
@@ -239,7 +221,8 @@ void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 		m_state == State::Idle &&
 		m_actionCooldown <= 0)
 	{
-		m_state = State::Shot;
+		m_chargeBossState = ChargeShotBossState::Shot;
+		m_state = State::None;
 		m_actionCooldown = action_cooldown;
 
 		//ショットアニメーションを最初から再生する
@@ -250,7 +233,8 @@ void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 		m_state == State::Idle &&
 		m_actionCooldown <= 0)
 	{
-		m_state = State::PrevRush;
+		m_chargeBossState = ChargeShotBossState::PrevRush;
+		m_state = State::None;
 		m_actionCooldown = action_cooldown;
 		m_prevRushTime = prev_rush_frame;
 		return;
@@ -264,6 +248,7 @@ void ChargeShotBoss::OnArrive()
 	m_pos = first_pos;
 	m_appearTime = appear_time;
 	m_state = State::Appear;
+	m_chargeBossState = ChargeShotBossState::None;
 }
 
 void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
@@ -309,6 +294,7 @@ void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBull
 	if (m_shotAnim.GetIsEnd())
 	{
 		m_state = State::Idle;
+		m_chargeBossState = ChargeShotBossState::None;
 	}
 }
 
@@ -353,6 +339,7 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 		{
 			//ステートをアイドルに戻す
 			m_state = State::Idle;
+			m_chargeBossState = ChargeShotBossState::None;
 			m_isRushing = false;
 			ctx.pCamera->OnImpact();
 		}
@@ -391,7 +378,8 @@ void ChargeShotBoss::PrevRushUpdate(GameContext& ctx)
 		if (m_prevRushTime < 0)
 		{
 			m_velocity.x = 0.0f;
-			m_state = State::Rush;
+			m_chargeBossState = ChargeShotBossState::Rush;
+			m_state = State::None;
 		}
 	}
 }
@@ -409,6 +397,7 @@ void ChargeShotBoss::AppearUpdate()
 	if (m_appearTime <= 0)
 	{
 		m_state = State::Idle;
+		m_chargeBossState = ChargeShotBossState::None;
 		m_velocity.y = 0.0f;
 		m_isStart = true;
 	}
@@ -428,5 +417,16 @@ void ChargeShotBoss::IdleUpdate(GameContext& ctx)
 
 		//ランダムな攻撃方法をとる
 		Attack(ctx.pEnemyBullets, ctx.pPlayer);
+	}
+}
+
+void ChargeShotBoss::NoneUpdate()
+{
+	if (!m_isDead)
+	{
+			Rect chipRect;	//当たったマップチップの矩形
+			HitMap(chipRect);//マップとの接地判定
+			//押し戻しはしているが地面についていない判定にする(ごり押し)
+			m_isGround = false;
 	}
 }
