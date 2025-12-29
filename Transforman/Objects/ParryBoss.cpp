@@ -1,17 +1,24 @@
 #include "ParryBoss.h"
 #include <Dxlib.h>
 #include "../Graphics/Camera.h"
+#include <cassert>
 
 namespace
 {
 	constexpr int size_width = 30;
 	constexpr int size_height = 30;
+
+	//èâä˙à íu
+	const Vector2 first_pos = { 500.0f, 500.0f };
 }
 
 ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap)
 {
 	m_handle = LoadGraph("img/game/Enemy/parry_boss.png");
+	assert(m_handle >= 0);
+
+	m_pos = first_pos;
 }
 
 ParryBoss::~ParryBoss()

@@ -9,16 +9,22 @@
 #include "../Stages/Stage.h"
 #include "../Map.h"
 #include "../GameManager.h"
+#include "../Objects/ParryBoss.h"
+
+namespace
+{
+	
+}
 
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
 {
 	//ステージデータのロード
 	m_pStage = std::make_shared<Stage>();
-	m_pStage->Load(2);
+	m_pStage->Load(1);
 	//マップチップの生成
 	m_pMap = std::make_shared<Map>(m_pStage);
-	m_pMap->SetStageType(StageType::Stage2);
+	m_pMap->SetStageType(StageType::Stage1);
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_pMap);
 	// プレイヤーの弾の生成
@@ -28,17 +34,19 @@ GameScene::GameScene(SceneController& controller) :
 		bullet = std::make_shared<PlayerBullet>();
 	}
 	// 敵の弾の生成
-	m_pEnemyBullets.resize(20); 
+	m_pEnemyBullets.resize(20);
 	for (auto& bullet : m_pEnemyBullets)
 	{
 		bullet = std::make_shared<EnemyBullet>();
 	}
 	// 敵の生成
-	//チャージショットボス、壁のぼりボス、火炎放射ボス、植物系ボスの4体
+	//チャージショットボス、パリィボス、火炎放射ボス、植物系ボスの4体
 	m_pEnemies.resize(0);
 	//チャージショットボスを試しに追加する
 	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>(m_pMap);
 	m_pEnemies.push_back(m_pChargeShotBoss);
+	m_pParryBoss = std::make_shared<ParryBoss>(m_pMap);
+	m_pEnemies.push_back(m_pParryBoss);
 
 	//キャラクターすべてを配列に入れる
 	for (auto& enemy : m_pEnemies)
@@ -101,7 +109,7 @@ void GameScene::Update(Input& input)
 	m_pMap->Update();
 
 	//ゲームマネージャー更新
-	m_pGameManager->Update(m_pPlayer,m_pStage,m_pCamera,m_pChargeShotBoss);
+	m_pGameManager->Update(m_pPlayer,m_pStage,m_pCamera,m_pChargeShotBoss, m_pParryBoss);
 }
 
 void GameScene::Draw()

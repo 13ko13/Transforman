@@ -7,6 +7,7 @@
 #include "Objects/Player.h"
 #include <algorithm>
 
+
 namespace
 {
 	constexpr int chip_size = 32;
@@ -85,12 +86,12 @@ void Map::Draw(Camera camera)
 			switch (m_stageType)
 			{
 			case StageType::Stage1:
-				//描画
-				DrawRectRotaGraph(
-					posX + chip_size / 2,
-					posY + chip_size / 2,
-					srcX, srcY,
-					chip_size, chip_size,
+			//描画
+			DrawRectRotaGraph(
+							posX + chip_size / 2,
+							posY + chip_size / 2,
+							srcX, srcY,
+							chip_size, chip_size,
 					1.0, 0.0,
 					m_handles[static_cast<int>(StageType::Stage1)], true);//ステージ1のマップチップを描画
 				break;
@@ -111,6 +112,7 @@ void Map::Draw(Camera camera)
 			//当たり判定
 			DrawBoxAA(posX, posY, posX + chip_size, posY + chip_size, 0x00ff00, false);
 #endif // _DEBUG
+
 		}
 	}
 }

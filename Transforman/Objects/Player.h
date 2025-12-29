@@ -74,6 +74,8 @@ private:
 	int m_parryCooltime;//パリィを打てるまでのクールタイム管理用
 	int m_iFrameTimer;//パリィ後の無敵中の時間
 
+	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
+	bool m_isJumping;///ジャンプしているかどうか
 	bool m_isPrevJump;//ジャンプ準備中かどうか
 	bool m_isCharging;//チャージショットをしているかどうか
 	bool m_isArrive;//ボス部屋に到着したかどうか

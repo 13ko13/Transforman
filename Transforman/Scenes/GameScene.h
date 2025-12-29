@@ -18,6 +18,7 @@ class Map;
 class Charactor;
 class GameManager;
 class Text;
+class ParryBoss;
 class GameScene : public Scene
 {
 public:
@@ -32,6 +33,7 @@ private:
 	std::vector<std::shared_ptr<EnemyBullet>> m_pEnemyBullets;//敵の弾
 	std::vector<std::shared_ptr<EnemyBase>> m_pEnemies;//敵
 	std::shared_ptr<ChargeShotBoss> m_pChargeShotBoss;//チャージショットボス
+	std::shared_ptr<ParryBoss> m_pParryBoss;//パリィボス
 	std::shared_ptr<Camera> m_pCamera;//カメラ
 	std::shared_ptr<CollisionManager> m_pColManager;//当たり判定のマネージャー
 	std::vector<std::shared_ptr<Object>> m_pObjects;//オブジェクトの配列

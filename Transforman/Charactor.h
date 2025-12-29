@@ -47,7 +47,6 @@ public:
 private:
 
 protected:
-	bool m_isJumping;///ƒWƒƒƒ“ƒv‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	Rect m_colRect;
 	std::shared_ptr<Map> m_pMap;
 	bool m_isDead;//Ž€–S‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
