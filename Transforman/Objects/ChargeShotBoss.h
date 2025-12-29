@@ -19,7 +19,11 @@ public:
 	/// プレイヤーが到着したときに呼び出される関数
 	/// </summary>
 	void OnArrive() override;
-	
+	/// <summary>
+	/// ボス戦が始まっているかどうかを返す関数
+	/// </summary>
+	/// <returns>true:始まっている,false:始まっていない</returns>
+	bool GetIsStart() { return m_isStart; }
 	/// <summary>
 	/// 現在のチャージショットボスのステートを取得する
 	/// </summary>
@@ -30,19 +34,23 @@ private:
 	int m_prevRushTime;//突進準備中の現在のフレーム数
 	bool m_isRushing;//突進中かどうか
 	int m_actionCooldown;//次の行動までのフレーム数
+	bool m_isStart;//ボス戦が始まっているかどうか
 
 	Animation m_rushAnim;
 	Animation m_prevRushAnim;
 	Animation m_shotAnim;
 
-	enum class ChargeShotBossState
+
+	enum class State
 	{
 		None,//何もしない
+		Appear,//出現
+		Idle,//待機
 		PrevRush,//突進準備
 		Rush,//突進
 		Shot,//弾
 	};
-	ChargeShotBossState m_bossState;
+	State m_state;//状態
 
 private:
 	void Attack() override;

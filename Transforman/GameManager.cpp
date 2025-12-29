@@ -4,7 +4,6 @@
 #include "Graphics/Camera.h"
 #include "Objects/ChargeShotBoss.h"
 #include "Stages/Stage.h"
-#include "Objects/EnemyBase.h"
 
 namespace
 {
@@ -24,7 +23,7 @@ GameManager::~GameManager()
 void GameManager::Update(std::shared_ptr<Player> pPlayer,
 	std::shared_ptr<Stage> pStage,
 	std::shared_ptr<Camera> pCamera,
-	std::vector<std::shared_ptr<EnemyBase>> pEnemies)
+	std::shared_ptr<ChargeShotBoss> pChargeBoss)
 {
 	//プレイヤーがボスの場所に到着したら
 	//isArriveをtrueにする
@@ -34,40 +33,16 @@ void GameManager::Update(std::shared_ptr<Player> pPlayer,
 		pCamera->OnArriveEnemy(pPlayer, pStage);
 
 		//到着して、ボスが出現中の間はプレイヤーは行動不能にする
-		bool isStart = false;
-
-		//現在のステージのボスを取得する
-		for(const auto& enemy : pEnemies)
-		{
-			//現在生きている挑戦中のボスを探す(絶対に1体)
-			if(!enemy->GetIsDead())
-			{
-				//そのボス戦が始まっているかどうかを取得
-				isStart = enemy->GetIsStart();
-				break;
-			}
-		}
-
-		
+		bool isStart = pChargeBoss->GetIsStart();
 		if (isStart)
 		{
 			pPlayer->OnStart();
 		}
 		else
 		{
-			//ボスの状態が降臨中は行動不能にする
-			//現在のステージのボスを取得する
-			for(const auto& enemy : pEnemies)
+			if (pChargeBoss->GetState() == 1)
 			{
-				//現在生きている挑戦中のボスを探す(絶対に1体)
-				if(!enemy->GetIsDead())
-				{
-					if (pChargeBoss->GetState() == 1)
-					{
-						pPlayer->OnArriveEnemy();
-					}
-					break;
-				}
+				pPlayer->OnArriveEnemy();
 			}
 		}
 
@@ -85,9 +60,4 @@ void GameManager::Update(std::shared_ptr<Player> pPlayer,
 			m_isAppear = true;
 		}
 	}
-
-	//プレイヤーが各ステージのボスを倒したら
-	//次のステージへ進むことを許可するのと、
-	//倒したボスの能力を開放する
-	if()
 }
