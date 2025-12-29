@@ -20,6 +20,11 @@ public:
 	/// </summary>
 	void OnArrive() override;
 	
+	/// <summary>
+	/// 現在のチャージショットボスのステートを取得する
+	/// </summary>
+	/// <returns>チャージショットボスのステート</returns>
+	const int GetState() const { return static_cast<int>(m_state); }
 private:
 	int m_GroundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数
@@ -36,10 +41,8 @@ private:
 		PrevRush,//突進準備
 		Rush,//突進
 		Shot,//弾
-
-		StateMax//状態の最大数
 	};
-	ChargeShotBossState m_chargeBossState;
+	ChargeShotBossState m_bossState;
 
 private:
 	void Attack() override;
@@ -67,20 +70,14 @@ private:
 	/// </summary>
 	/// <param name="ctx"></param>
 	void PrevRushUpdate(GameContext& ctx);
-	
 	/// <summary>
 	/// ボス出現中の関数
 	/// </summary>
-	void AppearUpdate() override;
+	void AppearUpdate();
 	/// <summary>
 	/// アイドル状態の関数
 	/// </summary>
 	/// <param name="ctx">オブジェクトクラスを継承しているオブジェクトの構造体</param>
-	void IdleUpdate(GameContext& ctx) override;
-
-	/// <summary>
-	/// 正確には登場前の更新関数
-	/// </summary>
-	void NoneUpdate() override;
+	void IdleUpdate(GameContext& ctx);
 };
 

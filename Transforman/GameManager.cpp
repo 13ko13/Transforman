@@ -62,9 +62,7 @@ void GameManager::Update(std::shared_ptr<Player> pPlayer,
 				//現在生きている挑戦中のボスを探す(絶対に1体)
 				if(!enemy->GetIsDead())
 				{
-					//そのボスのステートを取得して
-					//出現中ならプレイヤーを行動不能にする
-					if (enemy->GetState() == 1)
+					if (pChargeBoss->GetState() == 1)
 					{
 						pPlayer->OnArriveEnemy();
 					}
@@ -81,26 +79,15 @@ void GameManager::Update(std::shared_ptr<Player> pPlayer,
 		const int cameraEndPosX = pStage->GetMapSize().w * mapchip_size - screenHalfW - 1;
 		//カメラのポジションがステージ端に来たら
 		const bool isCameraArrive = pCamera->GetPos().x >= cameraEndPosX;
-		//現在のステージのボスを取得する
-		for (const auto& enemy : pEnemies)
+		if (!m_isAppear && isCameraArrive)
 		{
-			//現在生きている挑戦中のボスを探す(絶対に1体)
-			if (!enemy->GetIsDead())
-			{
-				if (!m_isAppear && isCameraArrive)
-				{
-					enemy->OnArrive();
-					m_isAppear = true;
-					break;
-				}
-			}
+			pChargeBoss->OnArrive();
+			m_isAppear = true;
 		}
-		
 	}
 
 	//プレイヤーが各ステージのボスを倒したら
 	//次のステージへ進むことを許可するのと、
 	//倒したボスの能力を開放する
-	//まだ実装していないので保留
-	//if()
+	if()
 }
