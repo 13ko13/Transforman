@@ -5,8 +5,8 @@
 
 namespace
 {
-	constexpr int size_width = 30;
-	constexpr int size_height = 30;
+	constexpr int size_width = 80;
+	constexpr int size_height = 80;
 
 	//初期位置
 	const Vector2 first_pos = { 500.0f, 500.0f };
@@ -43,13 +43,19 @@ void ParryBoss::Draw(std::shared_ptr<Camera> pCamera)
 		m_pos.y + pCamera->GetDrawOffset().y,
 		0, 0,
 		size_width, size_height,
-		1.0f, 0.0f,
+		5.0, 0.0,
 		m_handle,
 		true, false);
+
+	//デバッグ用当たり判定表示
+#if _DEBUG
+	m_colRect.Draw(0xff0000, false, pCamera);
+#endif
 }
 
 void ParryBoss::OnArrive()
 {
+
 }
 
 void ParryBoss::Attack()
