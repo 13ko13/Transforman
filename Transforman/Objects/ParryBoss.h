@@ -1,5 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
+
+class Animation;
 class ParryBoss : public EnemyBase
 {
 public:
@@ -19,5 +21,18 @@ private:
 	/// 攻撃行動を行う関数
 	/// </summary>
 	void Attack() override;
+
+private:
+	enum class State
+	{
+		None,//何もしない
+		Appear,//出現
+		Idle,//待機,
+
+		StateNum
+	};
+	State m_state;//状態
+
+	Animation m_idleAnim; 
 };
 
