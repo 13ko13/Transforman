@@ -37,6 +37,9 @@ void Charactor::Update(GameContext& ctx)
 
 void Charactor::Draw(std::shared_ptr<Camera> pCamera)
 {
+#ifdef _DEBUG
+	m_colRect.Draw(0xff0000, false, pCamera);	
+#endif // DEBUG
 }
 
 void Charactor::HitMap(Rect& chipRect)
