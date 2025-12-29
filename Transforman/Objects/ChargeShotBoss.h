@@ -40,7 +40,6 @@ private:
 	Animation m_prevRushAnim;
 	Animation m_shotAnim;
 
-
 	enum class State
 	{
 		None,//‰½‚à‚µ‚È‚¢

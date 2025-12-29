@@ -183,7 +183,7 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 	if (!m_isDead)
 	{
 #if _DEBUG
-		m_colRect.Draw(0xaaffff, false, pCamera);
+		Charactor::Draw(pCamera);
 		DrawFormatString(0, 290, 0xffffff, "ChargeBossPosX:%f,Y:%f", m_pos.x, m_velocity.y);
 		DrawFormatString(0, 305, 0xffffff, "ChargeBossPosVelocityX:%f,Y:%f", m_velocity.x, m_velocity.y);
 		DrawFormatString(0, 320, 0xffffff, "ChargeBossState:%d", m_state);
