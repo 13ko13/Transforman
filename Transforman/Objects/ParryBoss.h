@@ -22,6 +22,11 @@ private:
 	/// </summary>
 	void Attack() override;
 
+	void IdleDraw(std::shared_ptr<Camera> pCamera);
+	void ParryDraw(std::shared_ptr<Camera> pCamera);
+	void IdleUpdate(GameContext& ctx);
+	void ParryUpdate(GameContext& ctx);
+
 private:
 	enum class State
 	{
@@ -35,4 +40,7 @@ private:
 	State m_state;//ó‘Ô
 
 	Animation m_idleAnim; 
+	Animation m_parryAnim;
+
+	int m_moveCooldown;//Ÿ‚Ìs“®‚Ü‚Å‚ÌƒtƒŒ[ƒ€”
 };
