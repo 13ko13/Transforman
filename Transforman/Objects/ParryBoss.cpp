@@ -89,6 +89,9 @@ void ParryBoss::Update(GameContext& ctx)
 			//アニメーション更新
 			m_idleAnim.Update();
 			break;
+		case State::Parry:
+
+			break;
 	}
 }
 
@@ -122,4 +125,5 @@ void ParryBoss::OnArrive()
 
 void ParryBoss::Attack()
 {
+
 }

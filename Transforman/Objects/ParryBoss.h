@@ -28,6 +28,7 @@ private:
 		None,//何もしない
 		Appear,//出現
 		Idle,//待機,
+		Parry,//パリィ
 
 		StateNum
 	};
@@ -35,4 +36,3 @@ private:
 
 	Animation m_idleAnim; 
 };
-
