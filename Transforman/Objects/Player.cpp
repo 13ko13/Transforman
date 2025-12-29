@@ -272,7 +272,7 @@ void Player::Update(GameContext& ctx)
 void Player::Draw(std::shared_ptr<Camera> pCamera)
 {
 #if _DEBUG
-	m_colRect.Draw(0xffffff, false, pCamera);
+	Charactor::Draw(pCamera);
 	DrawFormatString(0, 0, 0xffffff, "Frame:%d", m_frame);
 	DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
