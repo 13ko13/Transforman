@@ -16,7 +16,19 @@ public:
 	/// <param name="oneAnimFrame">次のアニメーションまでの待機時間</param>
 	/// <param name="scale">表示サイズ</param>
 	/// <param name="isRepeat">ループするかどうか</param>
-	void Init(int drawHandle, int animIndex, Vector2 frameSize, int maxAnimNum, int oneAnimFrame, float scale, bool isRepeat = true);
+	void Init(int drawHandle, int animIndex, Vector2 frameSize, int maxAnimNum, int oneAnimFrame, float scale, bool isRepeat);
+	/// <summary>
+	/// 普通のアニメーション初期化
+	/// </summary>
+	/// <param name="drawHandle">画像ハンドル</param>
+	/// <param name="startSrcX">アニメーションを開始する切り取り位置</param>
+	/// <param name="animIndexY">切り取り位置Y</param>
+	/// <param name="frameSize">アニメーション一枚のサイズ</param>
+	/// <param name="maxAnimNum">最大アニメーション枚数</param>
+	/// <param name="oneAnimFrame">次のアニメーションまでの待機時間</param>
+	/// <param name="scale">表示サイズ</param>
+	/// <param name="isRepeat">ループするかどうか</param>
+	void Init(int drawHandle, int startSrcX, int animIndexY, Vector2 frameSize, int maxAnimNum, int oneAnimFrame, float scale, bool isRepeat);
 	/// <summary>
 	/// 一枚絵アニメーション初期化
 	/// </summary>
@@ -49,6 +61,7 @@ private:
 	bool m_isRepeat;		// 繰り返し再生するかどうか
 	int m_drawHandle;	// 画像ハンドル
 	int m_animIndex;		// アニメーションの種類番号
+	int m_startSrcX;		// アニメーション開始の切り取りX位置
 	Vector2 m_frameSize;	// 画像の1コマサイズ
 	int m_maxAnimNum;	// アニメーションの最大コマ数
 	int m_nowAnimNum;	// 現在のアニメーション番号

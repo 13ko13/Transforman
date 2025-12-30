@@ -69,7 +69,7 @@ void ChargeShotBoss::Init()
 	const Vector2 frameSize = { graph_width ,graph_height };
 	m_idleAnim.Init(m_handle, 0, frameSize, idle_anim_frame, anim_wait_frame, draw_scale, true);
 	m_prevRushAnim.Init(m_handle, 0, frameSize, rush_anim_frame, anim_wait_prev_rush, draw_scale, true);
-	m_rushAnim.Init(m_handle, 0, frameSize, rush_anim_frame, anim_wait_rush, draw_scale, true);
+	m_rushAnim.Init(m_handle,0, frameSize, rush_anim_frame, anim_wait_rush, draw_scale, true);
 	m_shotAnim.Init(m_handle, 1, frameSize, shot_anim_frame, anim_wait_shot, draw_scale, false);
 }
 

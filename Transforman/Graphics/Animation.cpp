@@ -12,7 +12,8 @@ Animation::Animation() :
 	m_frameCount(0),
 	m_scale(1.0f),
 	m_rotate(0.0f),
-	m_drawOffset({0.0f,0.0f})
+	m_drawOffset({0.0f,0.0f}),
+	m_startSrcX(0)
 {
 }
 
@@ -20,18 +21,39 @@ Animation::~Animation()
 {
 }
 
-void Animation::Init(int drawHandle, int animIndex, Vector2 frameSize, int maxAnimNum, int oneAnimFrame, float scale, bool isRepeat)
+
+void Animation::Init(int drawHandle, int startSrcX, int animIndexY, Vector2 frameSize,
+	int maxAnimNum, int oneAnimFrame, float scale, bool isRepeat)
+{
+	m_isRepeat = isRepeat;
+	m_drawHandle = drawHandle;
+	m_animIndex = animIndexY;
+	m_startSrcX = startSrcX;       // ← 開始列（シート左からのXコマ番号）
+	m_frameSize = frameSize;
+	m_maxAnimNum = maxAnimNum;      // ← 「枚数」のみを保持（startSrcXは足さない）
+	m_oneAnimFrame = oneAnimFrame;
+	m_scale = scale;
+	m_nowAnimNum = 0;               // ← 0..(m_maxAnimNum-1) の「相対インデックス」で進める
+	m_frameCount = 0;
+}
+
+
+
+void Animation::Init(int drawHandle, int animIndex, Vector2 frameSize,
+	int maxAnimNum, int oneAnimFrame, float scale, bool isRepeat)
 {
 	m_isRepeat = isRepeat;
 	m_drawHandle = drawHandle;
 	m_animIndex = animIndex;
+	m_startSrcX = 0;               // ← 先頭から始める
 	m_frameSize = frameSize;
-	m_maxAnimNum = maxAnimNum;
+	m_maxAnimNum = maxAnimNum;      // ← 枚数
 	m_oneAnimFrame = oneAnimFrame;
 	m_scale = scale;
 	m_nowAnimNum = 0;
 	m_frameCount = 0;
 }
+
 
 void Animation::Init(int drawHandle, int animIndexY, int animIndexX, Vector2 frameSize, float scale, bool isRepeat)
 {
@@ -46,59 +68,64 @@ void Animation::Init(int drawHandle, int animIndexY, int animIndexX, Vector2 fra
 	m_frameCount = 0;
 }
 
+
 void Animation::Update()
 {
-	if (m_oneAnimFrame == 0) return;	// 1コマあたりのフレーム数が0なら処理を抜ける
+	if (m_oneAnimFrame == 0) return;
 
-	m_frameCount++;	// フレームカウントを進める
-
-	if (m_frameCount >= m_oneAnimFrame)	// 1コマ分のフレームが経過したら
+	m_frameCount++;
+	if (m_frameCount >= m_oneAnimFrame)
 	{
 		m_frameCount = 0;
-		m_nowAnimNum++;	// アニメーション番号を進める
+		m_nowAnimNum++;
 		if (m_nowAnimNum >= m_maxAnimNum)
-		{	// 最大コマ数を超えたら最初に戻す
+		{
 			if (m_isRepeat)
-			{	// 繰り返し再生するなら最初のコマに戻す
-				m_nowAnimNum = 0;
+			{
+				m_nowAnimNum = 0;                    // ループ
+			}
+			else
+			{
+				m_nowAnimNum = m_maxAnimNum - 1;     // ← 非ループは「最後のコマで止める」
 			}
 		}
 	}
 }
 
+
 void Animation::Draw(Vector2 pos, bool isTurn)
 {
-	// 現在のコマ数が最大コマ数なら描画しない
-	if (m_nowAnimNum != m_maxAnimNum)
-	{
-		DrawRectRotaGraph(pos.x + m_drawOffset.x, pos.y + m_drawOffset.y,
-			m_frameSize.x * m_nowAnimNum, m_animIndex * m_frameSize.y,
-			m_frameSize.x, m_frameSize.y,
-			m_scale, m_rotate, m_drawHandle, true, isTurn);
-	}
+	// ← 「最大なら描かない」条件を撤廃。常に現在コマを描く
+	const int srcX = (m_startSrcX + m_nowAnimNum) * static_cast<int>(m_frameSize.x);
+	const int srcY = m_animIndex * static_cast<int>(m_frameSize.y);
+
+	DrawRectRotaGraph(pos.x + m_drawOffset.x, pos.y + m_drawOffset.y,
+		srcX, srcY,
+		static_cast<int>(m_frameSize.x), static_cast<int>(m_frameSize.y),
+		m_scale, m_rotate, m_drawHandle, true, isTurn);
+
 }
 
 void Animation::Draw(int drawHandle, Vector2 pos, bool isTurn)
 {
-	if (m_nowAnimNum != m_maxAnimNum)
-	{
-		DrawRectRotaGraph(pos.x, pos.y,
-			m_frameSize.x * m_nowAnimNum, m_animIndex * m_frameSize.y,
-			m_frameSize.x, m_frameSize.y,
-			m_scale, m_rotate, drawHandle, true, isTurn);
-	}
+	const int srcX = (m_startSrcX + m_nowAnimNum) * static_cast<int>(m_frameSize.x);
+	const int srcY = m_animIndex * static_cast<int>(m_frameSize.y);
+
+	DrawRectRotaGraph(pos.x, pos.y,
+		srcX, srcY,
+		static_cast<int>(m_frameSize.x), static_cast<int>(m_frameSize.y),
+		m_scale, m_rotate, drawHandle, true, isTurn);
 }
+
 
 bool Animation::GetIsEnd()
 {
-	if (m_isRepeat) return false;	// 繰り返し再生するなら終了しない
+	if (m_isRepeat) return false;
 
-	int totalFrames = m_oneAnimFrame * m_maxAnimNum;	// アニメーション全体のフレーム数
-	int currentFrame = m_nowAnimNum * m_oneAnimFrame + m_frameCount;	// 現在のフレーム数
-	if (currentFrame >= totalFrames) return true;
-
-	return false;
+	// 「最後のコマの最後のフレーム」まで進んだら終了
+	return (m_nowAnimNum == m_maxAnimNum - 1) && (m_frameCount == m_oneAnimFrame - 1);
 }
+
 
 bool Animation::operator!=(const Animation& other) const
 {

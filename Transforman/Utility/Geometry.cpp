@@ -81,3 +81,14 @@ Vector2 Vector2::operator*(float scale) const
 	/// ベクトルのスカラー倍
 	return { x * scale, y * scale };
 }
+
+bool Vector2::operator!=(const Vector2& val) const
+{
+	/// ベクトルの不等価比較
+	return (x != val.x || y != val.y);
+}
+
+bool Vector2::operator==(const Vector2& val) const
+{
+	return (x == val.x && y == val.y);
+}

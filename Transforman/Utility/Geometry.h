@@ -17,6 +17,8 @@ struct Vector2
 	Vector2 operator+(const Vector2& val)const;///加算
 	Vector2 operator-(const Vector2& val)const;///減算
 	Vector2 operator*(float scale)const;///ベクトルの乗算
+	bool operator!=(const Vector2& val)const;///不等価比較
+	bool operator==(const Vector2& val)const;///等価比較
 };
 
 //座標もベクターとして扱う

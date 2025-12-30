@@ -24,8 +24,12 @@ private:
 
 	void IdleDraw(std::shared_ptr<Camera> pCamera);
 	void ParryDraw(std::shared_ptr<Camera> pCamera);
+	void JumpingDraw(std::shared_ptr<Camera> pCamera);
+	void FallAttackDraw(std::shared_ptr<Camera> pCamera);
 	void IdleUpdate(GameContext& ctx);
 	void ParryUpdate(GameContext& ctx);
+	void JumpingUpdate(GameContext& ctx);
+	void FallAttackUpdate(GameContext& ctx);
 
 private:
 	enum class State
@@ -34,13 +38,20 @@ private:
 		Appear,//出現
 		Idle,//待機,
 		Parry,//パリィ
-
+		Jumping,//ジャンプ
+		FallAttack,//落下攻撃
+		
 		StateNum
 	};
 	State m_state;//状態
 
 	Animation m_idleAnim; 
 	Animation m_parryAnim;
+	Animation m_jumpAnim;
+	Animation m_fallAttackAnim;
 
 	int m_moveCooldown;//次の行動までのフレーム数
+
+	int m_jumpFrame;//ジャンプ中のフレーム数
+	Vector2 m_playerPrevPos;//プレイヤーの前フレームの位置
 };

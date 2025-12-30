@@ -53,7 +53,7 @@ PlayerBullet::~PlayerBullet()
 
 void PlayerBullet::Init()
 {
-	m_normalAnim.Init(m_handle, 0, { graph_width ,graph_height }, max_normal_anim_num, one_anim_frame,draw_scale, true);
+	m_normalAnim.Init(m_handle,0, { graph_width ,graph_height }, max_normal_anim_num, one_anim_frame,draw_scale, true);
 }
 
 void PlayerBullet::Update(GameContext& ctx)
