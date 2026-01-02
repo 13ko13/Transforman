@@ -3,6 +3,15 @@
 #include <memory>
 #include <vector>
 
+//敵種類の配列番号
+enum class EnemyNumber
+{
+    ChargeBoss,//配列の0番目
+    ParryBoss,
+    FlameBoss,
+	PlantBoss,
+};
+
 //プロトタイプ宣言
 class Input;
 class Player;

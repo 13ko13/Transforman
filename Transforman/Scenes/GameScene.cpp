@@ -100,7 +100,7 @@ void GameScene::Update(Input& input)
 		object->Update(ctx);
 	}
 	
-	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets);
+	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets,m_pParryBoss->GetSwordHitBox());
 
 	// ƒJƒƒ‰‚ÌXV
 	m_pCamera->Update(m_pPlayer,m_pStage);

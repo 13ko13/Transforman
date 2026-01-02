@@ -19,7 +19,7 @@ namespace
 	//アニメーション関連
 	constexpr int idle_anim_num = 9;//アイドルアニメーション枚数
 	constexpr int one_anim_frame = 7;//1アニメーションあたりのフレーム数
-	constexpr int fall_one_anim_frame = 4;//落下攻撃1アニメーションあたりのフレーム数
+	constexpr int fall_one_anim_frame = 10;//落下攻撃1アニメーションあたりのフレーム数
 	constexpr double draw_scale = 5.0f;
 	constexpr float draw_offset_y = -40.0f;//キャラクターの描画オフセット
 	constexpr float rotate_angle = 0.11f;//傾き角度
@@ -27,10 +27,14 @@ namespace
 	constexpr int parry_src_y = 3;//パリィアニメーションの切り取りY位置
 
 	//攻撃関連
-	constexpr float jump_move_speed = 10.0f;//ジャンプ中の移動速度
-	constexpr int jump_duration = 120.0f;//ジャンプ継続フレーム数
-	constexpr float jump_height = 300.0f;//ジャンプ高さ
+	constexpr float jump_move_speed = 14.0f;//ジャンプ中の移動速度
+	constexpr int jump_duration = 150.0f;//ジャンプ継続フレーム数
+	constexpr float jump_height = 350.0f;//ジャンプ高さ
 	constexpr float target_offset_y = 20.0f;//ターゲットのYオフセット
+
+	//落下攻撃の剣の当たり判定サイズ
+	constexpr int sword_hitbox_width = 60;
+	constexpr int sword_hitbox_height = 150;
 }
 
 ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
@@ -38,12 +42,14 @@ ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
 	m_state(State::None),
 	m_moveCooldown(0),
 	m_jumpFrame(0),
+	m_isJump(false),
 	m_playerPrevPos({ 0.0f,0.0f })
 {
 	m_handle = LoadGraph("img/game/Enemy/parry_boss.png");
 	assert(m_handle >= 0);
 
 	m_pos = first_pos;
+	m_swordHitBox.SetCenter(0.0f,0.0f,0.0f,0.0f);
 }
 
 ParryBoss::~ParryBoss()
@@ -149,6 +155,7 @@ void ParryBoss::Draw(std::shared_ptr<Camera> pCamera)
 	//デバッグ用当たり判定表示
 #ifdef _DEBUG
 	Charactor::Draw(pCamera);
+	m_swordHitBox.Draw(0x00ff00, false, pCamera);
 	DrawFormatString(0, 450, 0xffffff, "ParryBossPosMoveCoolDown : %d",m_moveCooldown);
 	DrawFormatString(0, 465, 0xffffff, "ParryBossVelocity.x : %f ,y : %f",m_velocity.x,m_velocity.y);
 	DrawFormatString(0, 480, 0xffffff, "ParryBossPosX : %f ,Y : %f", m_pos.x, m_pos.y);
@@ -288,6 +295,7 @@ void ParryBoss::JumpingUpdate(GameContext& ctx)
 		//その距離をジャンプ継続フレーム数で割って
 		m_velocity.x = disX / jump_duration * jump_move_speed;
 		m_velocity.y = disY / jump_duration * jump_move_speed;
+		m_isJump = true; //ジャンプ中フラグを立てる
 		if (m_pos.y <= targetY + target_offset_y ||
 			m_jumpFrame <= 0)
 		{
@@ -304,4 +312,23 @@ void ParryBoss::JumpingUpdate(GameContext& ctx)
 
 void ParryBoss::FallAttackUpdate(GameContext& ctx)
 {
+	m_velocity.y += 0.3f;//重力加速度
+	//剣の当たり判定を更新
+	if(m_isRight)
+	{
+		//右向き
+		m_swordHitBox.SetCenter(m_pos.x + 100.0f , m_pos.y, sword_hitbox_width, sword_hitbox_height);
+	}
+	else
+	{
+		//左向き
+		m_swordHitBox.SetCenter(m_pos.x - 100.0f , m_pos.y, sword_hitbox_width, sword_hitbox_height);
+	}
+	if(m_isGround)
+	{
+		m_velocity.y = 0.0f;
+		m_state = State::Idle;
+		m_isJump = false;
+		m_swordHitBox.SetCenter(0.0f, 0.0f, 0.0f, 0.0f);//当たり判定を無効化
+	}
 }

@@ -6,6 +6,7 @@ class Player;
 class EnemyBase;
 class PlayerBullet;
 class EnemyBullet;
+class Rect;
 class CollisionManager
 {
 public:
@@ -20,7 +21,8 @@ public:
 		std::shared_ptr<Player>& pPlayer,
 		std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
 		std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets,
-		std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets
+		std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets,
+		const Rect& swordRect
 	);
 
 private:
@@ -47,6 +49,14 @@ private:
 	/// <param name="pEnemyBullet">敵の弾の参照</param>
 	/// <returns></returns>
 	static bool CheckCollision(const Player& player, const EnemyBullet& bullet);
+
+	/// <summary>
+	/// パリィボスの剣とプレイヤーの当たり判定をチェックする
+	/// </summary>
+	/// <param name="swordRect">剣の当たり判定参照</param>
+	/// <param name="player">プレイヤーの参照</param>
+	/// <returns></returns>
+	static bool CheckCollision(const Rect& swordRect, const Player& player);
 
 	/// <summary>
 	/// エネミーリストから死亡しているエネミーを削除する

@@ -5,12 +5,14 @@
 #include "../Objects/Player.h"
 #include "../Utility/Geometry.h"
 #include <DxLib.h>
+#include "../Collider/Rect.h"
 
 void CollisionManager::CheckCollisions(
 	std::shared_ptr<Player>& pPlayer,
 	std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
 	std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets,
-	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets)
+	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets,
+	const Rect& swordRect)
 {
 	//プレイヤーと敵(今のところ使わない)
 	for (auto& enemy : pEnemies)
@@ -123,6 +125,35 @@ void CollisionManager::CheckCollisions(
 		}
 	}
 
+	//パリィボスの剣とプレイヤー
+	if (CheckCollision(swordRect, *pPlayer))
+	{
+		//プレイヤーにノックバックする方向を伝える
+		int dir = 0;
+		bool isRight = false;
+		for (auto& enemy : pEnemies)
+		{
+			if (pPlayer->GetColRect().GetCenter().x > enemy->GetColRect().GetCenter().x)//プレイヤーが右にいる場合
+			{
+				//プレイヤーのノックバックする方向は右
+				dir = 1.0f;
+				//左向いてからノックバックさせる
+				isRight = false;
+			}
+			else//プレイヤーが左にいる
+			{
+				//プレイヤーのノックバックする方向は左
+				dir = -1.0f;
+				//右向いてからノックバックさせる
+				isRight = true;
+			}
+		}
+		//ノックバックさせる方向と
+		//プレイヤーが向く方向を設定
+		pPlayer->SetIsRight(isRight);
+		pPlayer->OnKnockback(dir);
+	}
+
 	RemoveDeadEnemies(pEnemies);
 }
 
@@ -139,6 +170,11 @@ bool CollisionManager::CheckCollision(const PlayerBullet& bullet, const EnemyBas
 bool CollisionManager::CheckCollision(const Player& player, const EnemyBullet& bullet)
 {
 	return bullet.GetCircle().IsCollWithRect(player.GetColRect());
+}
+
+bool CollisionManager::CheckCollision(const Rect& swordRect, const Player& player)
+{
+	return swordRect.IsCollRect(player.GetColRect());
 }
 
 void CollisionManager::RemoveDeadEnemies(std::vector<std::shared_ptr<EnemyBase>>& pEnemies)

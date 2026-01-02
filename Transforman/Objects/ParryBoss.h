@@ -16,6 +16,9 @@ public:
 	/// プレイヤーが到着したときに呼び出される関数
 	/// </summary>
 	void OnArrive() override;
+
+	//剣の当たり判定を取得する関数
+	const Rect& GetSwordHitBox() const { return m_swordHitBox; }
 private:
 	/// <summary>
 	/// 攻撃行動を行う関数
@@ -53,5 +56,9 @@ private:
 	int m_moveCooldown;//次の行動までのフレーム数
 
 	int m_jumpFrame;//ジャンプ中のフレーム数
+	bool m_isJump;//ジャンプ中かどうか
 	Vector2 m_playerPrevPos;//プレイヤーの前フレームの位置
+
+	//落下攻撃時の剣の当たり判定
+	Rect m_swordHitBox;
 };
