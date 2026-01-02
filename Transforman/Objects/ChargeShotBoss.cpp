@@ -267,6 +267,10 @@ void ChargeShotBoss::OnArrive()
 	m_state = State::Appear;
 }
 
+void ChargeShotBoss::OnDamage()
+{
+}
+
 void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 	std::shared_ptr<Player> pPlayer)
 {

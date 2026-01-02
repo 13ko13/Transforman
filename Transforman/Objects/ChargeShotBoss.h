@@ -29,6 +29,8 @@ public:
 	/// </summary>
 	/// <returns>チャージショットボスのステート</returns>
 	const int GetState() const { return static_cast<int>(m_state); }
+
+	void OnDamage() override;
 private:
 	int m_GroundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数

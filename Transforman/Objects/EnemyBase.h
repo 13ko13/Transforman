@@ -23,7 +23,14 @@ public:
 	virtual void Draw(std::shared_ptr<Camera> pCamera) override;
 
 	virtual void Attack() abstract;
+	/// <summary>
+	/// プレイヤーがボス部屋に到着したときに呼ばれる関数
+	/// </summary>
 	virtual void OnArrive() abstract;
+	/// <summary>
+	/// ダメージを受けたときに呼び出される関数
+	/// </summary>
+	virtual void OnDamage() abstract;
 private:
 
 protected:

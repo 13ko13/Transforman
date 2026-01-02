@@ -14,7 +14,7 @@ namespace
 	constexpr int graph_height = 80;//画像1枚の高さ
 
 	//初期位置
-	const Vector2 first_pos = { 500.0f, 500.0f };
+	const Vector2 first_pos = { 2380.0f, -32.0f };
 
 	//アニメーション関連
 	constexpr int idle_anim_num = 9;//アイドルアニメーション枚数
@@ -28,20 +28,26 @@ namespace
 
 	//攻撃関連
 	constexpr float jump_move_speed = 14.0f;//ジャンプ中の移動速度
-	constexpr int jump_duration = 150.0f;//ジャンプ継続フレーム数
+	constexpr int jump_duration = 200.0f;//ジャンプ継続フレーム数
 	constexpr float jump_height = 350.0f;//ジャンプ高さ
 	constexpr float target_offset_y = 20.0f;//ターゲットのYオフセット
+	constexpr int move_cooldown_time = 360;//行動のクールタイム
 
 	//落下攻撃の剣の当たり判定サイズ
 	constexpr int sword_hitbox_width = 60;
 	constexpr int sword_hitbox_height = 150;
+
+	//パリィ
+	constexpr int parry_cooldown_time = 1200;//パリィのクールタイム
 }
 
 ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap),
 	m_state(State::None),
 	m_moveCooldown(0),
+	m_parryCooldown(0),
 	m_jumpFrame(0),
+	m_hasParried(false),
 	m_isJump(false),
 	m_playerPrevPos({ 0.0f,0.0f })
 {
@@ -59,10 +65,21 @@ ParryBoss::~ParryBoss()
 
 void ParryBoss::Init()
 {
-	m_idleAnim.Init(m_handle, 0, { graph_width,graph_height }, idle_anim_num, one_anim_frame, draw_scale, true);
-	m_parryAnim.Init(m_handle, parry_src_y, { graph_width,graph_height }, parry_anim_num, one_anim_frame, draw_scale, false);
-	m_jumpAnim.Init(m_handle, 2, { graph_width, graph_height }, 5, one_anim_frame, draw_scale, false);
-	m_fallAttackAnim.Init(m_handle, 8, 2, { graph_width, graph_height }, 15, fall_one_anim_frame, draw_scale, false);
+	//アイドルアニメーション初期化
+	m_idleAnim.Init(m_handle, 0, { graph_width,graph_height },
+		idle_anim_num, one_anim_frame, draw_scale, true);
+	//パリィアニメーション初期化
+	m_parryAnim.Init(m_handle, parry_src_y, { graph_width, graph_height }, 
+		parry_anim_num, one_anim_frame, draw_scale, false);
+	//ジャンプアニメーション初期化
+	m_jumpAnim.Init(m_handle, 2, { graph_width, graph_height }, 
+		5, one_anim_frame, draw_scale, false);
+	//落下攻撃アニメーション初期化
+	m_fallAttackAnim.Init(m_handle, 8, 2, { graph_width, graph_height }, 
+		15, fall_one_anim_frame, draw_scale, false);
+	//ダメージアニメーション初期化
+	m_damageAnim.Init(m_handle, 3, { graph_width, graph_height },
+		5, one_anim_frame, draw_scale, false);
 }
 
 void ParryBoss::Update(GameContext& ctx)
@@ -102,6 +119,11 @@ void ParryBoss::Update(GameContext& ctx)
 	{
 		m_moveCooldown--;
 	}
+	//パリィクールタイム更新
+	if (m_parryCooldown > 0)
+	{
+		m_parryCooldown--;
+	}
 
 	//状態ごとのアニメーション更新
 	switch (m_state)
@@ -129,6 +151,10 @@ void ParryBoss::Update(GameContext& ctx)
 		m_fallAttackAnim.Update();
 		FallAttackUpdate(ctx);
 		break;
+	case State::Damage:
+		m_damageAnim.Update();
+		DamageUpdate(ctx);
+		break;
 	}
 }
 
@@ -150,6 +176,9 @@ void ParryBoss::Draw(std::shared_ptr<Camera> pCamera)
 	case State::FallAttack:
 		FallAttackDraw(pCamera);
 		break;
+	case State::Damage:
+		DamageDraw(pCamera);
+		break;
 	}
 
 	//デバッグ用当たり判定表示
@@ -160,6 +189,7 @@ void ParryBoss::Draw(std::shared_ptr<Camera> pCamera)
 	DrawFormatString(0, 465, 0xffffff, "ParryBossVelocity.x : %f ,y : %f",m_velocity.x,m_velocity.y);
 	DrawFormatString(0, 480, 0xffffff, "ParryBossPosX : %f ,Y : %f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 495, 0xffffff, "ParryBossState : %d", static_cast<int>(m_state));
+	DrawFormatString(0, 505, 0xffffff, "ParryBossParryCoolDown : %d", m_parryCooldown);
 #endif // DEBUG
 }
 
@@ -245,40 +275,63 @@ void ParryBoss::FallAttackDraw(std::shared_ptr<Camera> pCamera)
 	m_fallAttackAnim.Draw(drawPos, !m_isRight);
 }
 
+void ParryBoss::DamageDraw(std::shared_ptr<Camera> pCamera)
+{
+	//アニメーション描画
+	Vector2 drawPos = { m_pos.x, m_pos.y };//描画位置
+	m_damageAnim.SetOffset({ 0.0f,draw_offset_y });//描画オフセットを設定
+	drawPos += pCamera->GetDrawOffset();//カメラのオフセット分を足す
+	//プレイヤーの方向に応じて少し傾けて描画
+	if (m_isRight)
+	{
+		m_damageAnim.SetRotate(rotate_angle);//少し傾ける
+	}
+	else
+	{
+		m_damageAnim.SetRotate(-rotate_angle);//少し傾ける
+	}
+	m_damageAnim.Draw(drawPos, !m_isRight);
+}
+
 void ParryBoss::IdleUpdate(GameContext& ctx)
 {
+	if (m_state == State::Damage)return;//ステートがダメージなら処理を飛ばす
+
 	if (!m_isDead)
 	{
 		if (m_moveCooldown <= 0)
 		{
 			//行動クールタイムが0以下なら
 			//次の行動を決定する
-			m_moveCooldown = 120;//クールタイムをリセット
-			//次の行動を決定
-			m_state = State::Jumping;//ジャンプ状態に移行
+			m_moveCooldown = move_cooldown_time;//クールタイムをリセット
+			//落下攻撃を行う
+			m_state = State::Jumping;
 			m_jumpFrame = jump_duration;//ジャンプ継続フレーム数をセット
-			m_fallAttackAnim.Init(m_handle, 8, 2, { graph_width, graph_height }, 15, fall_one_anim_frame, draw_scale, false);
+			//ジャンプアニメーション初期化
+			m_jumpAnim.Init(m_handle, 2, { graph_width, graph_height },
+				5, one_anim_frame, draw_scale, false);
 		}
 	}
 }
 
 void ParryBoss::ParryUpdate(GameContext& ctx)
 {
+	if (m_state == State::Damage)return;//ステートがdamageなら処理を飛ばす
 	if(!m_isDead)
 	{
 		//パリィアニメーションが最後まで行ったら
 		if (m_parryAnim.GetIsEnd())
 		{
-			//状態をアイドルに戻す
-			m_state = State::Idle;
-			//アニメーションを最初に戻す
-			m_parryAnim.Init(m_handle, 1, parry_src_y, { graph_width,graph_height }, parry_anim_num, one_anim_frame, draw_scale, false);
+			//攻撃を開始する
+			m_state = State::Jumping;
 		}
 	}
 }
 
 void ParryBoss::JumpingUpdate(GameContext& ctx)
 {
+	if (m_state == State::Damage)return;//ステートがdamageなら処理を飛ばす
+
 	//ジャンプして、落下攻撃寸前まではプレイヤーの
 	//位置の真上に移動する
 	if (!m_isDead)
@@ -312,6 +365,8 @@ void ParryBoss::JumpingUpdate(GameContext& ctx)
 
 void ParryBoss::FallAttackUpdate(GameContext& ctx)
 {
+	if (m_state == State::Damage)return;//ステートがdamageなら処理を飛ばす
+
 	m_velocity.y += 0.3f;//重力加速度
 	//剣の当たり判定を更新
 	if(m_isRight)
@@ -328,7 +383,49 @@ void ParryBoss::FallAttackUpdate(GameContext& ctx)
 	{
 		m_velocity.y = 0.0f;
 		m_state = State::Idle;
+		m_hasParried = false;
 		m_isJump = false;
+		//落下攻撃アニメーションリセット
+		m_fallAttackAnim.Init(m_handle, 8, 2, { graph_width, graph_height },
+			15, fall_one_anim_frame, draw_scale, false);
 		m_swordHitBox.SetCenter(0.0f, 0.0f, 0.0f, 0.0f);//当たり判定を無効化
+		//画面を揺らす
+		ctx.pCamera->OnImpact();
+	}
+}
+
+void ParryBoss::DamageUpdate(GameContext& ctx)
+{
+	//アニメーションが最後まで行ったら
+	//ステートをアイドルに戻す
+	if (m_damageAnim.GetIsEnd())
+	{
+		m_state = State::Idle;
+	}
+}
+
+void ParryBoss::OnDamage()
+{
+	//パリィを発動中はダメージを食らわない
+	if (m_hasParried ||
+		m_state == State::Jumping ||//攻撃行動中も食らうが、処理は行わない
+		m_state == State::FallAttack ||
+		m_state == State::Damage) return;//又はダメージ中も食らわない
+	bool isCanParry = m_parryCooldown <= 0;
+	if (isCanParry)
+	{
+		//パリィアニメーションに移行
+		m_hasParried = true;
+		m_state = State::Parry;
+		m_jumpFrame = jump_duration;//ジャンプ継続フレーム数をセット
+		//パリィクールタイムをセット
+		m_parryCooldown = parry_cooldown_time;
+	}
+	else
+	{
+		//ダメージアニメーションを初期化
+		m_damageAnim.Init(m_handle, 3, { graph_width, graph_height }, 5, one_anim_frame, draw_scale, false);
+		//通常のダメージ処理
+		m_state = State::Damage;
 	}
 }

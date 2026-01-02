@@ -37,8 +37,8 @@ void Camera::Impact()
 		//0からshake_powerの2倍を用意(右から左まで行くにはshake_powerの2倍必要だから)
 		//そこからshake_powerを引くことでマイナス側も用意する
 		//揺れる範囲は shake_power ～  -shake_power
-		m_pos.y += GetRand(shake_power * 2) - shake_power;
-		m_pos.x += GetRand(shake_power * 2) - shake_power;
+		m_pos.y += GetRand(shake_power * 2 + 1) - shake_power;
+		m_pos.x += GetRand(shake_power * 2 + 1) - shake_power;
 	}
 }
 
@@ -98,6 +98,9 @@ void Camera::Update(const std::shared_ptr<Player> pPlayer, const std::shared_ptr
 		m_pos.x = static_cast<float>(cameraStartPosX);
 	}
 
+	//カメラの揺れ処理
+	Impact();
+
 	//ベクトルや計算を使って、「カメラのポジションを動かす」
 	//という感覚を保ちたいので、Draw側に足しているcamera.posをいじる
 	m_drawOffset.x = m_pos.x * -1;
@@ -106,6 +109,4 @@ void Camera::Update(const std::shared_ptr<Player> pPlayer, const std::shared_ptr
 	//(camera.posが画面の中央になるようにする) 
 	m_drawOffset.x += Graphic::screen_width / 2;
 	//m_drawOffset.y += Graphic::screen_height / 2;
-
-	Impact();
 }

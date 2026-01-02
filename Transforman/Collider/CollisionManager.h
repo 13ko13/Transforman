@@ -2,6 +2,15 @@
 #include <vector>
 #include <memory>
 
+//“Gí—Ş‚Ì”z—ñ”Ô†
+enum class EnemyNumber
+{
+	ChargeBoss,//”z—ñ‚Ì0”Ô–Ú
+	ParryBoss,
+	FlameBoss,
+	PlantBoss,
+};
+
 class Player;
 class EnemyBase;
 class PlayerBullet;

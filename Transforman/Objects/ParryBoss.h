@@ -19,6 +19,11 @@ public:
 
 	//剣の当たり判定を取得する関数
 	const Rect& GetSwordHitBox() const { return m_swordHitBox; }
+
+	/// <summary>
+	/// ダメージを受けたときに呼び出される関数
+	/// </summary>
+	void OnDamage() override;
 private:
 	/// <summary>
 	/// 攻撃行動を行う関数
@@ -29,10 +34,12 @@ private:
 	void ParryDraw(std::shared_ptr<Camera> pCamera);
 	void JumpingDraw(std::shared_ptr<Camera> pCamera);
 	void FallAttackDraw(std::shared_ptr<Camera> pCamera);
+	void DamageDraw(std::shared_ptr<Camera> pCamera);
 	void IdleUpdate(GameContext& ctx);
 	void ParryUpdate(GameContext& ctx);
 	void JumpingUpdate(GameContext& ctx);
 	void FallAttackUpdate(GameContext& ctx);
+	void DamageUpdate(GameContext& ctx);
 
 private:
 	enum class State
@@ -43,6 +50,7 @@ private:
 		Parry,//パリィ
 		Jumping,//ジャンプ
 		FallAttack,//落下攻撃
+		Damage,//ダメージ
 		
 		StateNum
 	};
@@ -52,11 +60,14 @@ private:
 	Animation m_parryAnim;
 	Animation m_jumpAnim;
 	Animation m_fallAttackAnim;
+	Animation m_damageAnim;
 
 	int m_moveCooldown;//次の行動までのフレーム数
+	int m_parryCooldown;//パリィ可能までのフレーム数
 
 	int m_jumpFrame;//ジャンプ中のフレーム数
 	bool m_isJump;//ジャンプ中かどうか
+	bool m_hasParried;//パリィを発動したかどうか
 	Vector2 m_playerPrevPos;//プレイヤーの前フレームの位置
 
 	//落下攻撃時の剣の当たり判定

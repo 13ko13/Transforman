@@ -6,6 +6,7 @@
 #include "../Utility/Geometry.h"
 #include <DxLib.h>
 #include "../Collider/Rect.h"
+#include "../Objects/ParryBoss.h"
 
 void CollisionManager::CheckCollisions(
 	std::shared_ptr<Player>& pPlayer,
@@ -75,11 +76,12 @@ void CollisionManager::CheckCollisions(
 				!enemy->GetIsDead() &&
 				CheckCollision(*bullet, *enemy))
 			{
+				enemy->OnDamage();
 				//’e‚Ì‘¶Ý‚ðÁ‚·
 				bullet->SetIsAlive(false);
 				//“G‚Ì‘¶Ý‚ðÁ‚·(‚¢‚¸‚êHP‚ð‚Â‚­‚é‚Ì‚Å
 				//HP‚ª0‚É‚È‚Á‚½‚ç‚Æ‚¢‚¤if•¶‚àì‚é
-				enemy->SetIsDead(true);
+				//enemy->SetIsDead(true);
 			}
 		}
 	}
