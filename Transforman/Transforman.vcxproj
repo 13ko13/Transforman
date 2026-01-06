@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
+    <ClCompile Include="FlameBoss.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Objects\ParryBoss.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
+    <ClInclude Include="FlameBoss.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Objects\ParryBoss.h" />
