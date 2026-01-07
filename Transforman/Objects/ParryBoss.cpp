@@ -14,7 +14,7 @@ namespace
 	constexpr int graph_height = 80;//画像1枚の高さ
 
 	//初期位置
-	const Vector2 first_pos = { 2380.0f, -32.0f };
+	const Vector2 first_pos = { 500.0f, 500.0f };
 
 	//アニメーション関連
 	constexpr int idle_anim_num = 9;//アイドルアニメーション枚数
@@ -43,7 +43,7 @@ namespace
 
 ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap),
-	m_state(State::None),
+	m_state(State::Idle),
 	m_moveCooldown(0),
 	m_parryCooldown(0),
 	m_jumpFrame(0),
