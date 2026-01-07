@@ -13,7 +13,8 @@
 
 namespace
 {
-	
+	constexpr int p_bullet_max = 3;//プレイヤー弾の最大数
+	constexpr int e_bullet_max = 20;//敵弾の最大数
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -28,13 +29,13 @@ GameScene::GameScene(SceneController& controller) :
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_pMap);
 	// プレイヤーの弾の生成
-	m_pPlayerBullets.resize(3);
+	m_pPlayerBullets.resize(p_bullet_max);
 	for (auto& bullet : m_pPlayerBullets)
 	{
 		bullet = std::make_shared<PlayerBullet>();
 	}
 	// 敵の弾の生成
-	m_pEnemyBullets.resize(20);
+	m_pEnemyBullets.resize(e_bullet_max);
 	for (auto& bullet : m_pEnemyBullets)
 	{
 		bullet = std::make_shared<EnemyBullet>();
