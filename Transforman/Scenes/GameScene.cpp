@@ -20,12 +20,6 @@ namespace
 GameScene::GameScene(SceneController& controller) :
 	Scene(controller)
 {
-	//ステージデータのロード
-	m_pStage = std::make_shared<Stage>();
-	m_pStage->Load(1);
-	//マップチップの生成
-	m_pMap = std::make_shared<Map>(m_pStage);
-	m_pMap->SetStageType(StageType::Stage1);
 	// プレイヤーの生成
 	m_pPlayer = std::make_shared<Player>(m_pMap);
 	// プレイヤーの弾の生成
@@ -78,6 +72,13 @@ GameScene::GameScene(SceneController& controller) :
 
 	//ゲームマネージャーの生成
 	m_pGameManager = std::make_shared<GameManager>();
+
+	//ステージデータのロード
+	m_pStage = std::make_shared<Stage>();
+	m_pStage->Load(1);
+	//マップチップの生成
+	m_pMap = std::make_shared<Map>(m_pStage);
+	m_pMap->SetStageType(StageType::Stage1);
 
 	//当たり判定マネージャーの生成
 	m_pColManager = std::make_shared<CollisionManager>();
