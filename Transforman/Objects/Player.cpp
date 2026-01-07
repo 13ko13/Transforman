@@ -30,8 +30,8 @@ namespace
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
 
-	constexpr int parry_i_frame = 30;						//パリィ後の無敵時間
-	constexpr int parry_cooltime = 600;						//パリィのクールタイム
+	constexpr int parry_i_frame = 60;						//パリィ後の無敵時間
+	constexpr int parry_cooltime = 0;						//パリィのクールタイム
 
 	//アニメーション用のグラフのインデックス
 	constexpr int graph_index_idle = 0;
@@ -289,6 +289,12 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	DrawFormatString(0, 400, 0xffffff, "ParryTimer : %d", m_iFrameTimer);
 	DrawFormatString(0, 415, 0xffffff, "ParryCooltime : %d", m_parryCooltime);
 #endif
+
+	//操作方法
+	DrawFormatString(Graphic::screen_width - 160, 64, 0xffffff, "Jump : B");
+	DrawFormatString(Graphic::screen_width - 160, 64 + 15, 0xffffff, "Shot : A");
+	DrawFormatString(Graphic::screen_width - 160, 64 + 30, 0xffffff, "Move : Lスティック");
+	DrawFormatString(Graphic::screen_width - 160, 64 + 45, 0xffffff, "Parry : X");
 
 	//ダメージ受けたときは一定時間表示する→しないを繰り返して
 	//無敵時間を表す

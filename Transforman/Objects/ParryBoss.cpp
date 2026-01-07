@@ -39,12 +39,15 @@ namespace
 
 	//パリィ
 	constexpr int parry_cooldown_time = 1200;//パリィのクールタイム
+
+	//行動までの初期クールタイム
+	constexpr int first_move_cooldown = 60;
 }
 
 ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
 	EnemyBase(size_width, size_height, pMap),
 	m_state(State::Idle),
-	m_moveCooldown(0),
+	m_moveCooldown(first_move_cooldown),
 	m_parryCooldown(0),
 	m_jumpFrame(0),
 	m_hasParried(false),
