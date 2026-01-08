@@ -47,8 +47,10 @@ GameScene::GameScene(SceneController& controller) :
 	//チャージショットボスを試しに追加する
 	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>(m_pMap);
 	m_pEnemies.push_back(m_pChargeShotBoss);
+	//ToDo
+	//1ステージ完成したらコメント化を解除する
 	m_pParryBoss = std::make_shared<ParryBoss>(m_pMap);
-	m_pEnemies.push_back(m_pParryBoss);
+	//m_pEnemies.push_back(m_pParryBoss);
 
 	//キャラクターすべてを配列に入れる
 	for (auto& enemy : m_pEnemies)

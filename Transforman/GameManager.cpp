@@ -69,7 +69,7 @@ void GameManager::ChargeBossUpdate(std::shared_ptr<Player> pPlayer,
 {
 	//プレイヤーがボスの場所に到着したら
 	//isArriveをtrueにする
-	if (pPlayer->GetPos().x > Graphic::screen_width)
+	if (pPlayer->GetPos().x > Graphic::screen_width + 200)
 	{
 		m_isArrive = true;
 		pCamera->OnArriveEnemy(pPlayer, pStage);
@@ -94,5 +94,14 @@ void GameManager::ParryBossUpdate(std::shared_ptr<Player> pPlayer,
 	std::shared_ptr<Stage> pStage,
 	std::shared_ptr<Camera> pCamera,
 	std::shared_ptr<ParryBoss> pParryBoss)
+{
+}
+
+bool GameManager::ShouldGoNextStage() const
+{
+	return false;
+}
+
+void GameManager::OnStageLoaded(int stageID, std::shared_ptr<Player> pPlayer, std::shared_ptr<Stage> pStage, std::shared_ptr<Camera> pCamera)
 {
 }
