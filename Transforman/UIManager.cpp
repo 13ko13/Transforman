@@ -11,10 +11,10 @@ UIManager::~UIManager()
 {
 }
 
-void UIManager::Update()
+void UIManager::Update(std::shared_ptr<Player> pPlayer)
 {
 	//プレイヤーのHPバーの更新
-	playerHpBar->Update();
+	playerHpBar->Update(pPlayer);
 }
 
 void UIManager::Draw()

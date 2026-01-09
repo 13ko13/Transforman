@@ -9,7 +9,7 @@ public:
 	UIManager(std::shared_ptr<Player> pPlayer);
 	~UIManager();
 
-	void Update();
+	void Update(std::shared_ptr<Player> pPlayer);
 	void Draw();
 
 private:
