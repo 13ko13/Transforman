@@ -18,6 +18,12 @@ namespace
 	constexpr int next_hp_offset = 25;//次のHPの描画位置オフセット
 
 	constexpr double graph_size = 5.0; //拡大率
+
+	constexpr int hp_1 = 1;//HP1
+	constexpr int hp_2 = 2;//HP2
+	constexpr int hp_3 = 3;//HP3
+	constexpr int hp_4 = 4;//HP4
+	constexpr int hp_5 = 5;//HP5
 }
 
 HpBar::HpBar(int maxHitPoint) :
@@ -45,6 +51,10 @@ HpBar::HpBar(int maxHitPoint) :
 	handle = LoadGraph("img/game/Player/HP_Bar_Pinch.png");//HPバーのピンチ時カラー
 	m_handles.push_back(handle);
 	assert(handle >= 0);//ハンドルnullチェック
+
+	handle = LoadGraph("img/game/Player/HP_Bar_Empty.png");
+	m_handles.push_back(handle);
+	assert(handle >= 0);
 	
 	//HPを設定
 	m_hitPoint = m_maxHitPoint;
@@ -87,10 +97,23 @@ void HpBar::Draw()
 		m_handles[static_cast<int>(handleNomber::Heart)],
 		true, false);
 
+	//HPバーの空の部分を先に描画しておいて
+	//その上に現在のHPを描画する
+	for (int i = 0; i < m_maxHitPoint; ++i)
+	{
+		//空HPの描画
+		DrawRotaGraph(
+			static_cast<int>(m_pos.x + normal_hp_offset + i * next_hp_offset),
+			static_cast<int>(m_pos.y + draw_offset_y),
+			graph_size, 0.0,
+			m_handles[static_cast<int>(handleNomber::Empty)],
+			true, false);
+	}
+
 	switch (m_hitPoint)
 	{
-	case 1:
-	case 2:
+	case hp_1://HPが1の時
+	case hp_2://HPが2の時
 		for (int i = 0; i < m_hitPoint; ++i)
 		{
 			//ピンチ時のHPの描画
@@ -102,9 +125,9 @@ void HpBar::Draw()
 				true, false);
 		}
 		break;
-	case 3:
-	case 4:
-	case 5:
+	case hp_3://HPが3の時
+	case hp_4://HPが4の時
+	case hp_5://HPが5の時
 		for (int i = 0; i < m_hitPoint; ++i)
 		{
 			//ノーマルHP描画

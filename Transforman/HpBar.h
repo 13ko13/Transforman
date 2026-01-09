@@ -21,7 +21,8 @@ private:
 		Background,//背景
 		Heart,//ハート
 		Normal,//通常HP
-		Pinch//ピンチ時
+		Pinch,//ピンチ時
+		Empty,//空HP
 	};
 	std::vector<int> m_handles;//ヒットポイントの画像ハンドル
 	int m_hitPoint;//現在のHP
