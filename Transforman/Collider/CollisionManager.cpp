@@ -7,13 +7,15 @@
 #include <DxLib.h>
 #include "../Collider/Rect.h"
 #include "../Objects/ParryBoss.h"
+#include "../Graphics/Camera.h"
 
 void CollisionManager::CheckCollisions(
 	std::shared_ptr<Player>& pPlayer,
 	std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
 	std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets,
 	std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets,
-	const Rect& swordRect)
+	const Rect& swordRect,
+	std::shared_ptr<Camera>& pCamera)
 {
 	//プレイヤーと敵(今のところ使わない)
 	for (auto& enemy : pEnemies)
@@ -57,6 +59,9 @@ void CollisionManager::CheckCollisions(
 				}
 				//プレイヤーのノックバックする方向は左
 				dir = -1;
+
+				//画面を揺らす
+				pCamera->OnImpact();
 			}
 			pPlayer->OnDamage(dir);
 			printfDx("敵とプレイヤーが当たった\n");
@@ -124,6 +129,9 @@ void CollisionManager::CheckCollisions(
 			//プレイヤーが向く方向を設定
 			pPlayer->SetIsRight(isRight);
 			pPlayer->OnDamage(dir);
+
+			//画面を揺らす
+			pCamera->OnImpact();
 		}
 	}
 

@@ -16,6 +16,7 @@ class EnemyBase;
 class PlayerBullet;
 class EnemyBullet;
 class Rect;
+class Camera;
 class CollisionManager
 {
 public:
@@ -31,7 +32,8 @@ public:
 		std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
 		std::vector<std::shared_ptr<PlayerBullet>>& pPlayerBullets,
 		std::vector<std::shared_ptr<EnemyBullet>>& pEnemyBullets,
-		const Rect& swordRect
+		const Rect& swordRect,
+		std::shared_ptr<Camera>& pCamera
 	);
 
 private:
