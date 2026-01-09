@@ -63,6 +63,12 @@ public:
 	/// </summary>
 	void OnStart();
 
+	/// <summary>
+	/// 現在のヒットポイントを取得します。
+	/// </summary>
+	/// <returns>現在のヒットポイントの値を返します。</returns>
+	const int GetHitPoint() const { return m_hitPoint; }
+
 private:
 	//変数一覧
 	int m_jumpFrame;//ジャンプ力

@@ -69,7 +69,7 @@ void GameManager::ChargeBossUpdate(std::shared_ptr<Player> pPlayer,
 {
 	//プレイヤーがボスの場所に到着したら
 	//isArriveをtrueにする
-	if (pPlayer->GetPos().x > Graphic::screen_width + 200)
+	if (pPlayer->GetPos().x > Graphic::screen_width)
 	{
 		m_isArrive = true;
 		pCamera->OnArriveEnemy(pPlayer, pStage);

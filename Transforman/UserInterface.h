@@ -4,7 +4,7 @@
 class UserInterface
 {
 public:
-	UserInterface(Vector2 pos,int handle);
+	UserInterface(Vector2 pos);
 	~UserInterface();
 
 	virtual void Update() abstract;
@@ -14,6 +14,5 @@ private:
 
 protected:
 	Vector2 m_pos;//ˆÊ’u
-	int m_handle;//‰æ‘œƒnƒ“ƒhƒ‹
 };
 

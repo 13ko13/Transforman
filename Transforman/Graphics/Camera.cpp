@@ -48,7 +48,7 @@ void Camera::OnArriveEnemy(std::shared_ptr<Player> pPlayer, std::shared_ptr<Stag
 	const int screenHalfW = Graphic::screen_width / 2;//640
 	//カメラの位置がステージの端から画面サイズの半分を
 	//引いた場所についたらカメラの位置を補正する
-	const float posX = pStage->GetMapSize().w * static_cast<float>(mapchip_size - screenHalfW);
+	const float posX = static_cast<float>(pStage->GetMapSize().w * mapchip_size - screenHalfW);
 	const float posY = pPlayer->GetPos().y;
 	Vector2 cameraEndPos = { posX,posY };
 	//カメラの位置をボス部屋に合わせる
