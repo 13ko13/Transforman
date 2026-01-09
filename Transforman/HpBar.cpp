@@ -54,7 +54,7 @@ HpBar::HpBar(int maxHitPoint) :
 
 	handle = LoadGraph("img/game/Player/HP_Bar_Empty.png");
 	m_handles.push_back(handle);
-	assert(handle >= 0);
+	assert(handle >= 0);//ハンドルnullチェック
 	
 	//HPを設定
 	m_hitPoint = m_maxHitPoint;
