@@ -4,7 +4,7 @@
 UIManager::UIManager(std::shared_ptr<Player> pPlayer)
 {
 	const int playerHP = pPlayer->GetHitPoint();
-	playerHpBar = std::make_shared<HpBar>(playerHP);
+	playerHpBar = std::make_shared<PlayerHpBar>(playerHP);
 }
 
 UIManager::~UIManager()

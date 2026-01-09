@@ -141,9 +141,10 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
+    <ClCompile Include="EnemyHpBar.cpp" />
     <ClCompile Include="FlameBoss.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="HpBar.cpp" />
+    <ClCompile Include="PlayerHpBar.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Objects\ParryBoss.cpp" />
     <ClCompile Include="SaveManager.cpp" />
@@ -176,9 +177,10 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
+    <ClInclude Include="EnemyHpBar.h" />
     <ClInclude Include="FlameBoss.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="HpBar.h" />
+    <ClInclude Include="PlayerHpBar.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Objects\ParryBoss.h" />
     <ClInclude Include="SaveData.h" />

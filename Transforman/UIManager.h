@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "HpBar.h"
+#include "PlayerHpBar.h"
 
 class Player;
 class UIManager
@@ -13,6 +13,6 @@ public:
 	void Draw();
 
 private:
-	std::shared_ptr<HpBar> playerHpBar;
+	std::shared_ptr<PlayerHpBar> playerHpBar;
 };
 
