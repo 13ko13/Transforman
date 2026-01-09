@@ -11,14 +11,14 @@ namespace
 	constexpr float ground = Graphic::screen_height - 220;	//地面の高さ(仮)
 	constexpr int move_speed = 5;							//移動速度
 	constexpr int debug_speed = 10;							//デバッグ用でプレイヤーのスピードを変えたときの値
-	constexpr float size_width = 40.0f;						//キャラクターの横幅
-	constexpr float size_height = 50.0f;					//キャラクターの高さ
-	constexpr float graph_width = 40.0f;					//画像の横切り取りサイズ
-	constexpr float graph_height = 40.0f;					//画像の縦切り取りサイズ
+	constexpr int size_width = 40;						//キャラクターの横幅
+	constexpr int size_height = 50;					//キャラクターの高さ
+	constexpr int graph_width = 40;					//画像の横切り取りサイズ
+	constexpr int graph_height = 40;					//画像の縦切り取りサイズ
 	constexpr int rect_offset_y = 12;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 	constexpr double draw_scale = 2.0f;						//描画スケール	
 
-	constexpr int knockback_duration = 15.0f;				//ノックバックする時間
+	constexpr int knockback_duration = 15;				//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
 
@@ -49,6 +49,9 @@ namespace
 	constexpr int damage_anim_frame = 8;					//食らい状態のアニメーション枚数
 	constexpr int deth_anim_frame = 20;						//死んだときのアニメーション枚数
 	constexpr int jump_anim_frame = 3;						//ジャンプの時のアニメーション枚数
+
+	//HP
+	constexpr int max_hit_point = 5;						//HP
 }
 
 Player::Player(std::shared_ptr<Map> pMap) :
@@ -78,6 +81,7 @@ Player::Player(std::shared_ptr<Map> pMap) :
 {
 	m_handle = LoadGraph("img/game/Player/transforman_player.png");
 	assert(m_handle >= 0);
+	m_hitPoint = max_hit_point;//HPを設定した
 }
 
 Player::~Player()
@@ -255,7 +259,7 @@ void Player::Update(GameContext& ctx)
 	//現在のアニメーションのフレーム数を0にする
 	if (m_animFrame >= animMax * anim_wait_frame)
 	{
-		m_animFrame = 0.0f;
+		m_animFrame = 0;
 	}
 
 
@@ -274,7 +278,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 #if _DEBUG
 	Charactor::Draw(pCamera);
 	DrawFormatString(0, 0, 0xffffff, "Frame:%d", m_frame);
-	DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
+	/*DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
 	DrawFormatString(0, 45, 0xffffff, "JumpFrame : %d", m_jumpFrame);
 	DrawFormatString(0, 60, 0xffffff, "ShotCoolTime:%d", m_shotCooltime);
@@ -287,7 +291,8 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	DrawFormatString(0, 255, 0xffffff, "WeaponType : %d", m_weaponType);
 	DrawFormatString(0, 385, 0xffffff, "IsCanAction : %d", m_isCanAction);
 	DrawFormatString(0, 400, 0xffffff, "ParryTimer : %d", m_iFrameTimer);
-	DrawFormatString(0, 415, 0xffffff, "ParryCooltime : %d", m_parryCooltime);
+	DrawFormatString(0, 415, 0xffffff, "ParryCooltime : %d", m_parryCooltime);*/
+	DrawFormatString(0, 15, 0xffffff, "HP: %d", m_hitPoint);
 #endif
 
 	//操作方法
@@ -396,7 +401,7 @@ void Player::Move(Input& input)
 #endif // _DEBUG
 	//ディレクションを正規化してプレイヤーのスピードをかけて
 	//ポジションに足してあげる移動処理
-	m_velocity += dir.Normalized() * speed;
+	m_velocity += dir.Normalized() * static_cast<float>(speed);
 }
 
 void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
@@ -592,7 +597,7 @@ void Player::Debug(Input& input)
 	}
 }
 
-void Player::OnKnockback(int dir)
+void Player::OnDamage(int dir)
 {
 	//チャージ状態や、火炎放射中だと
 	//引き継がれたままダメージを受けるので
@@ -601,6 +606,12 @@ void Player::OnKnockback(int dir)
 	m_state = PlayerState::Damage;//ステートを切り替える
 	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
 	m_knockbackDir = dir;//ノックバックする方向を代入
+
+	//HPを減らす
+	if (m_hitPoint > 0)
+	{
+		m_hitPoint--;
+	}
 
 	//ノックバックするための方向と速度を代入する
 	m_velocity.x = m_knockbackDir * knockback_speed;

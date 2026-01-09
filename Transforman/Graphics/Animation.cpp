@@ -99,7 +99,7 @@ void Animation::Draw(Vector2 pos, bool isTurn)
 	const int srcX = (m_startSrcX + m_nowAnimNum) * static_cast<int>(m_frameSize.x);
 	const int srcY = m_animIndex * static_cast<int>(m_frameSize.y);
 
-	DrawRectRotaGraph(pos.x + m_drawOffset.x, pos.y + m_drawOffset.y,
+	DrawRectRotaGraph(static_cast<int>(pos.x + m_drawOffset.x), static_cast<int>(pos.y + m_drawOffset.y),
 		srcX, srcY,
 		static_cast<int>(m_frameSize.x), static_cast<int>(m_frameSize.y),
 		m_scale, m_rotate, m_drawHandle, true, isTurn);
@@ -111,7 +111,7 @@ void Animation::Draw(int drawHandle, Vector2 pos, bool isTurn)
 	const int srcX = (m_startSrcX + m_nowAnimNum) * static_cast<int>(m_frameSize.x);
 	const int srcY = m_animIndex * static_cast<int>(m_frameSize.y);
 
-	DrawRectRotaGraph(pos.x, pos.y,
+	DrawRectRotaGraph(static_cast<int>(pos.x), static_cast<int>(pos.y),
 		srcX, srcY,
 		static_cast<int>(m_frameSize.x), static_cast<int>(m_frameSize.y),
 		m_scale, m_rotate, drawHandle, true, isTurn);

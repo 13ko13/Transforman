@@ -12,7 +12,7 @@
 
 namespace
 {
-	constexpr float radius = 20.0f;
+	constexpr int radius = 20;
 	constexpr float speed = 7.0f;
 	constexpr int way_num = 5;
 	constexpr float angle_30 = DX_PI_F / 6.0f;

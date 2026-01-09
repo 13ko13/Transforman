@@ -58,7 +58,7 @@ void CollisionManager::CheckCollisions(
 				//プレイヤーのノックバックする方向は左
 				dir = -1;
 			}
-			pPlayer->OnKnockback(dir);
+			pPlayer->OnDamage(dir);
 			printfDx("敵とプレイヤーが当たった\n");
 		}
 		else
@@ -108,14 +108,14 @@ void CollisionManager::CheckCollisions(
 				if (pPlayer->GetColRect().GetCenter().x > enemy->GetColRect().GetCenter().x)//プレイヤーが右にいる場合
 				{
 					//プレイヤーのノックバックする方向は右
-					dir = 1.0f;
+					dir = 1;
 					//左向いてからノックバックさせる
 					isRight = false;
 				}
 				else//プレイヤーが左にいる
 				{
 					//プレイヤーのノックバックする方向は左
-					dir = -1.0f;
+					dir = -1;
 					//右向いてからノックバックさせる
 					isRight = true;
 				}
@@ -123,7 +123,7 @@ void CollisionManager::CheckCollisions(
 			//ノックバックさせる方向と
 			//プレイヤーが向く方向を設定
 			pPlayer->SetIsRight(isRight);
-			pPlayer->OnKnockback(dir);
+			pPlayer->OnDamage(dir);
 		}
 	}
 
@@ -138,14 +138,14 @@ void CollisionManager::CheckCollisions(
 			if (pPlayer->GetColRect().GetCenter().x > enemy->GetColRect().GetCenter().x)//プレイヤーが右にいる場合
 			{
 				//プレイヤーのノックバックする方向は右
-				dir = 1.0f;
+				dir = 1;
 				//左向いてからノックバックさせる
 				isRight = false;
 			}
 			else//プレイヤーが左にいる
 			{
 				//プレイヤーのノックバックする方向は左
-				dir = -1.0f;
+				dir = -1;
 				//右向いてからノックバックさせる
 				isRight = true;
 			}
@@ -153,7 +153,7 @@ void CollisionManager::CheckCollisions(
 		//ノックバックさせる方向と
 		//プレイヤーが向く方向を設定
 		pPlayer->SetIsRight(isRight);
-		pPlayer->OnKnockback(dir);
+		pPlayer->OnDamage(dir);
 	}
 
 	RemoveDeadEnemies(pEnemies);

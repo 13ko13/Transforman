@@ -6,7 +6,7 @@
 
 namespace
 {
-	constexpr float radius = 0.0f;
+	constexpr int radius = 0;
 	const Vector2 first_pos = { 0.0f,0.0f };
 }
 
@@ -24,8 +24,8 @@ void Circle::Draw(std::shared_ptr<Camera> pCamera)
 {
 	//“–‚½‚è”»’è‚ð•`‰æ
 	DrawCircle(
-		m_pos.x + pCamera->GetDrawOffset().x,
-		m_pos.y + pCamera->GetDrawOffset().y,
+		static_cast<int>(m_pos.x + pCamera->GetDrawOffset().x),
+		static_cast<int>(m_pos.y + pCamera->GetDrawOffset().y),
 		m_radius, 0xffffff, 0, 1);
 #ifdef _DEBUG
 	DrawFormatString(0, 335, 0xffffff, "circlePos        : %f, %f", m_pos.x, m_pos.y);

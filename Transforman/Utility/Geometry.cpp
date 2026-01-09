@@ -16,8 +16,8 @@ void Vector2::Normalize()
 	if (len == 0.0f)
 	{
 		//0œZ‚ğ”ğ‚¯‚é
-		x == 0.0f;
-		y == 0.0f;
+		x = 0.0f;
+		y = 0.0f;
 		return;
 	}
 

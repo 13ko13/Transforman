@@ -20,5 +20,5 @@ void UserInterface::Update()
 void UserInterface::Draw()
 {
 	//UI‚Ì•`‰æ
-	DrawRotaGraph(m_pos.x, m_pos.y, 1.0, 0.0, m_handle, true, false);
+	DrawRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 1.0, 0.0, m_handle, true, false);
 }

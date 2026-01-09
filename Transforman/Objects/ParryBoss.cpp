@@ -28,7 +28,7 @@ namespace
 
 	//攻撃関連
 	constexpr float jump_move_speed = 14.0f;//ジャンプ中の移動速度
-	constexpr int jump_duration = 200.0f;//ジャンプ継続フレーム数
+	constexpr int jump_duration = 200;//ジャンプ継続フレーム数
 	constexpr float jump_height = 350.0f;//ジャンプ高さ
 	constexpr float target_offset_y = 20.0f;//ターゲットのYオフセット
 	constexpr int move_cooldown_time = 360;//行動のクールタイム

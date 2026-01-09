@@ -49,7 +49,7 @@ void GameManager::Update(std::shared_ptr<Player> pPlayer,
 
 	//ボスの出現演出を行う(一度だけ)
 	//画面の半分
-	const int screenHalfW = Graphic::screen_width * 0.5f;//640
+	const int screenHalfW = Graphic::screen_width / 2;//640
 	//ステージの横幅から画面の横半分を引いたもの
 	const int cameraEndPosX = pStage->GetMapSize().w * mapchip_size - screenHalfW - 1;
 	//カメラのポジションがステージ端に来たら

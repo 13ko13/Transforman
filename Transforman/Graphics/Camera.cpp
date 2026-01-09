@@ -45,11 +45,11 @@ void Camera::Impact()
 void Camera::OnArriveEnemy(std::shared_ptr<Player> pPlayer, std::shared_ptr<Stage> pStage)
 {
 	//画面の半分
-	const int screenHalfW = Graphic::screen_width * 0.5f;//640
+	const int screenHalfW = Graphic::screen_width / 2;//640
 	//カメラの位置がステージの端から画面サイズの半分を
 	//引いた場所についたらカメラの位置を補正する
-	const int posX = pStage->GetMapSize().w * mapchip_size - screenHalfW;
-	const int posY = pPlayer->GetPos().y;
+	const float posX = pStage->GetMapSize().w * static_cast<float>(mapchip_size - screenHalfW);
+	const float posY = pPlayer->GetPos().y;
 	Vector2 cameraEndPos = { posX,posY };
 	//カメラの位置をボス部屋に合わせる
 	m_pos = VLerp(m_pos, cameraEndPos, 0.07f);
@@ -82,7 +82,7 @@ void Camera::Update(const std::shared_ptr<Player> pPlayer, const std::shared_ptr
 	//ステージデータ取得
 	const auto& mapSize = pStage->GetMapSize();
 	//画面の半分
-	const int screenHalfW = Graphic::screen_width * 0.5f;//640
+	const int screenHalfW = Graphic::screen_width / 2;//640
 	//カメラの位置がステージの端から画面サイズの半分を
 	//引いた場所についたらカメラの位置を補正する
 	const int cameraEndPosX = pStage->GetMapSize().w * mapchip_size - screenHalfW;

@@ -10,8 +10,8 @@
 namespace 
 {
 	constexpr float speed = 7.0f;
-	constexpr float normal_shot_radius = 15.0f;
-	constexpr float charge_shot_radius = 25.0f;
+	constexpr int normal_shot_radius = 15;
+	constexpr int charge_shot_radius = 25;
 
 	//アニメーション
 	constexpr int anim_idx_y = 0;

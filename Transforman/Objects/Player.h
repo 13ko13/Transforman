@@ -44,7 +44,7 @@ public:
 	/// NockBack開始時の処理
 	/// </summary>
 	/// <param name="dir">ノックバックさせる方向</param>
-	void OnKnockback(int dir);
+	void OnDamage(int dir);
 
 	/// <summary>
 	/// 現在無敵中かどうかを返す関数
@@ -90,6 +90,8 @@ private:
 	float m_damageAnimFrame;	//現在のダメージアニメーションフレーム数
 
 	int m_knockbackDir;			//ノックバックする方向
+
+	int m_hitPoint;//現在のHP
 
 	PlayerState m_state;
 	WeaponType m_weaponType;

@@ -79,7 +79,7 @@ void TitleScene::FadeDraw()
 	//値の範囲をいったん0.0～1.0にしておくといろいろと扱いやすくなる
 	auto rate = static_cast<float>(m_frame) / static_cast<float>(fade_interval);
 	//aブレンド
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);//DxLibのAlphaブレンドが0～255
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));//DxLibのAlphaブレンドが0～255
 	//画面全体に黒フィルムをかける
 	DrawBox(0, 0, wsize.w, wsize.h, 0x000000, true);
 	//ブレンドしない

@@ -30,8 +30,8 @@ void BackGround::Update()
 void BackGround::Draw()
 {
 	//îwåi
-	DrawRotaGraph(m_pos.x + Graphic::screen_width * 0.5f,
-					m_pos.y + Graphic::screen_height * 0.5f,
+	DrawRotaGraph(static_cast<int>(m_pos.x + Graphic::screen_width / 2),
+					static_cast<int>(m_pos.y + Graphic::screen_height / 2),
 					graph_scale, graph_angle,
 					m_handle, true, false);
 }

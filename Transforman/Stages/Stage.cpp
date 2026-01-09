@@ -64,7 +64,7 @@ void Stage::Load(int stageNom)
 	//まず、データ本体を一気に読み込む
 	//(ヘッダはもう読み込んだのでFMFの残り部分(タイル情報)を
 	//データの内部領域に格納、それをヘッダのサイズ分読み込む
-	FileRead_read(m_data.data(), m_data.size() * sizeof(uint8_t), handle);
+	FileRead_read(m_data.data(), static_cast<int>(m_data.size() * sizeof(uint8_t)), handle);
 	//読み込みは終了したのでファイルを閉じる(ハンドル)
 	FileRead_close(handle);
 }

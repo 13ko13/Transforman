@@ -12,7 +12,7 @@ Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap) :
 {
 	m_pMap = pMap;
 	//当たり判定を初期化
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 1, m_height - 1);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(m_width - 1), static_cast<float>(m_height - 1));
 }
 
 Charactor::~Charactor()
@@ -47,7 +47,7 @@ void Charactor::HitMap(Rect& chipRect)
 	//横方向の衝突
 	m_pos.x += m_velocity.x;
 	//常に最新の矩形情報にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 1, m_height - 1);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(m_width - 1), static_cast<float>(m_height - 1));
 	//衝突していたら
 	if (m_pMap->IsCollision(m_colRect, chipRect))
 	{
@@ -73,7 +73,7 @@ void Charactor::HitMap(Rect& chipRect)
 	//縦方向の衝突
 	m_pos.y += m_velocity.y;
 	//常に最新の矩形情報にする
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width - 1, m_height - 1);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(m_width - 1), static_cast<float>(m_height - 1));
 	if (m_pMap->IsCollision(m_colRect, chipRect))
 	{
 		//下方向(落下)
@@ -97,6 +97,6 @@ void Charactor::HitMap(Rect& chipRect)
 
 
 #ifdef _DEBUG
-	m_colRect.SetCenter(m_pos.x, m_pos.y, m_width, m_height);
+	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(m_width), static_cast<float>(m_height));
 #endif // DEBUG
 }

@@ -28,9 +28,9 @@ public:
 	/// •`‰æ‚·‚éÛ‚É”¼Œa‚ğŒˆ‚ß‚é
 	/// </summary>
 	/// <param name="radius">”¼Œa</param>
-	void SetRadius(float radius) { m_radius = radius; }
+	void SetRadius(int radius) { m_radius = radius; }
 private:
 	Vector2 m_pos;
-	float m_radius;
+	int m_radius;
 };
 

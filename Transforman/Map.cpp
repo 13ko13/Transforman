@@ -17,9 +17,9 @@ namespace
 Map::Map(std::shared_ptr<Stage> pStage) :
 	m_pStage(pStage),
 	m_isStageEnd(false),
-	m_scrollX(0.0f),
-	m_startChipX(0.0f),
-	m_offsetX(0.0f)
+	m_scrollX(0),
+	m_startChipX(0),
+	m_offsetX(0)
 {
 	//ステージ1のマップチップの読み込み
 	int handle = -1;
@@ -32,6 +32,8 @@ Map::Map(std::shared_ptr<Stage> pStage) :
 	handle = LoadGraph("img/game/map/mapchip_2.png");
 	m_handles.push_back(handle);
 	assert(handle >= 0);
+
+	m_stageType = StageType::Stage1;
 }
 
 Map::~Map()
@@ -88,18 +90,18 @@ void Map::Draw(Camera camera)
 			case StageType::Stage1:
 			//描画
 			DrawRectRotaGraph(
-							posX + chip_size / 2,
-							posY + chip_size / 2,
+				static_cast<int>(posX + chip_size / 2),
+				static_cast<int>(posY + chip_size / 2),
 							srcX, srcY,
 							chip_size, chip_size,
-					1.0, 0.0,
-					m_handles[static_cast<int>(StageType::Stage1)], true);//ステージ1のマップチップを描画
+							1.0, 0.0,
+							m_handles[static_cast<int>(StageType::Stage1)], true);//ステージ1のマップチップを描画
 				break;
 			case StageType::Stage2:
 				//描画
 				DrawRectRotaGraph(
-					posX + chip_size / 2,
-					posY + chip_size / 2,
+					static_cast<int>(posX + chip_size / 2),
+					static_cast<int>(posY + chip_size / 2),
 					srcX, srcY,
 					chip_size, chip_size,
 					1.0, 0.0,
