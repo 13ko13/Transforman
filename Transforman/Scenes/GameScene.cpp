@@ -10,6 +10,7 @@
 #include "../Map.h"
 #include "../GameManager.h"
 #include "../Objects/ParryBoss.h"
+#include "../UIManager.h"
 
 namespace
 {
@@ -84,6 +85,9 @@ GameScene::GameScene(SceneController& controller) :
 
 	//当たり判定マネージャーの生成
 	m_pColManager = std::make_shared<CollisionManager>();
+
+	//UIマネージャーの生成
+	m_pUIManager = std::make_shared<UIManager>(m_pPlayer);
 }
 
 void GameScene::Init()
@@ -104,7 +108,7 @@ void GameScene::Update(Input& input)
 		object->Update(ctx);
 	}
 	
-	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets,m_pParryBoss->GetSwordHitBox());
+	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets,m_pParryBoss->GetSwordHitBox(), m_pCamera);
 
 	// カメラの更新
 	m_pCamera->Update(m_pPlayer,m_pStage);
@@ -114,6 +118,9 @@ void GameScene::Update(Input& input)
 
 	//ゲームマネージャー更新
 	m_pGameManager->Update(m_pPlayer,m_pStage,m_pCamera,m_pChargeShotBoss, m_pParryBoss);
+
+	//UIマネージャー更新
+	m_pUIManager->Update(m_pPlayer);
 }
 
 void GameScene::Draw()
@@ -127,4 +134,7 @@ void GameScene::Draw()
 	{
 		object->Draw(m_pCamera);
 	}
+
+	//UIマネージャーの描画
+	m_pUIManager->Draw();
 }

@@ -19,6 +19,7 @@ class Charactor;
 class GameManager;
 class Text;
 class ParryBoss;
+class UIManager;
 class GameScene : public Scene
 {
 public:
@@ -41,5 +42,6 @@ private:
 	std::shared_ptr<Map> m_pMap;//マップチップ
 	std::vector<std::shared_ptr<Charactor>> m_pCharactors;//キャラクターの配列
 	std::shared_ptr<GameManager> m_pGameManager;//ゲームマネージャー
+	std::shared_ptr<UIManager> m_pUIManager;//UIマネージャー
 };
 
