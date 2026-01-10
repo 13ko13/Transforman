@@ -87,7 +87,7 @@ GameScene::GameScene(SceneController& controller) :
 	m_pColManager = std::make_shared<CollisionManager>();
 
 	//UIマネージャーの生成
-	m_pUIManager = std::make_shared<UIManager>(m_pPlayer);
+	m_pUIManager = std::make_shared<UIManager>(m_pPlayer, m_pChargeShotBoss);
 }
 
 void GameScene::Init()
@@ -120,7 +120,7 @@ void GameScene::Update(Input& input)
 	m_pGameManager->Update(m_pPlayer,m_pStage,m_pCamera,m_pChargeShotBoss, m_pParryBoss);
 
 	//UIマネージャー更新
-	m_pUIManager->Update(m_pPlayer);
+	m_pUIManager->Update(m_pPlayer,m_pChargeShotBoss);
 }
 
 void GameScene::Draw()
