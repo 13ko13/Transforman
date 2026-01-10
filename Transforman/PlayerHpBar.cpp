@@ -28,8 +28,8 @@ namespace
 
 PlayerHpBar::PlayerHpBar(int maxHitPoint) :
 	UserInterface({0,0}),
-	m_hitPoint(0),
-	m_maxHitPoint(maxHitPoint)
+	m_currentHP(0),
+	m_maxHP(maxHitPoint)
 {
 	int handle = -1;
 	handle = LoadGraph("img/game/Player/HP_Bar_Frame.png");//HPバーの枠
@@ -57,7 +57,7 @@ PlayerHpBar::PlayerHpBar(int maxHitPoint) :
 	assert(handle >= 0);//ハンドルnullチェック
 	
 	//HPを設定
-	m_hitPoint = m_maxHitPoint;
+	m_currentHP = m_maxHP;
 }
 
 PlayerHpBar::~PlayerHpBar()
@@ -70,13 +70,13 @@ void PlayerHpBar::Update()
 
 void PlayerHpBar::Update(std::shared_ptr<Player> pPlayer)
 {
-	m_hitPoint = pPlayer->GetHitPoint();//HPを更新
+	m_currentHP = pPlayer->GetHitPoint();//HPを更新
 }
 
 void PlayerHpBar::Draw()
 {
 #ifdef _DEBUG
-	DrawFormatString(0, 200, 0xffffff, "PlayerHitPoint : %d", m_hitPoint);
+	DrawFormatString(0, 200, 0xffffff, "PlayerHitPoint : %d", m_currentHP);
 #endif // _DEBUG
 
 	////UIの描画
@@ -99,7 +99,7 @@ void PlayerHpBar::Draw()
 
 	//HPバーの空の部分を先に描画しておいて
 	//その上に現在のHPを描画する
-	for (int i = 0; i < m_maxHitPoint; ++i)
+	for (int i = 0; i < m_maxHP; ++i)
 	{
 		//空HPの描画
 		DrawRotaGraph(
@@ -110,11 +110,11 @@ void PlayerHpBar::Draw()
 			true, false);
 	}
 
-	switch (m_hitPoint)
+	switch (m_currentHP)
 	{
 	case hp_1://HPが1の時
 	case hp_2://HPが2の時
-		for (int i = 0; i < m_hitPoint; ++i)
+		for (int i = 0; i < m_currentHP; ++i)
 		{
 			//ピンチ時のHPの描画
 			DrawRotaGraph(
@@ -128,7 +128,7 @@ void PlayerHpBar::Draw()
 	case hp_3://HPが3の時
 	case hp_4://HPが4の時
 	case hp_5://HPが5の時
-		for (int i = 0; i < m_hitPoint; ++i)
+		for (int i = 0; i < m_currentHP; ++i)
 		{
 			//ノーマルHP描画
 			DrawRotaGraph(
