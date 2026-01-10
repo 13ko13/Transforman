@@ -31,6 +31,12 @@ public:
 	/// ダメージを受けたときに呼び出される関数
 	/// </summary>
 	virtual void OnDamage() abstract;
+
+	/// <summary>
+	/// エネミーの体力を取得する関数
+	/// </summary>
+	/// <returns>体力</returns>
+	virtual int GetHitPoint() const { return m_hitPoint; }
 private:
 
 protected:
@@ -38,5 +44,6 @@ protected:
 	bool m_isAppear;//自分が出現しているかどうか
 
 	Animation m_idleAnim;
+	int m_hitPoint;//体力
 };
 

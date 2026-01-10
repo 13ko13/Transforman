@@ -4,7 +4,8 @@
 EnemyBase::EnemyBase(int width,int height,std::shared_ptr<Map> pMap):
 	Charactor(width,height,pMap),
 	m_appearTime(0),
-	m_isAppear(false)
+	m_isAppear(false),
+	m_hitPoint(0)
 {
 	
 }
