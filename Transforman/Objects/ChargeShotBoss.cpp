@@ -42,6 +42,8 @@ namespace
 	constexpr int rush_anim_frame = 4;//突進中のアニメーション枚数
 	constexpr int shot_anim_frame = 10;//弾撃ちアニメーションの枚数
 	constexpr int chip_size = 32;		//マップチップのサイズ
+
+	constexpr int max_hitpoint = 5;//ボスの最大体力
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
@@ -57,6 +59,8 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
 
 	m_pos = first_pos;
 	m_state = State::None;
+	//体力設定
+	m_hitPoint = max_hitpoint;
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -269,6 +273,10 @@ void ChargeShotBoss::OnArrive()
 
 void ChargeShotBoss::OnDamage()
 {
+	if(m_hitPoint > 0)
+	{
+		m_hitPoint--;
+	}
 }
 
 void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,

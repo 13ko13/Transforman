@@ -30,6 +30,9 @@ public:
 	/// <returns>チャージショットボスのステート</returns>
 	const int GetState() const { return static_cast<int>(m_state); }
 
+	/// <summary>
+	/// ダメージを受けたときに呼ぶ関数
+	/// </summary>
 	void OnDamage() override;
 private:
 	int m_GroundNum;//地面に触れた回数
