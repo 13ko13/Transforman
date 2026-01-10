@@ -15,17 +15,16 @@ public:
 	void Draw() override;
 
 private:
-	enum class handleNomber
+	enum class HandleNomber
 	{
 		Frame,//枠
-		Background,//背景
 		Heart,//ハート
 		Normal,//通常HP
 		Pinch,//ピンチ時
 		Empty,//空HP
 	};
 	std::vector<int> m_handles;//ヒットポイントの画像ハンドル
-	int m_hitPoint;//現在のHP
-	int m_maxHitPoint;//最大HP
+	int m_currentHP;//現在のHP
+	int m_maxHP;//最大HP
 };
 

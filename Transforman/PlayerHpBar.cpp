@@ -8,13 +8,13 @@ namespace
 	constexpr int graph_height = 30;//HPバーと高さ
 
 	//描画位置オフセット
-	constexpr int draw_offset_x = 170;
-	constexpr int draw_offset_y = 50;
+	constexpr int draw_offset_x = 130;
+	constexpr int draw_offset_y = 90;
 
 	constexpr int pinch_hp = 2;//ピンチと判断するHP
 	constexpr int normal_hp = 3;//通常と判断するHP
 
-	constexpr int normal_hp_offset = 95;//通常HPの描画位置オフセット
+	constexpr int normal_hp_offset = 55;//通常HPの描画位置オフセット
 	constexpr int next_hp_offset = 25;//次のHPの描画位置オフセット
 
 	constexpr double graph_size = 5.0; //拡大率
@@ -33,10 +33,6 @@ PlayerHpBar::PlayerHpBar(int maxHitPoint) :
 {
 	int handle = -1;
 	handle = LoadGraph("img/game/Player/HP_Bar_Frame.png");//HPバーの枠
-	m_handles.push_back(handle);
-	assert(handle >= 0);//ハンドルnullチェック
-
-	handle = LoadGraph("img/game/Player/HP_Bar_Background.png");//HPバーの背景
 	m_handles.push_back(handle);
 	assert(handle >= 0);//ハンドルnullチェック
 
@@ -85,16 +81,16 @@ void PlayerHpBar::Draw()
 	DrawRotaGraph(
 		static_cast<int>(m_pos.x + draw_offset_x),
 		static_cast<int>(m_pos.y + draw_offset_y),
-		5.0, 0.0,
-		m_handles[static_cast<int>(handleNomber::Frame)],
+		graph_size, 0.0,
+		m_handles[static_cast<int>(HandleNomber::Frame)],
 		true, false);
 
 	//ハートの描画
 	DrawRotaGraph(
 		static_cast<int>(m_pos.x + draw_offset_x),
 		static_cast<int>(m_pos.y + draw_offset_y),
-		5.0, 0.0,
-		m_handles[static_cast<int>(handleNomber::Heart)],
+		graph_size, 0.0,
+		m_handles[static_cast<int>(HandleNomber::Heart)],
 		true, false);
 
 	//HPバーの空の部分を先に描画しておいて
@@ -106,7 +102,7 @@ void PlayerHpBar::Draw()
 			static_cast<int>(m_pos.x + normal_hp_offset + i * next_hp_offset),
 			static_cast<int>(m_pos.y + draw_offset_y),
 			graph_size, 0.0,
-			m_handles[static_cast<int>(handleNomber::Empty)],
+			m_handles[static_cast<int>(HandleNomber::Empty)],
 			true, false);
 	}
 
@@ -121,7 +117,7 @@ void PlayerHpBar::Draw()
 				static_cast<int>(m_pos.x + draw_offset_x + i * next_hp_offset),
 				static_cast<int>(m_pos.y + draw_offset_y),
 				graph_size, 0.0,
-				m_handles[static_cast<int>(handleNomber::Pinch)],
+				m_handles[static_cast<int>(HandleNomber::Pinch)],
 				true, false);
 		}
 		break;
@@ -135,13 +131,10 @@ void PlayerHpBar::Draw()
 				static_cast<int>(m_pos.x + normal_hp_offset + i * next_hp_offset),
 				static_cast<int>(m_pos.y + draw_offset_y),
 				graph_size, 0.0,
-				m_handles[static_cast<int>(handleNomber::Normal)],
+				m_handles[static_cast<int>(HandleNomber::Normal)],
 				true, false);
 		}
 		break;
 	}
 	//HPバーの描画
-	
-
-	
 }
