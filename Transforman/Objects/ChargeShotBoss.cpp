@@ -44,6 +44,8 @@ namespace
 	constexpr int chip_size = 32;		//マップチップのサイズ
 
 	constexpr int max_hitpoint = 5;//ボスの最大体力
+
+	constexpr int shake_power = 7;//地面に着地したときのカメラの揺れ力
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
@@ -79,6 +81,12 @@ void ChargeShotBoss::Init()
 
 void ChargeShotBoss::Update(GameContext& ctx)
 {
+	//HPが0になったら死亡フラグを立てる
+	if (m_hitPoint <= 0)
+	{
+		m_isDead = true;
+	}
+
 	m_animFrame++;
 	//地面についている間は地面についた回数をカウント
 	if (m_isGround)
@@ -88,7 +96,7 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	//一番最初に地面についた瞬間のみカメラを揺らす
 	if (m_GroundNum == 1)
 	{
-		ctx.pCamera->OnImpact();
+		ctx.pCamera->OnImpact(shake_power);
 	}
 
 	//常にプレイヤーの方向を見る
@@ -160,7 +168,7 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		m_state == State::Idle)
 	{
 		//アニメーション更新
-		//全枚数のアニメーションを終えたら
+		//全枚数のアニメーションを		終えたら
 		//1枚目の画像に戻す
 		m_idleAnim.Update();
 	}
@@ -193,6 +201,7 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		DrawFormatString(0, 320, 0xffffff, "ChargeBossState:%d", m_state);
 		DrawFormatString(0, 370, 0xffffff, "PrevRushTime:%d", m_prevRushTime);
 		DrawFormatString(0, 430, 0xffffff, "ChargeBossIsGround:%d", m_isGround);
+		DrawFormatString(0, 445, 0xffffff, "ChargeBossHP:%d", m_hitPoint  );
 
 #endif
 
@@ -367,7 +376,7 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 			//ステートをアイドルに戻す
 			m_state = State::Idle;
 			m_isRushing = false;
-			ctx.pCamera->OnImpact();
+			ctx.pCamera->OnImpact(shake_power);
 		}
 	}
 }

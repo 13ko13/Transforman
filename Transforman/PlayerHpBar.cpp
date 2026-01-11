@@ -58,6 +58,11 @@ PlayerHpBar::PlayerHpBar(int maxHitPoint) :
 
 PlayerHpBar::~PlayerHpBar()
 {
+	//‰æ‘œ‚ÌŠJ•ú
+	for (auto handle : m_handles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void PlayerHpBar::Update()

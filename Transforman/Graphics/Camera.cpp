@@ -12,7 +12,7 @@ namespace
 	constexpr float camera_lerp_t = 0.1f;
 	constexpr int mapchip_size = 32;
 	constexpr int shake_frame = 30;//カメラを揺らす時間
-	constexpr int shake_power = 7;//カメラを揺らすときの力
+	//constexpr int shake_power = 7;//カメラを揺らすときの力
 }
 
 Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
@@ -23,10 +23,11 @@ Vector2 Camera::VLerp(const Vector2& start, const Vector2& end, float t)
 	return ret;
 }
 
-void Camera::OnImpact()
+void Camera::OnImpact(int shakePower)
 {
 	//カメラを揺らす時間を設定
 	m_shakingFrame = shake_frame;
+	m_shakePower = shakePower;
 }
 
 void Camera::Impact()
@@ -37,8 +38,8 @@ void Camera::Impact()
 		//0からshake_powerの2倍を用意(右から左まで行くにはshake_powerの2倍必要だから)
 		//そこからshake_powerを引くことでマイナス側も用意する
 		//揺れる範囲は shake_power ～  -shake_power
-		m_pos.y += GetRand(shake_power * 2 + 1) - shake_power;
-		m_pos.x += GetRand(shake_power * 2 + 1) - shake_power;
+		m_pos.y += GetRand(m_shakePower * 2 + 1) - m_shakePower;
+		m_pos.x += GetRand(m_shakePower * 2 + 1) - m_shakePower;
 	}
 }
 
@@ -60,7 +61,8 @@ Camera::Camera() :
 	m_pos(first_pos),
 	m_isArrive(false),
 	m_drawOffset(first_pos),
-	m_shakingFrame(0)
+	m_shakingFrame(0),
+	m_shakePower(0)
 {
 
 }

@@ -39,7 +39,8 @@ EnemyBullet::EnemyBullet()
 
 EnemyBullet::~EnemyBullet()
 {
-
+	//‰æ‘œ‚ÌŠJ•ú
+	DeleteGraph(m_handle);
 }
 
 void EnemyBullet::Init()

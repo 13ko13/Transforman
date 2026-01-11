@@ -141,6 +141,8 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
+    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="EffectFactory.cpp" />
     <ClCompile Include="EnemyHpBar.cpp" />
     <ClCompile Include="FlameBoss.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -177,6 +179,8 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
+    <ClInclude Include="Effect.h" />
+    <ClInclude Include="EffectFactory.h" />
     <ClInclude Include="EnemyHpBar.h" />
     <ClInclude Include="FlameBoss.h" />
     <ClInclude Include="GameManager.h" />

@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// カメラが衝撃を受けたときの関数
 	/// </summary>
-	void OnImpact();
+	void OnImpact(int shakePower);
 
 	void OnArriveEnemy(std::shared_ptr<Player> pPlayer,std::shared_ptr<Stage> pStage);
 	Vector2 GetPos() { return m_pos; };
@@ -29,6 +29,7 @@ private:
 	Vector2 m_drawOffset;	//全てのDrawObjectに足す値
 	bool m_isArrive;//ボスの場所に到着したかどうか
 	int m_shakingFrame;//現在のカメラを揺らしている時間
+	int m_shakePower;//カメラを揺らす力 
 
 	//関数
 	/// <summary>

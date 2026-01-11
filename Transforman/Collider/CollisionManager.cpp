@@ -9,6 +9,11 @@
 #include "../Objects/ParryBoss.h"
 #include "../Graphics/Camera.h"
 
+namespace
+{
+	constexpr int shake_power = 3;//カメラを揺らすときの力
+}
+
 void CollisionManager::CheckCollisions(
 	std::shared_ptr<Player>& pPlayer,
 	std::vector<std::shared_ptr<EnemyBase>>& pEnemies,
@@ -60,11 +65,19 @@ void CollisionManager::CheckCollisions(
 				//プレイヤーのノックバックする方向は左
 				dir = -1;
 
-				//画面を揺らす
-				pCamera->OnImpact();
+				//プレイヤーが死んでいるとき以外画面を揺らす
+				if(pPlayer->GetHitPoint() !=0)
+				{
+					//画面を揺らす
+					pCamera->OnImpact(shake_power);
+				}
+				
 			}
-			pPlayer->OnDamage(dir);
-			printfDx("敵とプレイヤーが当たった\n");
+			//プレイヤーが死んでいないならダメージ処理を行う
+			if (pPlayer->GetHitPoint() != 0)
+			{
+				pPlayer->OnDamage(dir);
+			}
 		}
 		else
 		{
@@ -81,12 +94,14 @@ void CollisionManager::CheckCollisions(
 				!enemy->GetIsDead() &&
 				CheckCollision(*bullet, *enemy))
 			{
-				enemy->OnDamage();
+				//通常時は敵にダメージを与える
+				//HPが0になったら敵を消す
+				if (enemy->GetHitPoint() > 0)
+				{
+					enemy->OnDamage();
+				}	
 				//弾の存在を消す
 				bullet->SetIsAlive(false);
-				//敵の存在を消す(いずれHPをつくるので
-				//HPが0になったらというif文も作る
-				//enemy->SetIsDead(true);
 			}
 		}
 	}
@@ -128,10 +143,18 @@ void CollisionManager::CheckCollisions(
 			//ノックバックさせる方向と
 			//プレイヤーが向く方向を設定
 			pPlayer->SetIsRight(isRight);
-			pPlayer->OnDamage(dir);
+			//プレイヤーが死んでいないならダメージ処理を行う
+			if (pPlayer->GetHitPoint() != 0)
+			{
+				pPlayer->OnDamage(dir);
+			}
 
-			//画面を揺らす
-			pCamera->OnImpact();
+			//プレイヤーが死んでいるとき以外画面を揺らす
+			if (pPlayer->GetHitPoint() != 0)
+			{
+				//画面を揺らす
+				pCamera->OnImpact(shake_power);
+			}
 		}
 	}
 
@@ -161,7 +184,18 @@ void CollisionManager::CheckCollisions(
 		//ノックバックさせる方向と
 		//プレイヤーが向く方向を設定
 		pPlayer->SetIsRight(isRight);
-		pPlayer->OnDamage(dir);
+		//プレイヤーが死んでいないならダメージ処理を行う
+		if (pPlayer->GetHitPoint() != 0)
+		{
+			pPlayer->OnDamage(dir);
+		}
+
+		//プレイヤーが死んでいるとき以外画面を揺らす
+		if (pPlayer->GetHitPoint() != 0)
+		{
+			//画面を揺らす
+			pCamera->OnImpact(shake_power);
+		}
 	}
 
 	RemoveDeadEnemies(pEnemies);

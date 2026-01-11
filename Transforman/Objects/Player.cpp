@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "Player.h"
 #include "../Utility/Geometry.h"
 #include <DxLib.h>
@@ -47,7 +48,7 @@ namespace
 	constexpr int flame_anim_frame = 1;						//火炎放射中のアニメーションの枚数
 	constexpr int walk_anim_frame = 7;						//歩き状態のアニメーションの枚数
 	constexpr int damage_anim_frame = 8;					//食らい状態のアニメーション枚数
-	constexpr int deth_anim_frame = 20;						//死んだときのアニメーション枚数
+	constexpr int deth_anim_frame = 21;						//死んだときのアニメーション枚数
 	constexpr int jump_anim_frame = 3;						//ジャンプの時のアニメーション枚数
 
 	//HP
@@ -100,6 +101,11 @@ void Player::Update(GameContext& ctx)
 	//デバッグ処理
 	Debug(ctx.input);
 #endif
+
+	if(m_hitPoint <= 0)
+	{
+		m_state = PlayerState::Dead;//死亡状態にする
+	}
 
 	//フレームを更新
 	m_frame++;
@@ -253,6 +259,18 @@ void Player::Update(GameContext& ctx)
 			m_state = PlayerState::Idle;
 		}
 		break;
+	case PlayerState::Dead:
+		UpdateKnockback();
+		//行動不能にする
+		m_isCanAction = false;
+		m_animSrcY = graph_height * graph_index_deth;
+		animMax = deth_anim_frame;
+		//アニメーションが最後まで行ったら
+		if (m_animFrame >= animMax * anim_wait_frame)
+		{
+			m_animFrame = animMax * anim_wait_frame - 1;
+		}
+		break;
 	}
 	//現在のアニメーションのフレーム数が
 	//現在のステートの描画枚数を超えたら
@@ -278,20 +296,20 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 #if _DEBUG
 	Charactor::Draw(pCamera);
 	DrawFormatString(0, 0, 0xffffff, "Frame:%d", m_frame);
-	/*DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
-	DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
-	DrawFormatString(0, 45, 0xffffff, "JumpFrame : %d", m_jumpFrame);
-	DrawFormatString(0, 60, 0xffffff, "ShotCoolTime:%d", m_shotCooltime);
-	DrawFormatString(0, 150, 0xffffff, "PrevChargeFrame:%d", m_prevChargeFrame);
-	DrawFormatString(0, 165, 0xffffff, "Ground : %d", m_isGround);
-	DrawFormatString(0, 195, 0xffffff, "Velocity(%f , %f)", m_velocity.x, m_velocity.y);
-	DrawFormatString(0, 210, 0xffffff, "PlayerState : %d", m_state);
-	DrawFormatString(0, 225, 0xffffff, "DamageAnimFrame : %f", m_damageAnimFrame);
-	DrawFormatString(0, 240, 0xffffff, "BlinkingTimer : %d", m_blinkingTimer);
-	DrawFormatString(0, 255, 0xffffff, "WeaponType : %d", m_weaponType);
-	DrawFormatString(0, 385, 0xffffff, "IsCanAction : %d", m_isCanAction);
-	DrawFormatString(0, 400, 0xffffff, "ParryTimer : %d", m_iFrameTimer);
-	DrawFormatString(0, 415, 0xffffff, "ParryCooltime : %d", m_parryCooltime);*/
+	//DrawFormatString(0, 15, 0xffffff, "PlayerPosX:%f, Y: %f", m_pos.x, m_pos.y);
+	//DrawFormatString(0, 30, 0xffffff, "IsRight:%d", m_isRight);
+	//DrawFormatString(0, 45, 0xffffff, "JumpFrame : %d", m_jumpFrame);
+	//DrawFormatString(0, 60, 0xffffff, "ShotCoolTime:%d", m_shotCooltime);
+	//DrawFormatString(0, 150, 0xffffff, "PrevChargeFrame:%d", m_prevChargeFrame);
+	//DrawFormatString(0, 165, 0xffffff, "Ground : %d", m_isGround);
+	//DrawFormatString(0, 195, 0xffffff, "Velocity(%f , %f)", m_velocity.x, m_velocity.y);
+	DrawFormatString(0, 230, 0xffffff, "PlayerState : %d", m_state);
+	//DrawFormatString(0, 225, 0xffffff, "DamageAnimFrame : %f", m_damageAnimFrame);
+	//DrawFormatString(0, 240, 0xffffff, "BlinkingTimer : %d", m_blinkingTimer);
+	//DrawFormatString(0, 255, 0xffffff, "WeaponType : %d", m_weaponType);
+	//DrawFormatString(0, 385, 0xffffff, "IsCanAction : %d", m_isCanAction);
+	//DrawFormatString(0, 400, 0xffffff, "ParryTimer : %d", m_iFrameTimer);
+	//DrawFormatString(0, 415, 0xffffff, "ParryCooltime : %d", m_parryCooltime);
 	DrawFormatString(0, 15, 0xffffff, "HP: %d", m_hitPoint);
 #endif
 
@@ -352,7 +370,8 @@ void Player::OnArriveEnemy()
 void Player::Jump()
 {
 	if (m_state == PlayerState::Damage ||
-		m_state == PlayerState::Parry) return;
+		m_state == PlayerState::Parry ||
+		m_state == PlayerState::Dead) return;
 	//ジャンプを長押ししていないなら飛ばす
 	if (!m_isJumping) return;
 
@@ -371,7 +390,8 @@ void Player::Move(Input& input)
 	//処理を行わない
 	if (m_state == PlayerState::Damage ||
 		m_state == PlayerState::Fire ||
-		m_state == PlayerState::Parry) return;
+		m_state == PlayerState::Parry ||
+		m_state == PlayerState::Dead) return;
 
 	Vector2 dir = { 0.0f,0.0f };//プレイヤーの速度ベクトル
 	m_velocity.x = 0.0f;
@@ -492,7 +512,8 @@ void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 
 void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
-	if (m_state != PlayerState::Damage)
+	if (m_state != PlayerState::Damage ||
+		m_state == PlayerState::Dead)
 	{
 		//ボタンが一定フレーム以上
 		//長押しされたらチャージショットの判定にする
@@ -549,31 +570,26 @@ void Player::ChangeState(PlayerState state)
 	m_state = state;
 }
 
+
 void Player::UpdateKnockback()
 {
-	//残りノックバック時間を減らしていく
 	m_knockackTimer--;
-	//プレイヤーが右を向いている場合は
-	//Xはマイナス側に進んでいくので
-	//ノックバックした後に徐々に0に近づけて
-	//自然なノックバックにする
-	if (m_isRight)
-	{
-		m_velocity.x++;
-		if (m_velocity.x >= 0)
-		{
-			m_velocity.x = 0.0f;
-		}
+
+	// 減速量（好みで調整)
+	constexpr float decel = 1.0f;
+
+	if (m_knockbackDir > 0) {         // 右へノックバック中（velocity.x > 0 から 0 へ）
+		m_velocity.x = std::max(0.0f, m_velocity.x - decel);
 	}
-	else
-	{
-		m_velocity.x--;
-		if (m_velocity.x <= 0)
-		{
-			m_velocity.x = 0.0f;
-		}
+	else if (m_knockbackDir < 0) {  // 左へノックバック中（velocity.x < 0 から 0 へ）
+		m_velocity.x = std::min(0.0f, m_velocity.x + decel);
+	}
+	else {
+		// dir==0 の安全策
+		m_velocity.x = 0.0f;
 	}
 }
+
 
 void Player::Debug(Input& input)
 {
@@ -594,28 +610,34 @@ void Player::Debug(Input& input)
 	if (input.IsTriggered("parry"))
 	{
 		m_parryCooltime = -1;
+		//仮で死亡するようにする
+		m_hitPoint = 0;
 	}
 }
 
 void Player::OnDamage(int dir)
 {
+	m_knockbackDir = dir;//ノックバックする方向を決める
+	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
+
+	//ノックバックするための方向と速度を代入する
+	m_velocity.x = m_knockbackDir * knockback_speed;
+	m_velocity.y = knockback_jump;
+
+	if (m_hitPoint <= 0) return;//すでにHPが0以下なら処理しない
+
 	//チャージ状態や、火炎放射中だと
 	//引き継がれたままダメージを受けるので
 	//一度アイドルにリセットする
 	m_state = PlayerState::Idle;
 	m_state = PlayerState::Damage;//ステートを切り替える
-	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
-	m_knockbackDir = dir;//ノックバックする方向を代入
-
+	
 	//HPを減らす
 	if (m_hitPoint > 0)
 	{
 		m_hitPoint--;
 	}
 
-	//ノックバックするための方向と速度を代入する
-	m_velocity.x = m_knockbackDir * knockback_speed;
-	m_velocity.y = knockback_jump;
 }
 
 void Player::OnStart()

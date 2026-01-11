@@ -48,7 +48,8 @@ PlayerBullet::PlayerBullet() :
 
 PlayerBullet::~PlayerBullet()
 {
-
+	//‰æ‘œ‚ÌŠJ•ú
+	DeleteGraph(m_handle);
 }
 
 void PlayerBullet::Init()

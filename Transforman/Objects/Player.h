@@ -16,7 +16,8 @@ enum class PlayerState
 	ChargeShot,
 	Parry,
 	Fire,
-	Damage
+	Damage,
+	Dead,
 };
 
 enum class WeaponType

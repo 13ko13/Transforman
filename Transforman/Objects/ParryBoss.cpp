@@ -42,6 +42,8 @@ namespace
 
 	//行動までの初期クールタイム
 	constexpr int first_move_cooldown = 60;
+
+	constexpr int shake_power = 7;//落下攻撃着地時のカメラ揺れ力
 }
 
 ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
@@ -63,7 +65,8 @@ ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
 
 ParryBoss::~ParryBoss()
 {
-
+	//画像の開放
+	DeleteGraph(m_handle);
 }
 
 void ParryBoss::Init()
@@ -393,7 +396,7 @@ void ParryBoss::FallAttackUpdate(GameContext& ctx)
 			15, fall_one_anim_frame, draw_scale, false);
 		m_swordHitBox.SetCenter(0.0f, 0.0f, 0.0f, 0.0f);//当たり判定を無効化
 		//画面を揺らす
-		ctx.pCamera->OnImpact();
+		ctx.pCamera->OnImpact(shake_power);
 	}
 }
 

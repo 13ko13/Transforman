@@ -5,7 +5,7 @@ class UserInterface
 {
 public:
 	UserInterface(Vector2 pos);
-	~UserInterface();
+	virtual ~UserInterface();
 
 	virtual void Update() abstract;
 	virtual void Draw() abstract;

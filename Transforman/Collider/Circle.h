@@ -29,6 +29,8 @@ public:
 	/// </summary>
 	/// <param name="radius">”¼Œa</param>
 	void SetRadius(int radius) { m_radius = radius; }
+
+	Vector2 GetCenter() const { return m_pos; }
 private:
 	Vector2 m_pos;
 	int m_radius;

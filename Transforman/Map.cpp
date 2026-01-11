@@ -38,6 +38,11 @@ Map::Map(std::shared_ptr<Stage> pStage) :
 
 Map::~Map()
 {
+	//‰æ‘œ‚ÌŠJ•ú
+	for (auto handle : m_handles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void Map::Update()

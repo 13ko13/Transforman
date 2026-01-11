@@ -58,6 +58,11 @@ EnemyHpBar::EnemyHpBar(int maxHitPoint) :
 
 EnemyHpBar::~EnemyHpBar()
 {
+	//‰æ‘œ‚ÌŠJ•ú
+	for (auto handle : m_handles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void EnemyHpBar::Update()
