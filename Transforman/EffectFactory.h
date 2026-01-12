@@ -14,14 +14,14 @@ enum class EffectType
 class Effect;
 class EffectFactory
 {
-private:
-	std::vector<int> m_handles;//エフェクトの画像ハンドル
-	std::list<std::shared_ptr<Effect>> m_effects;//エフェクトのリスト
-
 public:
 	EffectFactory();
 	void Create(const Vector2& pos, EffectType type);
 	void Update();
 	void Draw();
+
+private:
+	std::vector<int> m_handles;//エフェクトの画像ハンドル
+	//std::list<std::shared_ptr<Effect>> m_effects;//エフェクトのリスト
 };
 
