@@ -26,7 +26,7 @@ namespace
 	constexpr int max_jump_frame = 15;						//最大ジャンプ入力時間
 	constexpr float jump_power = 12.0f;						//ジャンプ力
 
-	constexpr int shot_cooltime = 15;						//ショットのクールタイム
+	constexpr int shot_cooltime = 7;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
