@@ -43,7 +43,7 @@ namespace
 	constexpr int shot_anim_frame = 10;//弾撃ちアニメーションの枚数
 	constexpr int chip_size = 32;		//マップチップのサイズ
 
-	constexpr int max_hitpoint = 5;//ボスの最大体力
+	constexpr int max_hitpoint = 10;//ボスの最大体力
 
 	constexpr int shake_power = 7;//地面に着地したときのカメラの揺れ力
 }
@@ -168,7 +168,7 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		m_state == State::Idle)
 	{
 		//アニメーション更新
-		//全枚数のアニメーションを		終えたら
+		//全枚数のアニメーションを終えたら
 		//1枚目の画像に戻す
 		m_idleAnim.Update();
 	}
