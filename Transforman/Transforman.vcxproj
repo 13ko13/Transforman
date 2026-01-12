@@ -146,6 +146,7 @@
     <ClCompile Include="EnemyHpBar.cpp" />
     <ClCompile Include="FlameBoss.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Scenes\GameoverScene.cpp" />
     <ClCompile Include="PlayerHpBar.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Objects\ParryBoss.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="EnemyHpBar.h" />
     <ClInclude Include="FlameBoss.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Scenes\GameoverScene.h" />
     <ClInclude Include="PlayerHpBar.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Objects\ParryBoss.h" />
