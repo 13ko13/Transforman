@@ -43,4 +43,13 @@ private:
 	
 	//アニメーション
 	Animation m_normalAnim;
+	Animation m_chargeAnim;
+
+	std::vector<int> m_handles;//弾の画像ハンドル
+
+	enum class HandleNumber
+	{
+		Normal = 0,
+		Charge = 1
+	};
 };

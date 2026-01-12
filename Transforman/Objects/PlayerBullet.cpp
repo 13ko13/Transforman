@@ -9,17 +9,27 @@
 
 namespace 
 {
-	constexpr float speed = 7.0f;
+	constexpr float speed = 10.0f;
 	constexpr int normal_shot_radius = 15;
 	constexpr int charge_shot_radius = 25;
 
 	//アニメーション
-	constexpr int anim_idx_y = 0;
-	constexpr int max_normal_anim_num = 4;
-	constexpr int one_anim_frame = 5;
-	constexpr int graph_width = 16;
-	constexpr int graph_height = 16;
-	constexpr float draw_scale = 3.0f;
+	//Normal
+	constexpr int normal_anim_idx_y = 0;//アニメーション切り取りY位置
+	constexpr int normal_max_anim_num = 4;//アニメーション枚数
+	constexpr int normal_one_anim_frame = 5;//1アニメーションあたりのフレーム数
+	constexpr int normal_graph_width = 16;//画像1枚の幅
+	constexpr int normal_graph_height = 16;//画像1枚の高さ
+	constexpr float normal_draw_scale = 3.0f;//描画スケール
+
+	//Charge
+	constexpr int charge_anim_idx_y = 6;//アニメーション切り取りY位置
+	constexpr int charge_anim_idx_x = 15;//アニメーション切り取りX位置
+	constexpr int charge_max_anim_num = 3;//アニメーション枚数
+	constexpr int charge_one_anim_frame = 4;//1アニメーションあたりのフレーム数
+	constexpr int charge_graph_width = 32;//画像1枚の幅
+	constexpr int charge_graph_height = 32;//画像1枚の高さ
+	constexpr float charge_draw_scale = 2.0f;//描画スケール
 
 	//Fire
 	constexpr int fire_width = 150;
@@ -41,20 +51,43 @@ PlayerBullet::PlayerBullet() :
 	m_rect.SetLT(
 		m_pos.x ,m_pos.y ,
 		fire_width, fire_height);
+
 	//画像をロード
-	m_handle = LoadGraph("img/game/bullet/player_bullet.png");
-	assert(m_handle >= 0);
+	int handle = -1;
+	
+	handle = LoadGraph("img/game/bullet/player_bullet.png");
+	assert(handle >= 0);
+	m_handles.push_back(handle);
+
+	handle = LoadGraph("img/game/bullet/player_charge_bullet.png");
+	assert(handle >= 0);
+	m_handles.push_back(handle);
 }
 
 PlayerBullet::~PlayerBullet()
 {
 	//画像の開放
-	DeleteGraph(m_handle);
+	for(auto handle : m_handles)
+	{
+		DeleteGraph(handle);
+	}
 }
 
 void PlayerBullet::Init()
 {
-	m_normalAnim.Init(m_handle,0, { graph_width ,graph_height }, max_normal_anim_num, one_anim_frame,draw_scale, true);
+	//通常弾アニメーション初期化
+	m_normalAnim.Init(
+		m_handles[static_cast<int>(HandleNumber::Normal)],
+		0, { normal_graph_width ,normal_graph_height},
+		normal_max_anim_num, normal_one_anim_frame,
+		normal_draw_scale, true);
+	//チャージ弾アニメーション初期化
+	m_chargeAnim.Init(
+		m_handles[static_cast<int>(HandleNumber::Charge)],
+		charge_anim_idx_x, charge_anim_idx_y,
+		{ charge_graph_width, charge_graph_height },
+		charge_max_anim_num, charge_one_anim_frame,
+		charge_draw_scale, true);
 }
 
 void PlayerBullet::Update(GameContext& ctx)
@@ -125,6 +158,8 @@ void PlayerBullet::Update(GameContext& ctx)
 			{
 				m_isAlive = false;
 			}
+			//アニメーションの更新
+			m_chargeAnim.Update();
 		}
 		break;
 	case BulletType::Fire:
@@ -184,8 +219,12 @@ void PlayerBullet::Draw(std::shared_ptr<Camera> pCamera)
 #if _DEBUG
 			//当たり判定を描画する
 			m_circle.Draw(pCamera);
-			DrawFormatString(0, 45, 0xffffff, "PlayerBulletPos X:%f , Y:%f", m_pos.x, m_pos.y);
 #endif
+			//アニメーションの描画
+			m_chargeAnim.Draw(
+				{m_pos.x + pCamera->GetDrawOffset().x,
+				m_pos.y + pCamera->GetDrawOffset().y }, !m_isRight
+			);
 			break;
 
 		case BulletType::Fire:
