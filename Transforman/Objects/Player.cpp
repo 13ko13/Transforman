@@ -43,7 +43,7 @@ namespace
 	constexpr int graph_index_jump = 8;
 
 	//アニメーション関係
-	constexpr int anim_wait_frame = 7;						//次のアニメーションまでの待機時間
+	constexpr int anim_wait_frame = 5;						//次のアニメーションまでの待機時間
 	constexpr int idle_anim_frame = 4;						//アイドルアニメーションの枚数
 	constexpr int flame_anim_frame = 1;						//火炎放射中のアニメーションの枚数
 	constexpr int walk_anim_frame = 7;						//歩き状態のアニメーションの枚数
