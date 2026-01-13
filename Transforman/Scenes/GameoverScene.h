@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "SceneController.h"
+#include "../Graphics/Animation.h"
 
 class GameoverScene : public Scene
 {
@@ -12,7 +13,13 @@ public:
 	void Draw() override;
 
 private:
-	int m_gameoverTextH;//ゲームオーバーのテキスト画像ハンドル
+	enum class handleNumber
+	{
+		gameoverText,
+		gameoverBackground
+	};
+
+	std::vector<int> m_handles;//ゲームオーバーのテキスト画像ハンドル
 	int m_frame;//フェード用のフレーム
 
 	//メンバ変数ポインタを使用して内部状態を書き換える
@@ -33,4 +40,6 @@ private:
 	//関数ポインタを使って状態遷移を楽にする
 	using DrawFunc_t = void(GameoverScene::*)();
 	DrawFunc_t m_draw;//drawメンバ関数ポインタ
+
+	Animation m_backgroundAnim;//ゲームオーバー背景アニメーション
 };
