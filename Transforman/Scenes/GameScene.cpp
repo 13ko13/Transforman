@@ -11,15 +11,22 @@
 #include "../GameManager.h"
 #include "../Objects/ParryBoss.h"
 #include "../UIManager.h"
+#include "SceneController.h"
+#include "GameoverScene.h"
+#include "../Main/Application.h"
+#include <DxLib.h>
 
 namespace
 {
 	constexpr int p_bullet_max = 10;//プレイヤー弾の最大数
 	constexpr int e_bullet_max = 20;//敵弾の最大数
+	constexpr int fade_interval = 60;//フェードにかかるフレーム数
 }
 
 GameScene::GameScene(SceneController& controller) :
-	Scene(controller)
+	Scene(controller),
+	m_isClear(false),
+	m_isGameover(false)
 {
 	//ステージデータのロード
 	m_pStage = std::make_shared<Stage>();
@@ -88,6 +95,13 @@ GameScene::GameScene(SceneController& controller) :
 
 	//UIマネージャーの生成
 	m_pUIManager = std::make_shared<UIManager>(m_pPlayer, m_pChargeShotBoss);
+
+	//updateとdrawをフェードインパターンにに切り替えておく
+	m_update = &GameScene::UpdateFadeIn;
+	m_draw = &GameScene::DrawFade;
+
+	//フェードにかかるフレーム数を代入
+	m_frame = fade_interval;
 }
 
 void GameScene::Init()
@@ -101,34 +115,116 @@ void GameScene::Init()
 
 void GameScene::Update(Input& input)
 { 
-	GameContext ctx{m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input,m_pCamera};
+	//現在割り当てられているメンバUpdate系関数を実行する
+	(this->*m_update)(input);
+}
+
+void GameScene::Draw()
+{
+	//割り当てられているDraw系メンバ関数を実行する
+	(this->*m_draw)();
+}
+
+void GameScene::UpdateFadeIn(Input&)
+{
+	//フレームが0以下になったらUpdateとDrawの関数ポインタに
+	//関数を参照させる
+	m_frame--;
+	if (m_frame <= 0)
+	{
+		m_update = &GameScene::UpdateNormal;
+		m_draw = &GameScene::DrawNormal;
+		//絶対return
+		return;
+	}
+}
+
+void GameScene::UpdateNormal(Input& input)
+{
+	GameContext ctx{ m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input,m_pCamera };
 	// 各オブジェクトの更新
 	for (auto& object : m_pObjects)
 	{
 		object->Update(ctx);
 	}
-	
-	m_pColManager->CheckCollisions(m_pPlayer,m_pEnemies,m_pPlayerBullets,m_pEnemyBullets,m_pParryBoss->GetSwordHitBox(), m_pCamera);
+
+	m_pColManager->CheckCollisions(m_pPlayer, m_pEnemies, m_pPlayerBullets, m_pEnemyBullets, m_pParryBoss->GetSwordHitBox(), m_pCamera);
 
 	// カメラの更新
-	m_pCamera->Update(m_pPlayer,m_pStage);
+	m_pCamera->Update(m_pPlayer, m_pStage);
 
 	//マップチップの更新
 	m_pMap->Update();
 
 	//ゲームマネージャー更新
-	m_pGameManager->Update(m_pPlayer,m_pStage,m_pCamera,m_pChargeShotBoss, m_pParryBoss);
+	m_pGameManager->Update(m_pPlayer, m_pStage, m_pCamera, m_pChargeShotBoss, m_pParryBoss);
 
 	//UIマネージャー更新
-	m_pUIManager->Update(m_pPlayer,m_pChargeShotBoss);
+	m_pUIManager->Update(m_pPlayer, m_pChargeShotBoss);
+
+	//プレイヤーが死んでいたら
+	//ゲームオーバーシーンに遷移する
+	//変数をtrueにする
+	if (m_pPlayer->GetIsDead())
+	{
+		m_isGameover = true;
+	}
 }
 
-void GameScene::Draw()
+void GameScene::UpdateFadeOut(Input&)
 {
+	//フレームを++してfade_intervalを超えたら
+	m_frame++;
+	//プレイヤーがゲームをクリアしたなら
+	//クリアシーンに遷移する
+	//死んだならゲームオーバーシーンに遷移する
+	if (m_isClear)
+	{
+		if (m_frame >= fade_interval)
+		{
+			//ToDo:クリアシーンに切り替える	
+
+			//絶対にreturnする
+			return;
+		}
+	}
+	//ゲームオーバーなら
+	else if (m_isGameover)
+	{
+		if (m_frame >= fade_interval)
+		{
+			m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller));
+
+			//絶対にreturnする
+			return;
+		}
+	}
+}
+
+void GameScene::DrawFade()
+{
+	//ウィンドウサイズを変数に保存
+	//ウィンドウサイズを変数に保存
+	const auto& wsize = Application::GetInstance().GetWindowSize();
+	//値の範囲をいったん0.0～1.0にしておくといろいろと扱いやすくなる
+	auto rate = static_cast<float>(m_frame) / static_cast<float>(fade_interval);
+	//aブレンド
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));//DxLibのAlphaブレンドが0～255
+	//画面全体に黒フィルムをかける
+	DrawBox(0, 0, wsize.w, wsize.h, 0x000000, true);
+	//ブレンドしない
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+}
+
+void GameScene::DrawNormal()
+{
+	//ウィンドウサイズを変数に保存
+	const auto wsize = Application::GetInstance().GetWindowSize();
+
 	//背景の描画
 	m_pBackground->Draw();
 	//マップチップの描画
-	m_pMap->Draw(*m_pCamera); 
+	m_pMap->Draw(*m_pCamera);
 	// 各オブジェクトの描画
 	for (auto& object : m_pObjects)
 	{

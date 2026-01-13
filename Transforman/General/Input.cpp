@@ -10,7 +10,7 @@ Input::Input() :
 {
 	//イベント名を添え時にして、右辺値に実際の入力種別と押されたボタンの配列を置く
 	m_inputTable["ok"] = { {PeripheralType::keyboard,KEY_INPUT_RETURN},	//キーボード:エンターキー
-							{PeripheralType::pad1,PAD_INPUT_START } };	//パッド:スタート
+							{PeripheralType::pad1,PAD_INPUT_A } };	//パッド:A
 
 	m_inputTable["shot"] = { {PeripheralType::keyboard,KEY_INPUT_Z},	//キーボード:Z
 							{PeripheralType::pad1,PAD_INPUT_A} };		//パッド:Aボタン

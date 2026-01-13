@@ -263,6 +263,7 @@ void Player::Update(GameContext& ctx)
 		UpdateKnockback();
 		//行動不能にする
 		m_isCanAction = false;
+		m_isDead = true;
 		m_animSrcY = graph_height * graph_index_deth;
 		animMax = deth_anim_frame;
 		//アニメーションが最後まで行ったら

@@ -43,5 +43,46 @@ private:
 	std::vector<std::shared_ptr<Charactor>> m_pCharactors;//キャラクターの配列
 	std::shared_ptr<GameManager> m_pGameManager;//ゲームマネージャー
 	std::shared_ptr<UIManager> m_pUIManager;//UIマネージャー
-};
 
+	int m_frame;//フェード用のフレーム
+
+
+
+	//関数ポインタをつかって状態遷移を楽にする
+	using UpdateFunc_t = void(GameScene::*)(Input&);
+	UpdateFunc_t m_update;///updateメンバ関数ポインタ
+
+	//関数ポインタをつかって状態遷移を楽にする
+	using DrawFunc_t = void(GameScene::*)();
+	DrawFunc_t m_draw;//drawメンバ関数ポインタ
+private:
+
+	//メンバ変数ポインタを使用して内部状態を書き換える
+	//update関数とdraw関数を、現在のGameSceneの状態に合わせて
+	//切り替えていく
+
+	/// <summary>
+	/// フェードイン中のアップデート処理
+	/// </summary>
+	void UpdateFadeIn(Input&);//フェードインUpdate
+
+	/// <summary>
+	/// 通常更新中のアップデート処理
+	/// </summary>
+	void UpdateNormal(Input&);//通常状態Update
+
+	/// <summary>
+	/// フェードアウト中のアップデート処理
+	/// </summary>
+	void UpdateFadeOut(Input&);//フェードアウトUpdate
+
+	/// <summary>
+	/// フェード中の描画処理
+	/// </summary>
+	void DrawFade();//フェードインDraw
+
+	/// <summary>
+	/// 通常の描画操作を実行します。
+	/// </summary>
+	void DrawNormal();//通常状態Draw
+};

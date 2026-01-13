@@ -18,8 +18,8 @@ TitleScene::TitleScene(SceneController& controller) :
 
 	//updateとdrawの関数ポインタにFadeInUpdateと
 	//FadeDrawを参照させる
-	m_update = &TitleScene::FadeInUpdate;
-	m_draw = &TitleScene::FadeDraw;
+	m_update = &TitleScene::UpdateFadeIn;
+	m_draw = &TitleScene::DrawFade;
 
 	//frameにfadeにかかる秒数を代入
 	m_frame = fade_interval;
@@ -27,30 +27,32 @@ TitleScene::TitleScene(SceneController& controller) :
 
 TitleScene::~TitleScene()
 {
+	//画像ハンドル解放
+	DeleteGraph(m_titleLogoH);
 	m_controller.Init();
 }
 
-void TitleScene::FadeInUpdate(Input&)
+void TitleScene::UpdateFadeIn(Input&)
 {
 	//フレームが0以下になったらUpdateとDrawの関数ポインタに
 	//関数を参照させる
 	if (--m_frame <= 0)
 	{
-		m_update = &TitleScene::NormalUpdate;
-		m_draw = &TitleScene::NormalDraw;
+		m_update = &TitleScene::UpdateNormal;
+		m_draw = &TitleScene::DrawNormal;
 		//絶対にreturnをする
 		return;
 	}
 }
 
-void TitleScene::NormalUpdate(Input& input)
+void TitleScene::UpdateNormal(Input& input)
 {
 	//okボタンが押されたら
 	//関数を切り替えてフェードアウトに入る
 	if (input.IsTriggered("ok"))
 	{
-		m_update = &TitleScene::FadeOutUpdate;
-		m_draw = &TitleScene::FadeDraw;
+		m_update = &TitleScene::UpdateFadeOut;
+		m_draw = &TitleScene::DrawFade;
 		//フェードアウトの最初　念のため　
 		m_frame = 0;
 		//絶対にreturnする
@@ -58,7 +60,7 @@ void TitleScene::NormalUpdate(Input& input)
 	}
 }
 
-void TitleScene::FadeOutUpdate(Input&)
+void TitleScene::UpdateFadeOut(Input&)
 {
 	//フレームを++してfade_intervalを超えたら
 	if (++m_frame >= fade_interval)
@@ -70,7 +72,7 @@ void TitleScene::FadeOutUpdate(Input&)
 	}
 }
 
-void TitleScene::FadeDraw()
+void TitleScene::DrawFade()
 {
 	//ウィンドウサイズを変数に保存
 	const auto& wsize = Application::GetInstance().GetWindowSize();
@@ -86,7 +88,7 @@ void TitleScene::FadeDraw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
-void TitleScene::NormalDraw()
+void TitleScene::DrawNormal()
 {
 	//ウィンドウサイズを変数に保存
 	const auto wsize = Application::GetInstance().GetWindowSize();
