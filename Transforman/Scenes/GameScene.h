@@ -46,8 +46,6 @@ private:
 
 	int m_frame;//フェード用のフレーム
 
-
-
 	//関数ポインタをつかって状態遷移を楽にする
 	using UpdateFunc_t = void(GameScene::*)(Input&);
 	UpdateFunc_t m_update;///updateメンバ関数ポインタ
@@ -55,6 +53,9 @@ private:
 	//関数ポインタをつかって状態遷移を楽にする
 	using DrawFunc_t = void(GameScene::*)();
 	DrawFunc_t m_draw;//drawメンバ関数ポインタ
+
+	bool m_isClear;
+	bool m_isGameover;
 private:
 
 	//メンバ変数ポインタを使用して内部状態を書き換える

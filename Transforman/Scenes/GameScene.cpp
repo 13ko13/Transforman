@@ -20,7 +20,7 @@ namespace
 {
 	constexpr int p_bullet_max = 10;//プレイヤー弾の最大数
 	constexpr int e_bullet_max = 20;//敵弾の最大数
-	constexpr int fade_interval = 60;//フェードにかかるフレーム数
+	constexpr int fade_interval = 70;//フェードにかかるフレーム数
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -80,7 +80,7 @@ GameScene::GameScene(SceneController& controller) :
 	{
 		m_pObjects.push_back(bullet);
 	}
-	
+
 	//カメラの生成
 	m_pCamera = std::make_shared<Camera>();
 
@@ -114,7 +114,7 @@ void GameScene::Init()
 }
 
 void GameScene::Update(Input& input)
-{ 
+{
 	//現在割り当てられているメンバUpdate系関数を実行する
 	(this->*m_update)(input);
 }
@@ -162,47 +162,53 @@ void GameScene::UpdateNormal(Input& input)
 	//UIマネージャー更新
 	m_pUIManager->Update(m_pPlayer, m_pChargeShotBoss);
 
-	//プレイヤーが死んでいたら
-	//ゲームオーバーシーンに遷移する
-	//変数をtrueにする
+	//プレイヤーが死んだらフェードアウトに遷移する
 	if (m_pPlayer->GetIsDead())
 	{
-		m_isGameover = true;
+		m_update = &GameScene::UpdateFadeOut;
+		m_draw = &GameScene::DrawFade;
+		//フェードアウトの最初　念のため
+		m_frame = 0;
+		//絶対にreturnする
+		return;
 	}
 }
 
-void GameScene::UpdateFadeOut(Input&)
+void GameScene::UpdateFadeOut(Input& input)
 {
+	GameContext ctx{ m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input,m_pCamera };
+
+	m_pPlayer->Update(ctx);
+
 	//フレームを++してfade_intervalを超えたら
 	m_frame++;
 	//プレイヤーがゲームをクリアしたなら
 	//クリアシーンに遷移する
 	//死んだならゲームオーバーシーンに遷移する
-	if (m_isClear)
+	if (m_frame >= fade_interval)
 	{
-		if (m_frame >= fade_interval)
-		{
-			//ToDo:クリアシーンに切り替える	
+		m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller));
 
-			//絶対にreturnする
-			return;
-		}
-	}
-	//ゲームオーバーなら
-	else if (m_isGameover)
-	{
-		if (m_frame >= fade_interval)
-		{
-			m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller));
-
-			//絶対にreturnする
-			return;
-		}
+		//絶対にreturnする
+		return;
 	}
 }
 
 void GameScene::DrawFade()
 {
+	//背景の描画
+	m_pBackground->Draw();
+	//マップチップの描画
+	m_pMap->Draw(*m_pCamera);
+	// 各オブジェクトの描画
+	for (auto& object : m_pObjects)
+	{
+		object->Draw(m_pCamera);
+	}
+
+	//UIマネージャーの描画
+	m_pUIManager->Draw();
+
 	//ウィンドウサイズを変数に保存
 	//ウィンドウサイズを変数に保存
 	const auto& wsize = Application::GetInstance().GetWindowSize();
