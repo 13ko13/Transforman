@@ -53,6 +53,9 @@ namespace
 
 	//HP
 	constexpr int max_hit_point = 5;						//HP
+
+	//スポーン地点
+	const Vector2 spawn_pos = { 180.0f,583.0f };
 }
 
 Player::Player(std::shared_ptr<Map> pMap) :
@@ -83,6 +86,7 @@ Player::Player(std::shared_ptr<Map> pMap) :
 	m_handle = LoadGraph("img/game/Player/transforman_player.png");
 	assert(m_handle >= 0);
 	m_hitPoint = max_hit_point;//HPを設定した
+	m_isRight = true;//右を向かせておく
 }
 
 Player::~Player()
@@ -92,7 +96,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	m_pos = { Graphic::screen_width / 2,Graphic::screen_height / 2 };
+	m_pos = spawn_pos;
 }
 
 void Player::Update(GameContext& ctx)
