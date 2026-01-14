@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
+    <ClCompile Include="Scenes\ClearScene.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectFactory.cpp" />
     <ClCompile Include="EnemyHpBar.cpp" />
@@ -180,6 +181,7 @@
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
+    <ClInclude Include="Scenes\ClearScene.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectFactory.h" />
     <ClInclude Include="EnemyHpBar.h" />
