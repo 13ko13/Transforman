@@ -30,14 +30,18 @@ ClearScene::ClearScene(SceneController& controller) :
 	assert(handle >= 1);//Nullチェック
 	m_handles.push_back(handle);
 
+	//PressA画像ハンドルロード
+	handle = LoadGraph("img/clear/press_a_button.png");
+	assert(handle >= 1);
+	m_handles.push_back(handle);
+
 	//updateとdrawの関数ポインタにFadeInUpdateと
 	//FadeDrawを参照させる
 	m_update = &ClearScene::UpdateFadeIn;
 	m_draw = &ClearScene::DrawFade;
 
 	//frameにfade中にかかる秒数を代入
-	m_frame = fade_interval;
-
+	m_frame = fade_interval;	//初期化関数呼び出し
 	Init();
 }
 
@@ -48,23 +52,20 @@ ClearScene::~ClearScene()
 	{
 		DeleteGraph(handle);
 	}
-
 }
 
 void ClearScene::Init()
 {
 	//クリアシーン背景アニメーション初期化
 	m_backgroundAnim.Init(
-		m_handles[static_cast<int>(handleNumber::clearBackground)],
-		0,
+		m_handles[static_cast<int>(handleNumber::clearBackground)],0,
 		{ 2816, 1536 },
 		1, 7,
 		0.5f, true);
 
 	//クリアシーンテキストアニメーション初期化
 	m_clearTextAnim.Init(
-		m_handles[static_cast<int>(handleNumber::clearText)],
-		0,
+		m_handles[static_cast<int>(handleNumber::clearText)],0,
 		{ 1376,768 },
 		1, 5,
 		0.5f, true);
@@ -181,7 +182,7 @@ void ClearScene::DrawNormal()
 
 	//テキストの表示
 	m_clearTextAnim.Draw(
-		{ static_cast<float>(wsize.w / 2),
-		static_cast<float>(wsize.h / 2) },
-		false);
+						{ static_cast<float>(wsize.w / 2),
+						static_cast<float>(wsize.h / 2) },
+						false);
 }
