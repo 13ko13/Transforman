@@ -1,6 +1,13 @@
 #include "SceneController.h"
 #include "Scene.h"
 
+void SceneController::ResetScene(std::shared_ptr<Scene> scene)
+{
+	//シーンを1つだけにしたいため、一旦シーンをすべてクリアします
+	m_scenes.clear();
+	m_scenes.push_back(scene);
+}
+
 void SceneController::ChangeScene(std::shared_ptr<Scene> scene)
 {
 	//もし、リストが空の場合、普通に代入でChangeSceneしようとすると

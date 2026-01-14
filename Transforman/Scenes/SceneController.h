@@ -9,6 +9,13 @@ class SceneController
 {
 public:
 	/// <summary>
+	/// シーンの切り替え(ただし、引数で渡されたシーンのみになる
+	/// </summary>
+	/// <param name="scene">新しいシーン</param>
+	/// <note>引数で渡されたシーンのみになり、積まれてるシーンの数は１つになる</note>
+	void ResetScene(std::shared_ptr<Scene> scene);
+
+	/// <summary>
 	/// シーンの切り替え
 	/// </summary>
 	/// <param name="scene">新しいシーン</param>
