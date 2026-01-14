@@ -13,6 +13,7 @@
 #include "../UIManager.h"
 #include "SceneController.h"
 #include "GameoverScene.h"
+#include "ClearScene.h"
 #include "../Main/Application.h"
 #include <DxLib.h>
 
@@ -102,6 +103,8 @@ GameScene::GameScene(SceneController& controller) :
 
 	//フェードにかかるフレーム数を代入
 	m_frame = fade_interval;
+
+	Init();
 }
 
 void GameScene::Init()
@@ -169,6 +172,19 @@ void GameScene::UpdateNormal(Input& input)
 		m_draw = &GameScene::DrawFade;
 		//フェードアウトの最初　念のため
 		m_frame = 0;
+		m_isClear = false;//クリアしていない
+		m_isGameover = true;//ゲームオーバーになった
+		//絶対にreturnする
+		return;
+	}
+	else if (m_pChargeShotBoss->GetIsDead())
+	{
+		m_update = &GameScene::UpdateFadeOut;
+		m_draw = &GameScene::DrawFade;
+		m_isClear = true;//クリアしていない
+		m_isGameover = false;//ゲームオーバーになった
+		//フェードアウトの最初　念のため
+		m_frame = 0;
 		//絶対にreturnする
 		return;
 	}
@@ -185,12 +201,25 @@ void GameScene::UpdateFadeOut(Input& input)
 	//プレイヤーがゲームをクリアしたなら
 	//クリアシーンに遷移する
 	//死んだならゲームオーバーシーンに遷移する
-	if (m_frame >= fade_interval)
+	if (!m_isClear && m_isGameover)
 	{
-		m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller));
+		if (m_frame >= fade_interval)
+		{
+			m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller));
 
-		//絶対にreturnする
-		return;
+			//絶対にreturnする
+			return;
+		}
+	}
+	else if (m_isClear && !m_isGameover)
+	{
+		if (m_frame >= fade_interval)
+		{
+			m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
+
+			//絶対にreturnする
+			return;
+		}
 	}
 }
 
