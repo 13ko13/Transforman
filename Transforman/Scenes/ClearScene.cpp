@@ -22,17 +22,12 @@ ClearScene::ClearScene(SceneController& controller) :
 {
 	//クリアシーンの文字画像ハンドルロード
 	int handle = LoadGraph("img/clear/clear_text.png");
-	assert(handle >= 1);//Nullチェック
+	assert(handle >= 1 && "クリアシーンの文字画像");//Nullチェック
 	m_handles.push_back(handle);
 
 	//クリアシーンの背景画像ハンドルロード
 	handle = LoadGraph("img/clear/clear_background.png");
-	assert(handle >= 1);//Nullチェック
-	m_handles.push_back(handle);
-
-	//PressA画像ハンドルロード
-	handle = LoadGraph("img/clear/press_a_button.png");
-	assert(handle >= 1);
+	assert(handle >= 1 && "クリアシーンの背景画像");//Nullチェック
 	m_handles.push_back(handle);
 
 	//updateとdrawの関数ポインタにFadeInUpdateと

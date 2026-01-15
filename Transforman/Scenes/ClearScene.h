@@ -16,8 +16,7 @@ private:
 	enum class handleNumber
 	{
 		clearText,
-		clearBackground,
-		pressAGraphic,
+		clearBackground
 	};
 
 	std::vector<int> m_handles;//クリアシーンのテキスト画像ハンドル
