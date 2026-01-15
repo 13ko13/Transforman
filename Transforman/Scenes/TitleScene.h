@@ -11,7 +11,14 @@ public:
 	void Draw() override;
 
 private:
-	int m_titleLogoH;//タイトルロゴハンドル
+	enum class HandleNumber
+	{
+		TitleLogo,
+		Abutton,
+		Bbutton,
+	};
+
+	std::vector<int> m_handles;//画像ハンドルの配列
 	int m_frame;//フェード用のフレーム
 	
 	//メンバ変数ポインタを使用して内部状態を書き換える
