@@ -6,15 +6,28 @@
 #include "GameScene.h"
 #include <assert.h>
 
-//フェードにかかるフレーム数
-constexpr int fade_interval = 60;
+namespace
+{
+	//フェードにかかるフレーム数
+	constexpr int fade_interval = 60;//フェードにかかるフレーム数
+	constexpr int a_button_offset_y = 200;//Aボタン画像のYオフセット
+	constexpr float title_logo_size = 0.8f;//タイトルロゴの表示サイズ
+	constexpr float a_button_size = 0.5f;//Aボタン画像の表示サイズ
+}
 
 TitleScene::TitleScene(SceneController& controller) :
 	Scene(controller)
 {
 	//タイトルロゴハンドルに画像のハンドルを渡す
-	m_titleLogoH = LoadGraph("img/title/title_logo.png");
-	assert(m_titleLogoH >= 1);	//Nullチェック
+	int handle = -1;
+
+	handle = LoadGraph("img/title/title_logo.png");
+	assert(handle >= 1);	//Nullチェック
+	m_handles.push_back(handle);
+
+	handle = LoadGraph("img/title/press_a_button.png");
+	assert(handle >= 1);	//Nullチェック
+	m_handles.push_back(handle);
 
 	//updateとdrawの関数ポインタにFadeInUpdateと
 	//FadeDrawを参照させる
@@ -28,9 +41,12 @@ TitleScene::TitleScene(SceneController& controller) :
 TitleScene::~TitleScene()
 {
 	//画像ハンドル解放
-	DeleteGraph(m_titleLogoH);
+	for (auto handle : m_handles)
+	{
+		DeleteGraph(handle);
+	}
 	m_controller.Init();
-}
+} 
 
 void TitleScene::UpdateFadeIn(Input&)
 {
@@ -77,7 +93,12 @@ void TitleScene::DrawFade()
 	//ウィンドウサイズを変数に保存
 	const auto& wsize = Application::GetInstance().GetWindowSize();
 	//ロゴを表示
-	DrawRotaGraph(wsize.w / 2, wsize.h / 2, 0.5, 0.0f, m_titleLogoH, true);
+	DrawRotaGraph(wsize.w / 2, wsize.h / 2, static_cast<double>(title_logo_size), 0.0f, m_handles[static_cast<int>(TitleScene::HandleNumber::TitleLogo)], true);
+
+	//「Aボタンでスタート」を表示
+	DrawRotaGraph(wsize.w / 2, wsize.h / 2 + a_button_offset_y,
+		static_cast<double>(a_button_size), 0.0f, m_handles[static_cast<int>(TitleScene::HandleNumber::Abutton)], true);
+
 	//値の範囲をいったん0.0～1.0にしておくといろいろと扱いやすくなる
 	auto rate = static_cast<float>(m_frame) / static_cast<float>(fade_interval);
 	//aブレンド
@@ -93,7 +114,12 @@ void TitleScene::DrawNormal()
 	//ウィンドウサイズを変数に保存
 	const auto wsize = Application::GetInstance().GetWindowSize();
 	//ロゴを表示
-	DrawRotaGraph(wsize.w / 2, wsize.h / 2, 0.5, 0.0f, m_titleLogoH, true);
+	DrawRotaGraph(wsize.w / 2, wsize.h / 2, static_cast<double>(title_logo_size),
+		0.0f, m_handles[static_cast<int>(TitleScene::HandleNumber::TitleLogo)], true);
+
+	//「Aボタンでスタート」を表示
+	DrawRotaGraph(wsize.w / 2, wsize.h / 2 + a_button_offset_y,
+		static_cast<double>(a_button_size), 0.0f, m_handles[static_cast<int>(TitleScene::HandleNumber::Abutton)], true);
 }
 
 void TitleScene::Init()
