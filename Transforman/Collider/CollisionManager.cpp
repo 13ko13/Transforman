@@ -98,8 +98,8 @@ void CollisionManager::CheckCollisions(
 				//HP‚ª0‚É‚È‚Á‚½‚ç“G‚ðÁ‚·
 				if (enemy->GetHitPoint() > 0)
 				{
-					enemy->OnDamage();
-				}	
+					enemy->OnDamage(bullet->GetType() == BulletType::Charge);
+				}
 				//’e‚Ì‘¶Ý‚ðÁ‚·
 				bullet->SetIsAlive(false);
 			}
