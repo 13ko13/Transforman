@@ -33,7 +33,7 @@ public:
 	/// <summary>
 	/// ダメージを受けたときに呼ぶ関数
 	/// </summary>
-	void OnDamage() override;
+	void OnDamage(bool isChargeShot) override;
 private:
 	int m_GroundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数

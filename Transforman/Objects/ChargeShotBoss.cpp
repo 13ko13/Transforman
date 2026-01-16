@@ -21,11 +21,11 @@ namespace
 	constexpr int appear_time = 60;//出現からノーマルに遷移するまでの時間
 	constexpr float bullet_pos_offset = 10.0f;
 	constexpr float appear_gravity = 6.0f;//出現中の重力
-	constexpr float move_speed = 6.0f;//通常移動の速さ
+	constexpr float move_speed = 12.0f;//突進の速さ
 	constexpr float prev_rush_speed = 0.001f;//突進準備中のほんの少し動く時のスピード
-	constexpr int action_cooldown = 120;//次の行動までのフレーム数
+	constexpr int action_cooldown = 70;//次の行動までのフレーム数
 
-	constexpr int prev_rush_frame = 120;//突進準備中の時間
+	constexpr int prev_rush_frame = 60;//突進準備中の時間
 	//アニメーション関連
 	constexpr int graph_idx_idle = 0;//待機状態
 	constexpr int graph_idx_appear = 0;//出現状態(画像がないので1アイドルと同じ状態)
@@ -33,7 +33,7 @@ namespace
 	constexpr int graph_idx_shot = 1;//弾撃ち状態
 
 	constexpr int anim_wait_frame = 10;//次のアニメーションまでの待機時間
-	constexpr int anim_wait_shot = 15;//ショット中の次のアニメーションまでの待機時間
+	constexpr int anim_wait_shot = 11;//ショット中の次のアニメーションまでの待機時間
 	constexpr int anim_wait_prev_rush = 4;//突進準備中の次のアニメーションまでの待機時間
 	constexpr int anim_wait_rush = 4;//突進中のアニメーション待機時間
 
@@ -280,10 +280,18 @@ void ChargeShotBoss::OnArrive()
 	m_state = State::Appear;
 }
 
-void ChargeShotBoss::OnDamage()
+void ChargeShotBoss::OnDamage(bool isChargeShot)
 {
-	if(m_hitPoint > 0)
+	if (isChargeShot)
 	{
+		if (m_hitPoint < 0) return;//死んでるなら何もしない
+		//チャージショットなら3ダメージ
+		m_hitPoint -= 3;
+	}
+	else
+	{
+		//通常ショットなら1ダメージ
+		if (m_hitPoint < 0) return;//死んでるなら何もしない
 		m_hitPoint--;
 	}
 }
