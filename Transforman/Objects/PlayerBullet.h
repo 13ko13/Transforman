@@ -25,7 +25,9 @@ public:
 	void Draw(std::shared_ptr<Camera> pCamera) override;
 
 	void SetIsRight(bool isRight) { m_isRight = isRight; }
+
 	void SetType(BulletType bulletType) { m_bulletType = bulletType; }
+	BulletType GetType() const { return m_bulletType; }
 
 	/// <summary>
 	/// ‰Î‰Š•úË‚ğ‘Å‚Â‚Æ‚¢‚¤–½—ß‚ª”ò‚Î‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚ÔŠÖ”
