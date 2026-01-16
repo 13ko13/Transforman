@@ -103,9 +103,9 @@ void EnemyHpBar::Draw()
 {
 	//UIの描画
 	//HPの枠の描画
-	DrawRectRotaGraphLT(m_pos.x , m_pos.y ,
+	DrawRectRotaGraphLT(m_pos.x, m_pos.y,
 		0, 0, first_frame_width, frame_height,
-		graph_size, 
+		graph_size,
 		m_handles[static_cast<int>(HandleNomber::Frame)],
 		true);
 
@@ -113,11 +113,11 @@ void EnemyHpBar::Draw()
 	int midFramePos = m_pos.x + first_frame_width * graph_size;
 	//HPバーの枠が長くなりすぎてしまうため
 	//HPの1メモリを3として扱う
-	for (int i = 0; i < m_maxHP / hp_per_memory - 1;i++)
+	for (int i = 0; i < m_maxHP / hp_per_memory - 1; i++)
 	{
-		DrawRectRotaGraphLT(midFramePos + one_hp_width * graph_size * i,m_pos.y,
-			first_frame_width,0,
-			one_hp_width,frame_height,
+		DrawRectRotaGraphLT(midFramePos + one_hp_width * graph_size * i, m_pos.y,
+			first_frame_width, 0,
+			one_hp_width, frame_height,
 			graph_size,
 			m_handles[static_cast<int>(HandleNomber::Frame)],
 			true);
@@ -127,7 +127,7 @@ void EnemyHpBar::Draw()
 	int lastFramePos = (midFramePos + one_hp_width * graph_size * m_maxHP / hp_per_memory) - one_hp_width * graph_size;
 
 	DrawRectRotaGraphLT(lastFramePos, m_pos.y,
-		last_frame_srcX, 0, 
+		last_frame_srcX, 0,
 		last_frame_width, frame_height,
 		graph_size,
 		m_handles[static_cast<int>(HandleNomber::Frame)],
@@ -147,29 +147,28 @@ void EnemyHpBar::Draw()
 	}
 
 	//ピンチHP
-	for (int i = 0; i < m_maxHP / hp_per_memory / pinch_per; i++)
+	//メモリは1本あたり3HPとして扱うので3ずつ増やす
+	for (int i = 0; i < m_currentHP; i += hp_per_memory)
 	{
-		DrawRotaGraph(m_pos.x + one_hp_width * graph_size * i + draw_pinch_offset_x, m_pos.y + draw_pinch_offset_y,
+		DrawRotaGraph(m_pos.x + one_hp_width * graph_size * i / hp_per_memory + draw_pinch_offset_x, m_pos.y + draw_pinch_offset_y,
 			graph_size, 0.0, m_handles[static_cast<int>(HandleNomber::Pinch)],
 			true);
 	}
 
 	//ノーマルHP
 	//ピンチじゃないときだけ表示する
-	if (m_currentHP > m_maxHP / hp_per_memory / pinch_per)//現在HP > 最大HPの3割
+	if (m_currentHP > m_maxHP / pinch_per)//現在HP > 最大HPの3割
 	{
-		for (int i = 0; i < m_maxHP / hp_per_memory; i++)
+		//メモリは1本あたり3HPとして扱うので3ずつ増やす
+		for (int i = 0; i < m_currentHP; i += hp_per_memory)
 		{
-			DrawRotaGraph(m_pos.x + one_hp_width * graph_size * i + draw_empty_offset_x, m_pos.y + draw_empty_offset_y,
+			//現在のHP分描画
+			//iは3ずつ増えるので1メモリ分の位置調整をする
+			DrawRotaGraph(m_pos.x + one_hp_width * graph_size * i / hp_per_memory + draw_empty_offset_x, m_pos.y + draw_empty_offset_y,
 				graph_size, 0.0, m_handles[static_cast<int>(HandleNomber::Normal)],
 				true);
 		}
 	}
-	else
-	{
-		//何も行わない
-	}
-	
 
 #ifdef _DEBUG
 	DrawFormatString(0, 215, 0xffffff, "EnemyHitPoint : %d", m_currentHP);
