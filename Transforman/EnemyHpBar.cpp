@@ -8,9 +8,14 @@ namespace
 	constexpr int graph_height = 30;//HPバーと高さ
 
 	//描画位置オフセット
-	constexpr int draw_fir_offset_x = 43;
-	constexpr int first_frame_offset_x = 1000;
-	constexpr int draw_offset_y = 90;
+	constexpr int draw_frame_x = 800;//枠の位置
+	constexpr int draw_frame_y = 10;//枠の位置
+	constexpr int draw_empty_offset_x = 75;//空HPのXオフセット
+	constexpr int draw_empty_offset_y = 75;//空HPのXオフセット
+	constexpr int draw_heart_offset_x = 125;//ハートのXオフセット
+	constexpr int draw_heart_offset_y = 75;//ハートのYオフセット
+	constexpr int draw_pinch_offset_x = 150;//ピンチHPのXオフセット
+	constexpr int draw_pinch_offset_y = 75;//ピンチHPのYオフセット
 
 	constexpr int pinch_hp = 2;//ピンチと判断するHP
 	constexpr int normal_hp = 3;//通常と判断するHP
@@ -39,6 +44,9 @@ namespace
 	constexpr int one_hp_width = 5;//1メモリの幅
 	constexpr int empty_hp_offset_x = 15;//空HPの描画位置オフセット
 	constexpr int pinch_hp_offset = 15;//ピンチ時HPの描画位置オフセット
+
+	constexpr int hp_per_memory = 3;//HPバーのメモリ1つ当たりのHP
+	constexpr int pinch_per = 3;//HPがピンチHPメモリになる割合
 }
 
 EnemyHpBar::EnemyHpBar(int maxHitPoint) :
@@ -70,7 +78,7 @@ EnemyHpBar::EnemyHpBar(int maxHitPoint) :
 	//HPを設定
 	m_currentHP = m_maxHP;
 
-	m_pos = { first_frame_offset_x ,draw_offset_y };
+	m_pos = { draw_frame_x ,draw_frame_y };
 }
 
 EnemyHpBar::~EnemyHpBar()
@@ -93,101 +101,91 @@ void EnemyHpBar::Update(int currentHP)
 
 void EnemyHpBar::Draw()
 {
-#ifdef _DEBUG
-	DrawFormatString(0, 215, 0xffffff, "EnemyHitPoint : %d", m_currentHP);
-#endif // _DEBUG
-
 	//UIの描画
 	//HPの枠の描画
-	//元画像の枠が5HP分しかないので
-	//6HP以上の場合は1メモリを伸ばして枠を伸ばす
-	//最初の枠の描画
-	DrawRectRotaGraph(
-		static_cast<int>(m_pos.x) - draw_fir_offset_x,
-		static_cast<int>(m_pos.y),
-		0,0,
-		first_frame_width, frame_height,
-		graph_size, 0.0,
+	DrawRectRotaGraphLT(m_pos.x , m_pos.y ,
+		0, 0, first_frame_width, frame_height,
+		graph_size, 
 		m_handles[static_cast<int>(HandleNomber::Frame)],
-		true, false);
+		true);
 
-	//1メモリを伸ばす場所の描画
-	for (int i = 0; i < m_maxHP - 1; ++i) {
-		DrawRectRotaGraph(
-			static_cast<int>(m_pos.x + first_frame_width + i * next_hp_offset),//X座標
-			static_cast<int>(m_pos.y),//Y座標
-			first_frame_width, 0,//切り取り開始位置
-			one_hp_width, frame_height,//切り取りサイズ
-			graph_size, 0.0,
+	//枠の真ん中を表示する位置
+	int midFramePos = m_pos.x + first_frame_width * graph_size;
+	//HPバーの枠が長くなりすぎてしまうため
+	//HPの1メモリを3として扱う
+	for (int i = 0; i < m_maxHP / hp_per_memory - 1;i++)
+	{
+		DrawRectRotaGraphLT(midFramePos + one_hp_width * graph_size * i,m_pos.y,
+			first_frame_width,0,
+			one_hp_width,frame_height,
+			graph_size,
 			m_handles[static_cast<int>(HandleNomber::Frame)],
-			true, false);
+			true);
 	}
 
-	//最後の枠の描画
-	const int firAndMidWidth = first_frame_width + (m_maxHP - 1) * one_hp_width;//最初と中間の枠の合計幅
-	DrawRectRotaGraph(
-		static_cast<int>( m_pos.x + firAndMidWidth) + draw_last_offset_x,//X座標
-		static_cast<int>(m_pos.y),//Y座標
-		last_frame_srcX, 0,//切り取り開始位置
-		last_frame_width, frame_height,//切り取りサイズ
-		graph_size, 0.0,//画像倍率と回転角度
+	//枠の最後を表示する位置
+	int lastFramePos = (midFramePos + one_hp_width * graph_size * m_maxHP / hp_per_memory) - one_hp_width * graph_size;
+
+	DrawRectRotaGraphLT(lastFramePos, m_pos.y,
+		last_frame_srcX, 0, 
+		last_frame_width, frame_height,
+		graph_size,
 		m_handles[static_cast<int>(HandleNomber::Frame)],
-		true, false);
+		true);
 
-	//ハートの描画
-	DrawRotaGraph(
-		static_cast<int>(m_pos.x + 60),
-		static_cast<int>(m_pos.y),
-		graph_size, 0.0,
-		m_handles[static_cast<int>(HandleNomber::Heart)],
-		true, false);
+	//ハートの表示
+	DrawRotaGraph(m_pos.x + one_hp_width * graph_size + draw_heart_offset_x, m_pos.y + draw_heart_offset_y,
+		graph_size, 0.0, m_handles[static_cast<int>(HandleNomber::Heart)],
+		true);
 
-	//HPバーの空の部分を先に描画しておいて
-	//その上に現在のHPを描画する
-	for (int i = 0; i < m_maxHP; ++i)
+	//空HPの表示
+	for (int i = 0; i < m_maxHP / hp_per_memory; i++)
 	{
-		//空HPの描画
-		DrawRotaGraph(
-			static_cast<int>(m_pos.x + i * next_hp_offset - empty_hp_offset_x),
-			static_cast<int>(m_pos.y),
-			graph_size, 0.0,
-			m_handles[static_cast<int>(HandleNomber::Empty)],
-			true, false);
+		DrawRotaGraph(m_pos.x + one_hp_width * graph_size * i + draw_empty_offset_x, m_pos.y + draw_empty_offset_y,
+			graph_size, 0.0, m_handles[static_cast<int>(HandleNomber::Empty)],
+			true);
 	}
 
-	switch (m_currentHP)
+	//ピンチHP
+	for (int i = 0; i < m_maxHP / hp_per_memory / pinch_per; i++)
 	{
-	case hp_1://HPが1の時
-	case hp_2://HPが2の時
-		for (int i = 0; i < m_currentHP; ++i)
-		{
-			//ピンチ時のHPの描画
-			DrawRotaGraph(
-				static_cast<int>(m_pos.x  + i * next_hp_offset + 60),
-				static_cast<int>(m_pos.y ),
-				graph_size, 0.0,
-				m_handles[static_cast<int>(HandleNomber::Pinch)],
-				true, false);
-		}
-		break;
-	case hp_3://HPが3の時
-	case hp_4://HPが4の時
-	case hp_5://HPが5の時
-	case hp_6://HPが6の時
-	case hp_7://HPが7の時
-	case hp_8://HPが8の時
-	case hp_9://HPが9の時
-	case hp_10://HPが10の時
-		for (int i = 0; i < m_currentHP; ++i)
-		{
-			//ノーマルHP描画
-			DrawRotaGraph(
-				static_cast<int>(m_pos.x + i * next_hp_offset - pinch_hp_offset),
-				static_cast<int>(m_pos.y),
-				graph_size, 0.0,
-				m_handles[static_cast<int>(HandleNomber::Normal)],
-				true, false);
-		}
-		break;
+		DrawRotaGraph(m_pos.x + one_hp_width * graph_size * i + draw_pinch_offset_x, m_pos.y + draw_pinch_offset_y,
+			graph_size, 0.0, m_handles[static_cast<int>(HandleNomber::Pinch)],
+			true);
 	}
+
+	//ノーマルHP
+	//ピンチじゃないときだけ表示する
+	if (m_currentHP > m_maxHP / hp_per_memory / pinch_per)//現在HP > 最大HPの3割
+	{
+		for (int i = 0; i < m_maxHP / hp_per_memory; i++)
+		{
+			DrawRotaGraph(m_pos.x + one_hp_width * graph_size * i + draw_empty_offset_x, m_pos.y + draw_empty_offset_y,
+				graph_size, 0.0, m_handles[static_cast<int>(HandleNomber::Normal)],
+				true);
+		}
+	}
+	else
+	{
+		//何も行わない
+	}
+	
+
+#ifdef _DEBUG
+	DrawFormatString(0, 215, 0xffffff, "EnemyHitPoint : %d", m_currentHP);
+	DrawPixel(m_pos.x, m_pos.y, 0xffaaff);
+	DrawPixel(m_pos.x + first_frame_width * 5, m_pos.y, 0xffaaff);
+
+#endif // _DEBUG
+}
+
+inline void EnemyHpBar::DrawRectRotaGraphLT(int x, int y, int srcX, int srcY, int srcW, int srcH, double scale, int handle, bool trans)
+{
+	DrawRectRotaGraph2(
+		x, y,
+		srcX, srcY, srcW, srcH,
+		0.0f, 0.0f,//CenterX,CenterYを0.0に
+		scale, 0.0f,//拡大、角度
+		handle, trans
+	);
 }

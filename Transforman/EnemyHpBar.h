@@ -21,6 +21,13 @@ private:
 		Empty,//空HP
 	};
 
+	inline void DrawRectRotaGraphLT(
+		int x, int y,//描画先の左上座標
+		int srcX, int srcY,//切り取り元の左上
+		int srcW, int srcH,//切り取りサイズ
+		double scale,//拡大率
+		int handle, bool trans);
+
 	int m_maxHP;
 	int m_currentHP;
 	std::vector<int> m_handles;//ヒットポイントの画像ハンドル
