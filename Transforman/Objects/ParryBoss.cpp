@@ -410,7 +410,7 @@ void ParryBoss::DamageUpdate(GameContext& ctx)
 	}
 }
 
-void ParryBoss::OnDamage()
+void ParryBoss::OnDamage(bool isChargeShot)
 {
 	//パリィを発動中はダメージを食らわない
 	if (m_hasParried ||
