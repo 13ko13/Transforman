@@ -12,21 +12,21 @@ namespace
 	constexpr float ground = Graphic::screen_height - 220;	//地面の高さ(仮)
 	constexpr int move_speed = 5;							//移動速度
 	constexpr int debug_speed = 10;							//デバッグ用でプレイヤーのスピードを変えたときの値
-	constexpr int size_width = 40;						//キャラクターの横幅
-	constexpr int size_height = 50;					//キャラクターの高さ
-	constexpr int graph_width = 40;					//画像の横切り取りサイズ
-	constexpr int graph_height = 40;					//画像の縦切り取りサイズ
+	constexpr int size_width = 40;							//キャラクターの横幅
+			constexpr int size_height = 50;					//キャラクターの高さ
+			constexpr int graph_width = 40;					//画像の横切り取りサイズ
+	constexpr int graph_height = 40;						//画像の縦切り取りサイズ
 	constexpr int rect_offset_y = 12;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 	constexpr double draw_scale = 2.0f;						//描画スケール	
 
-	constexpr int knockback_duration = 15;				//ノックバックする時間
+	constexpr int knockback_duration = 15;					//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
 	constexpr float knockback_jump = -7.0f;					//縦のノックバック力
 
 	constexpr int max_jump_frame = 15;						//最大ジャンプ入力時間
 	constexpr float jump_power = 12.0f;						//ジャンプ力
 
-	constexpr int shot_cooltime = 7;						//ショットのクールタイム
+	constexpr int shot_cooltime = 13;						//ショットのクールタイム
 	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
