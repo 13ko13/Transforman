@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// ダメージを受けたときに呼び出される関数
 	/// </summary>
-	void OnDamage() override;
+	void OnDamage(bool isChargeShot) override;
 
 private:
 	/// <summary>

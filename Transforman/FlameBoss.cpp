@@ -43,7 +43,7 @@ void FlameBoss::OnArrive()
 {
 }
 
-void FlameBoss::OnDamage()
+void FlameBoss::OnDamage(bool isChargeShot)
 {
 }
 
