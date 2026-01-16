@@ -30,7 +30,7 @@ public:
 	/// <summary>
 	/// ダメージを受けたときに呼び出される関数
 	/// </summary>
-	virtual void OnDamage() abstract;
+	virtual void OnDamage(bool isChargeShot) abstract;
 
 	/// <summary>
 	/// エネミーの体力を取得する関数
