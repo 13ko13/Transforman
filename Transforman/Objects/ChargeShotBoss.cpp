@@ -5,6 +5,7 @@
 #include <cassert>
 #include "../Graphics/Camera.h"
 #include "../General/GameConstants.h"
+#include "../EffectFactory.h"
 #include "../Stages/Stage.h"
 
 namespace
@@ -48,8 +49,8 @@ namespace
 	constexpr int shake_power = 7;//’n–Ê‚É’…’n‚µ‚½‚Æ‚«‚ÌƒJƒƒ‰‚Ì—h‚ê—Í
 }
 
-ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap) :
-	EnemyBase(size_width, size_height, pMap),
+ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
+	EnemyBase(size_width, size_height, pMap, effectfactory),
 	m_prevRushTime(0),
 	m_actionCooldown(0),
 	m_isRushing(false),
@@ -421,6 +422,8 @@ void ChargeShotBoss::PrevRushUpdate(GameContext& ctx)
 		if (m_prevRushTime < 0)
 		{
 			m_velocity.x = 0.0f;
+			const Vector2 offset = { 0.0f,0.0f };
+			m_pEffectFactory->CreateFollow(shared_from_this(), EffectType::rush, offset);
 			m_state = State::Rush;
 		}
 	}

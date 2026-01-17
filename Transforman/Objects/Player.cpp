@@ -58,8 +58,8 @@ namespace
 	const Vector2 spawn_pos = { 180.0f,583.0f };
 }
 
-Player::Player(std::shared_ptr<Map> pMap) :
-	Charactor(size_width, size_height, pMap),
+Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
+	Charactor(size_width, size_height, pMap, effectfactory),
 	m_isJumping(false),
 	m_isPrevJump(false),
 	m_isCharging(false),

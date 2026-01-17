@@ -1,14 +1,18 @@
 #pragma once
 #include "Objects/Object.h"
 #include "Collider/Rect.h"
+#include "PosProvider.h"
 #include <memory>
 
 struct GameContext;
 class Map;
-class Charactor :public Object
+class EffectFactory;
+class Charactor :public Object,
+	public PosProvider
 {
 public:
-	Charactor(int width,int height,std::shared_ptr<Map> pMap);
+	Charactor(int width,int height,std::shared_ptr<Map> pMap,
+		std::shared_ptr<EffectFactory> effectfactory);
 	virtual ~Charactor();
 	virtual void Init() override;
 	virtual void Update(GameContext& ctx) override;
@@ -44,11 +48,14 @@ public:
 	/// <returns>true:‰E,false:¶</returns>
 	virtual const bool GetIsRight() const { return m_isRight; }
 
+	Vector2 GetPos() const override { return m_pos; }
+
 private:
 
 protected:
 	Rect m_colRect;
 	std::shared_ptr<Map> m_pMap;
+	std::shared_ptr<EffectFactory> m_pEffectFactory;
 	bool m_isDead;//€–S‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	bool m_isGround;//Ú’n‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	bool m_isRight;//‰E‚ğŒü‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©

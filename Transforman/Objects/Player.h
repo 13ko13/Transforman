@@ -28,10 +28,11 @@ enum class WeaponType
 };
 
 class PlayerBullet;
+class EffectFactory;
 class Player : public Charactor
 {
 public:
-	Player(std::shared_ptr<Map> pMap);
+	Player(std::shared_ptr<Map> pMap,std::shared_ptr<EffectFactory> effectfactory);
 	~Player();
 
 	void Init() override;

@@ -20,6 +20,7 @@ class GameManager;
 class Text;
 class ParryBoss;
 class UIManager;
+class EffectFactory;
 class GameScene : public Scene
 {
 public:
@@ -43,6 +44,7 @@ private:
 	std::vector<std::shared_ptr<Charactor>> m_pCharactors;//キャラクターの配列
 	std::shared_ptr<GameManager> m_pGameManager;//ゲームマネージャー
 	std::shared_ptr<UIManager> m_pUIManager;//UIマネージャー
+	std::shared_ptr<EffectFactory> m_pEffectFactory;//エフェクトファクトリー
 
 	int m_frame;//フェード用のフレーム
 

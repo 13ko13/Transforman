@@ -38,8 +38,6 @@ public:
 	/// </summary>
 	void Gravity();
 
-	const Vector2& GetPos() const { return m_pos; }
-
 protected:
 	int m_handle;	//画像のハンドル
 	int m_frame;//現在のフレーム数

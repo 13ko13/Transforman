@@ -5,10 +5,13 @@
 
 class EnemyBullet;
 class Player;
-class ChargeShotBoss : public EnemyBase
+class EffectFactory;
+class ChargeShotBoss : public EnemyBase,
+	public std::enable_shared_from_this<ChargeShotBoss>
 {
 public:
-	ChargeShotBoss(std::shared_ptr<Map> pMap);
+	ChargeShotBoss(std::shared_ptr<Map> pMap,
+		std::shared_ptr<EffectFactory> effectfactory);
 	~ChargeShotBoss();
 
 	void Init() override;

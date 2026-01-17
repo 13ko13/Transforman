@@ -46,8 +46,8 @@ namespace
 	constexpr int shake_power = 7;//—‰ºUŒ‚’…’n‚ÌƒJƒƒ‰—h‚ê—Í
 }
 
-ParryBoss::ParryBoss(std::shared_ptr<Map> pMap) :
-	EnemyBase(size_width, size_height, pMap),
+ParryBoss::ParryBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
+	EnemyBase(size_width, size_height, pMap, effectfactory),
 	m_state(State::Idle),
 	m_moveCooldown(first_move_cooldown),
 	m_parryCooldown(0),

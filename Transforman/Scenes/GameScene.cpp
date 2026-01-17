@@ -15,6 +15,7 @@
 #include "GameoverScene.h"
 #include "ClearScene.h"
 #include "../Main/Application.h"
+#include "../EffectFactory.h"
 #include <DxLib.h>
 
 namespace
@@ -36,8 +37,11 @@ GameScene::GameScene(SceneController& controller) :
 	m_pMap = std::make_shared<Map>(m_pStage);
 	m_pMap->SetStageType(StageType::Stage1);
 
+	//エフェクトファクトリーの生成
+	m_pEffectFactory = std::make_shared<EffectFactory>();
+
 	// プレイヤーの生成
-	m_pPlayer = std::make_shared<Player>(m_pMap);
+	m_pPlayer = std::make_shared<Player>(m_pMap,m_pEffectFactory);
 	// プレイヤーの弾の生成
 	m_pPlayerBullets.resize(p_bullet_max);
 	for (auto& bullet : m_pPlayerBullets)
@@ -54,11 +58,10 @@ GameScene::GameScene(SceneController& controller) :
 	//チャージショットボス、パリィボス、火炎放射ボス、植物系ボスの4体
 	m_pEnemies.resize(0);
 	//チャージショットボスを試しに追加する
-	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>(m_pMap);
+	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>(m_pMap, m_pEffectFactory);
 	m_pEnemies.push_back(m_pChargeShotBoss);
-	//ToDo
-	//1ステージ完成したらコメント化を解除する
-	m_pParryBoss = std::make_shared<ParryBoss>(m_pMap);
+	//ToDo:1ステージ完成したらコメント化を解除する
+	m_pParryBoss = std::make_shared<ParryBoss>(m_pMap, m_pEffectFactory);
 	//m_pEnemies.push_back(m_pParryBoss);
 
 	//キャラクターすべてを配列に入れる
@@ -165,6 +168,9 @@ void GameScene::UpdateNormal(Input& input)
 	//UIマネージャー更新
 	m_pUIManager->Update(m_pPlayer, m_pChargeShotBoss);
 
+	//エフェクトファクトリー更新
+	m_pEffectFactory->Update();
+
 	//プレイヤーが死んだらフェードアウトに遷移する
 	if (m_pPlayer->GetIsDead())
 	{
@@ -268,4 +274,7 @@ void GameScene::DrawNormal()
 
 	//UIマネージャーの描画
 	m_pUIManager->Draw();
+
+	//エフェクトファクトリーの描画
+	m_pEffectFactory->Draw(m_pCamera);
 }

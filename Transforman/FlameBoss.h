@@ -12,10 +12,11 @@ enum class GraphNumber
 	FlameIdle,
 };
 
+class EffectFactory;
 class FlameBoss : public EnemyBase
 {
 public:
-	FlameBoss(std::shared_ptr<Map> pMap);
+	FlameBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory);
     ~FlameBoss();
 
 	void Init() override;

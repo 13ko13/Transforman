@@ -2,10 +2,11 @@
 #include "EnemyBase.h"
 
 class Animation;
+class EffectFactory;
 class ParryBoss : public EnemyBase
 {
 public:
-	ParryBoss(std::shared_ptr<Map> pMap);
+	ParryBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory);
 	~ParryBoss();
 
 	void Init() override;

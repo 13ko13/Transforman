@@ -10,8 +10,8 @@ namespace
 	const Vector2 first_pos = { 3000.0f, -50.0f };
 }
 
-FlameBoss::FlameBoss(std::shared_ptr<Map> pMap) :
-	EnemyBase(size_width, size_height, pMap)
+FlameBoss::FlameBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
+	EnemyBase(size_width, size_height, pMap, effectfactory)
 {
 	m_pos = first_pos;
 	m_pos = first_pos;

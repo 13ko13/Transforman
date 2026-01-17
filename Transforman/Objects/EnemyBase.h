@@ -9,13 +9,15 @@
 // プロトタイプ宣言
 class Player;
 struct GameContext;
+class EffectFactory;
 /// <summary>
 /// エネミー全体の基底クラス
 /// </summary>
 class EnemyBase : public Charactor
 {
 public:
-	EnemyBase(int width,int height,std::shared_ptr<Map> pMap);
+	EnemyBase(int width,int height,std::shared_ptr<Map> pMap,
+		std::shared_ptr<EffectFactory> effectfactory);
 	virtual ~EnemyBase();
 
 	virtual void Init() override;

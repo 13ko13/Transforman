@@ -1,27 +1,28 @@
 #pragma once
 #include <vector>
 #include "Utility/Geometry.h"
+#include "PosProvider.h"
 #include <list>
 #include <memory>
 
 enum class EffectType
 {
-	SmallExplosion,
-	LargeExplosion,
-	NumEffectType
+	rush,//ラッシュエフェクト
 };
 
 class Effect;
+class Camera;
 class EffectFactory
 {
 public:
-	EffectFactory();
+	EffectFactory(); 
 	void Create(const Vector2& pos, EffectType type);
+	void CreateFollow(std::shared_ptr<PosProvider> target, EffectType type, const Vector2& offset);
 	void Update();
-	void Draw();
+	void Draw(const std::shared_ptr<Camera>& pCamera);
 
 private:
 	std::vector<int> m_handles;//エフェクトの画像ハンドル
-	//std::list<std::shared_ptr<Effect>> m_effects;//エフェクトのリスト
+	std::list<std::shared_ptr<Effect>> m_effects;//エフェクトのリスト
 };
 
