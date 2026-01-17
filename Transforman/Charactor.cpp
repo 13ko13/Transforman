@@ -1,8 +1,10 @@
 #include "Charactor.h"
 #include "Graphics/Camera.h"
+#include "EffectFactory.h"
 #include "Map.h"
 
-Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap) :
+Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap,
+	std::shared_ptr<EffectFactory> effectfactory) :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),
 	m_isGround(false),
 	m_isRight(false),
@@ -11,6 +13,7 @@ Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap) :
 	m_height(height)
 {
 	m_pMap = pMap;
+	m_pEffectFactory = effectfactory;
 	//“–‚½‚è”»’è‚ğ‰Šú‰»
 	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(m_width - 1), static_cast<float>(m_height - 1));
 }
