@@ -70,11 +70,6 @@ void RushEffect::Update()
 
 void RushEffect::Draw(const std::shared_ptr<Camera>& pCamera)
 {
-
-	static int aliveCounter = 0;
-	DrawFormatString(0, 80, 0xffffff, "RushEffect Draw alive:%d", aliveCounter++);
-
-
 	if (m_isDead) return;
 	const Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
 	m_animation.Draw(drawPos,false);
