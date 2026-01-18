@@ -3,36 +3,87 @@
   "WorkspaceRootPath": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Charactor.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Charactor.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Objects\\ChargeShotBoss.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\HitWallEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:HitWallEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Charactor.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Charactor.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Objects\\ChargeShotBoss.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Collider\\CollisionManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Collider\\CollisionManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Collider\\CollisionManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Collider\\CollisionManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\EnemyBase.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Objects\\EnemyBase.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Objects\\Player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\Player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Objects\\Player.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\DashEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:DashEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\DashEffect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:DashEffect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\EffectFactory.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:EffectFactory.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Effect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Effect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\EffectFactory.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:EffectFactory.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\RushEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:RushEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\SaveData.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:SaveData.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\RushEffect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:RushEffect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\PROGRAM FILES (X86)\\WINDOWS KITS\\10\\INCLUDE\\10.0.26100.0\\UM\\OLE.H||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Effect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:Effect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\HitWallEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:HitWallEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\HitWallEffect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:HitWallEffect.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\RushEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|solutionrelative:RushEffect.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A9A20936-6C8A-4AA6-8F77-430DA2777303}|Transforman.vcxproj|C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\GameManager.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -58,11 +109,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 21,
               "Title": "GameManager.cpp",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\GameManager.cpp",
               "RelativeDocumentMoniker": "GameManager.cpp",
@@ -71,12 +122,11 @@
               "ViewState": "AgIAABYAAAAAAAAAAAAcwCsAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-12-07T14:29:34.551Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 23,
               "Title": "GameManager.h",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\GameManager.h",
               "RelativeDocumentMoniker": "GameManager.h",
@@ -89,35 +139,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ChargeShotBoss.cpp",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.cpp",
-              "RelativeDocumentMoniker": "Objects\\ChargeShotBoss.cpp",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.cpp*",
-              "RelativeToolTip": "Objects\\ChargeShotBoss.cpp*",
-              "ViewState": "AgIAAH0BAAAAAAAAAAD4v4kBAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-26T13:49:00.687Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ChargeShotBoss.h",
-              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.h",
-              "RelativeDocumentMoniker": "Objects\\ChargeShotBoss.h",
-              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.h",
-              "RelativeToolTip": "Objects\\ChargeShotBoss.h",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAABIAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-11-27T12:58:27.699Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 24,
               "Title": "Application.cpp",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Main\\Application.cpp",
               "RelativeDocumentMoniker": "Main\\Application.cpp",
@@ -130,7 +152,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 22,
               "Title": "GameoverScene.cpp",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Scenes\\GameoverScene.cpp",
               "RelativeDocumentMoniker": "Scenes\\GameoverScene.cpp",
@@ -139,18 +161,17 @@
               "ViewState": "AgIAAAYAAAAAAAAAAAAAACEAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-01-13T03:23:11.819Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 19,
               "Title": "HitWallEffect.h",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\HitWallEffect.h",
               "RelativeDocumentMoniker": "HitWallEffect.h",
               "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\HitWallEffect.h",
               "RelativeToolTip": "HitWallEffect.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-01-18T08:21:37.72Z",
               "IsPinned": true,
@@ -158,13 +179,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 18,
               "Title": "HitWallEffect.cpp",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\HitWallEffect.cpp",
               "RelativeDocumentMoniker": "HitWallEffect.cpp",
               "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\HitWallEffect.cpp",
               "RelativeToolTip": "HitWallEffect.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAIwCQAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-01-18T09:30:57.489Z",
               "IsPinned": true,
@@ -172,28 +193,197 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
+              "Title": "CollisionManager.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Collider\\CollisionManager.h",
+              "RelativeDocumentMoniker": "Collider\\CollisionManager.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Collider\\CollisionManager.h",
+              "RelativeToolTip": "Collider\\CollisionManager.h",
+              "ViewState": "AgIAAAwAAAAAAAAAAADwvxEAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T12:53:31.044Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CollisionManager.cpp",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Collider\\CollisionManager.cpp",
+              "RelativeDocumentMoniker": "Collider\\CollisionManager.cpp",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Collider\\CollisionManager.cpp",
+              "RelativeToolTip": "Collider\\CollisionManager.cpp",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAADcAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-18T12:53:29.832Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EnemyBase.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\EnemyBase.h",
+              "RelativeDocumentMoniker": "Objects\\EnemyBase.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\EnemyBase.h",
+              "RelativeToolTip": "Objects\\EnemyBase.h",
+              "ViewState": "AgIAAAwAAAAAAAAAAADwvyIAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T12:38:21.743Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Charactor.cpp",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Charactor.cpp",
+              "RelativeDocumentMoniker": "Charactor.cpp",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Charactor.cpp",
+              "RelativeToolTip": "Charactor.cpp",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAAwHEAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-18T12:36:49.269Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Charactor.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Charactor.h",
+              "RelativeDocumentMoniker": "Charactor.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Charactor.h",
+              "RelativeToolTip": "Charactor.h",
+              "ViewState": "AgIAACcAAAAAAAAAAADwv0AAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T12:36:48.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DashEffect.cpp",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\DashEffect.cpp",
+              "RelativeDocumentMoniker": "DashEffect.cpp",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\DashEffect.cpp",
+              "RelativeToolTip": "DashEffect.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-18T11:41:28.714Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Player.cpp",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\Player.cpp",
+              "RelativeDocumentMoniker": "Objects\\Player.cpp",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\Player.cpp",
+              "RelativeToolTip": "Objects\\Player.cpp",
+              "ViewState": "AgIAAJMBAAAAAAAAAAAAAKsBAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-18T11:57:59.686Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Player.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\Player.h",
+              "RelativeDocumentMoniker": "Objects\\Player.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\Player.h",
+              "RelativeToolTip": "Objects\\Player.h",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAmwC8AAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T11:56:52.873Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "EffectFactory.cpp",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\EffectFactory.cpp",
               "RelativeDocumentMoniker": "EffectFactory.cpp",
               "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\EffectFactory.cpp",
               "RelativeToolTip": "EffectFactory.cpp",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAFMAAAACAAAAAAAAAA==",
+              "ViewState": "AgIAACAAAAAAAAAAAAAIwDIAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-01-18T09:34:13.702Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 12,
+              "Title": "Effect.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Effect.h",
+              "RelativeDocumentMoniker": "Effect.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Effect.h",
+              "RelativeToolTip": "Effect.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T11:47:00.638Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DashEffect.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\DashEffect.h",
+              "RelativeDocumentMoniker": "DashEffect.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\DashEffect.h",
+              "RelativeToolTip": "DashEffect.h",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACAAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T11:40:27.808Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "EffectFactory.h",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\EffectFactory.h",
               "RelativeDocumentMoniker": "EffectFactory.h",
               "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\EffectFactory.h",
               "RelativeToolTip": "EffectFactory.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwoAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxUAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-01-18T09:33:58.694Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "SaveData.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\SaveData.h",
+              "RelativeDocumentMoniker": "SaveData.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\SaveData.h",
+              "RelativeToolTip": "SaveData.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T12:11:52.452Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ole.h",
+              "DocumentMoniker": "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\um\\ole.h",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\um\\ole.h",
+              "ToolTip": "C:\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\um\\ole.h",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\Program Files (x86)\\Windows Kits\\10\\Include\\10.0.26100.0\\um\\ole.h",
+              "ViewState": "AgIAAP0AAAAAAAAAAAAIwA8BAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-01-18T11:47:32.723Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Effect.cpp",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Effect.cpp",
+              "RelativeDocumentMoniker": "Effect.cpp",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Effect.cpp",
+              "RelativeToolTip": "Effect.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAIwBEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-01-18T11:47:22.603Z",
               "EditorCaption": ""
             }
           ]
@@ -207,40 +397,66 @@
         "Id": "5b6b3320-4ae8-49ca-bfac-6cc58789cd7f",
         "Display": 0,
         "X": 789,
-        "Y": 201,
+        "Y": 276,
         "Width": 1677,
-        "Height": 767,
+        "Height": 692,
         "WindowState": 0
       },
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 15,
               "Title": "RushEffect.h",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\RushEffect.h",
               "RelativeDocumentMoniker": "RushEffect.h",
               "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\RushEffect.h",
               "RelativeToolTip": "RushEffect.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvxQAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxcAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-01-18T08:24:02.798Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 20,
               "Title": "RushEffect.cpp",
               "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\RushEffect.cpp",
               "RelativeDocumentMoniker": "RushEffect.cpp",
               "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\RushEffect.cpp",
               "RelativeToolTip": "RushEffect.cpp",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAADIAAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAEgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-01-18T08:24:16.648Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ChargeShotBoss.h",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.h",
+              "RelativeDocumentMoniker": "Objects\\ChargeShotBoss.h",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.h",
+              "RelativeToolTip": "Objects\\ChargeShotBoss.h",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAEUAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-11-27T12:58:27.699Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ChargeShotBoss.cpp",
+              "DocumentMoniker": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.cpp",
+              "RelativeDocumentMoniker": "Objects\\ChargeShotBoss.cpp",
+              "ToolTip": "C:\\Users\\Admin\\Documents\\GitHub\\Transforman\\Transforman\\Objects\\ChargeShotBoss.cpp",
+              "RelativeToolTip": "Objects\\ChargeShotBoss.cpp",
+              "ViewState": "AgIAAK8BAAAAAAAAAAAgwNEBAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-26T13:49:00.687Z",
               "EditorCaption": ""
             }
           ]
