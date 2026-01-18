@@ -8,6 +8,7 @@
 #include "../Collider/Rect.h"
 #include "../Objects/ParryBoss.h"
 #include "../Graphics/Camera.h"
+#include "../Charactor.h"
 
 namespace
 {
@@ -77,6 +78,8 @@ void CollisionManager::CheckCollisions(
 			if (pPlayer->GetHitPoint() != 0)
 			{
 				pPlayer->OnDamage(dir);
+				//キャラクター共通処理のOnDamageを呼ぶ
+				pPlayer->Charactor::OnDamage();
 			}
 		}
 		else
@@ -99,6 +102,7 @@ void CollisionManager::CheckCollisions(
 				if (enemy->GetHitPoint() > 0)
 				{
 					enemy->OnDamage(bullet->GetType() == BulletType::Charge);
+					enemy->Charactor::OnDamage();
 				}
 				//弾の存在を消す
 				bullet->SetIsAlive(false);
@@ -188,6 +192,7 @@ void CollisionManager::CheckCollisions(
 		if (pPlayer->GetHitPoint() != 0)
 		{
 			pPlayer->OnDamage(dir);
+			pPlayer->Charactor::OnDamage();
 		}
 
 		//プレイヤーが死んでいるとき以外画面を揺らす
