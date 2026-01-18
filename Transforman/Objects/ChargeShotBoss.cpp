@@ -6,6 +6,7 @@
 #include "../Graphics/Camera.h"
 #include "../General/GameConstants.h"
 #include "../EffectFactory.h"
+#include "../Effect.h"
 #include "../Stages/Stage.h"
 
 namespace
@@ -47,6 +48,9 @@ namespace
 	constexpr int max_hitpoint = 30;//ボスの最大体力
 
 	constexpr int shake_power = 7;//地面に着地したときのカメラの揺れ力
+
+	//エフェクトを出す指定位置
+	constexpr float rush_effect_offset_y = 200.0f;
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -382,6 +386,17 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 
 		if (isColWall)
 		{
+			//壁にぶつかったのでエフェクトを消す
+			if (auto rushEffect = m_rushEffect.lock())
+			{
+				rushEffect->Kill();
+			}
+
+			//壁にぶつかったエフェクトを出す
+			Vector2 effectPos = m_pos;
+			effectPos.y -= rush_effect_offset_y;//エフェクトの位置調整
+			m_pEffectFactory->Create(effectPos, EffectType::hitWall);
+
 			//ステートをアイドルに戻す
 			m_state = State::Idle;
 			m_isRushing = false;
@@ -389,7 +404,7 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 		}
 	}
 }
-
+	
 void ChargeShotBoss::PrevRushUpdate(GameContext& ctx)
 {
 	//生きているなら行動させる
@@ -423,7 +438,7 @@ void ChargeShotBoss::PrevRushUpdate(GameContext& ctx)
 		{
 			m_velocity.x = 0.0f;
 			const Vector2 offset = { 0.0f,0.0f };
-			m_pEffectFactory->CreateFollow(shared_from_this(), EffectType::rush, offset);
+			m_rushEffect = m_pEffectFactory->CreateFollow(shared_from_this(), EffectType::rush, offset);
 			m_state = State::Rush;
 		}
 	}

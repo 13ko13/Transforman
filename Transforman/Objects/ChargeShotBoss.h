@@ -6,6 +6,7 @@
 class EnemyBullet;
 class Player;
 class EffectFactory;
+class Effect;
 class ChargeShotBoss : public EnemyBase,
 	public std::enable_shared_from_this<ChargeShotBoss>
 {
@@ -43,6 +44,8 @@ private:
 	bool m_isRushing;//突進中かどうか
 	int m_actionCooldown;//次の行動までのフレーム数
 	bool m_isStart;//ボス戦が始まっているかどうか
+
+	std::weak_ptr<Effect> m_rushEffect;//突進エフェクト
 
 	Animation m_rushAnim;
 	Animation m_prevRushAnim;
