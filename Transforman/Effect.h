@@ -13,6 +13,7 @@ public:
     virtual void Draw(const std::shared_ptr<Camera>& pCamera);
 	bool GetIsDead() const { return m_isDead; }
     const Vector2 GetPos() const { return m_pos; }
+	void Kill() { m_isDead = true; }//外部からエフェクトを消すための関数
 
 protected:
 	Vector2 m_pos;
