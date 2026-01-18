@@ -2,12 +2,20 @@
 #include "Graphics/Camera.h"
 #include "EffectFactory.h"
 #include "Map.h"
+#include <DxLib.h>
+
+namespace
+{
+	constexpr int hit_action_time = 10;//ダメージを受けたときの赤くなる 時間
+}
 
 Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap,
 	std::shared_ptr<EffectFactory> effectfactory) :
 	Object({ 0.0f,0.0f }, { 0.0f,0.0f }),
+	m_hitActionTimer(0),
 	m_isGround(false),
 	m_isRight(false),
+	m_isDamage(false),
 	m_isDead(false),
 	m_width(width),
 	m_height(height)
@@ -19,7 +27,7 @@ Charactor::Charactor(int width, int height, std::shared_ptr<Map> pMap,
 }
 
 Charactor::~Charactor()
-{
+{	
 
 }
 
@@ -29,6 +37,14 @@ void Charactor::Init()
 
 void Charactor::Update(GameContext& ctx)
 {
+	//被ダメージ時の赤くなる時間を計測
+	m_hitActionTimer--;
+	if (m_hitActionTimer <= 0)
+	{
+		m_isDamage = false;
+		m_hitActionTimer = 0;
+	}
+
 	m_isGround = false;
 	Gravity();
 
@@ -98,8 +114,14 @@ void Charactor::HitMap(Rect& chipRect)
 		}
 	}
 
-
 #ifdef _DEBUG
 	m_colRect.SetCenter(m_pos.x, m_pos.y, static_cast<float>(m_width), static_cast<float>(m_height));
 #endif // DEBUG
+}
+
+void Charactor::OnDamage()
+{
+	//キャラクター全員に共通したダメージ処理
+	m_hitActionTimer = hit_action_time;
+	m_isDamage = true;
 }

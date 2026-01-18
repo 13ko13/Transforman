@@ -33,6 +33,11 @@ public:
 	virtual const Rect& GetColRect() const { return m_colRect; }
 
 	/// <summary>
+	/// ダメージを受けたときに呼び出される関数
+	/// </summary>
+	virtual void OnDamage();
+
+	/// <summary>
 	/// キャラクターが死亡しているかどうかを返す
 	/// </summary>
 	/// <returns>死んでいる:true,生きている:false</returns>
@@ -56,6 +61,8 @@ protected:
 	Rect m_colRect;
 	std::shared_ptr<Map> m_pMap;
 	std::shared_ptr<EffectFactory> m_pEffectFactory;
+	int m_hitActionTimer;//被ダメージ時の赤くなる時間管理用タイマー
+	bool m_isDamage;//ダメージを受けたかどうか
 	bool m_isDead;//死亡しているかどうか
 	bool m_isGround;//接地しているかどうか
 	bool m_isRight;//右を向いているかどうか
