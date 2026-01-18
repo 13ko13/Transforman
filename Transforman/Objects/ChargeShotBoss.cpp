@@ -215,6 +215,12 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		m_prevRushAnim.SetOffset({ 0,-draw_offset_y });
 		m_shotAnim.SetOffset({ 0,-draw_offset_y });
 
+		//被ダメージ時に赤くする
+		if (m_isDamage)
+		{
+			SetDrawBright(255, 0, 0);
+		}
+		
 		Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
 		//アニメーションの描画
 		switch (m_state)
@@ -235,6 +241,9 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 			m_shotAnim.Draw(drawPos, !m_isRight);
 			break;
 		}
+
+		//描画後に明るさを元に戻す
+		SetDrawBright(255, 255, 255);
 	}
 }
 
