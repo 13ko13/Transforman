@@ -29,7 +29,7 @@ enum class WeaponType
 
 class PlayerBullet;
 class EffectFactory;
-class Player : public Charactor
+class Player : public Charactor, public std::enable_shared_from_this<Player>
 {
 public:
 	Player(std::shared_ptr<Map> pMap,std::shared_ptr<EffectFactory> effectfactory);
@@ -89,6 +89,7 @@ private:
 	bool m_isArrive;//ボス部屋に到着したかどうか
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
 	bool m_isCanAction;//プレイヤーが現在行動可能かどうか
+	bool m_isStartDash;//ダッシュを始めたかどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
 	int m_animSrcX;		  //現在のアニメーションの横の切り取り位置

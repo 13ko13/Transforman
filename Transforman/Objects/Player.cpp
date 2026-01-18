@@ -5,6 +5,7 @@
 #include "../General/GameConstants.h"
 #include "PlayerBullet.h"
 #include "../Graphics/Camera.h"
+#include "../EffectFactory.h"
 #include <cassert>
 
 namespace
@@ -66,6 +67,7 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	m_isArrive(false),
 	m_isInvincible(false),
 	m_isCanAction(true),
+	m_isStartDash(false),
 	m_jumpFrame(0),
 	m_shotCooltime(0),
 	m_flameThrowerCT(0),
@@ -405,16 +407,38 @@ void Player::Move(Input& input)
 		m_state = PlayerState::Walk;
 		dir.x = 1.0f;
 		m_isRight = true;
+		//ダッシュエフェクトを生成
+		if (m_isGround && !m_isStartDash)
+		{
+			m_isStartDash = true;
+			m_pEffectFactory->Create(
+				{ m_pos.x, m_pos.y + 12.0f },
+				EffectType::dash,
+				!m_isRight
+			);
+		}
 	}
 	else if (input.IsPressed("left"))
 	{
 		m_state = PlayerState::Walk;
 		dir.x = -1.0f;
 		m_isRight = false;
+
+		//ダッシュエフェクトを生成
+		if (m_isGround && !m_isStartDash)
+		{
+			m_isStartDash = true;
+			m_pEffectFactory->Create(
+								{ m_pos.x, m_pos.y + 12.0f },
+								EffectType::dash,
+								!m_isRight
+			);
+		}
 	}
 	else
 	{
 		m_state = PlayerState::Idle;
+		m_isStartDash = false;
 	}
 	int speed = move_speed;
 #ifdef _DEBUG
