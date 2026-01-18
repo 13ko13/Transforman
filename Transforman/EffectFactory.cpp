@@ -2,6 +2,7 @@
 #include "Effect.h"
 #include "RushEffect.h"
 #include "HitWallEffect.h"
+#include "DashEffect.h"
 #include "PosProvider.h"
 #include <DxLib.h>
 #include <cassert>
@@ -21,6 +22,11 @@ EffectFactory::EffectFactory()
 	handle = LoadGraph("img/game/Effect/chargeboss_hit_wall_effect.png");
 	assert(handle >= 0);
 	m_handles.push_back(handle);
+
+	//ダッシュエフェクト
+	handle = LoadGraph("img/game/Effect/dash_effect.png");
+	assert(handle >= 0);
+	m_handles.push_back(handle);
 }
 
 std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type)
@@ -38,6 +44,28 @@ std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type)
 		//壁衝突エフェクトの生成
 		effect = std::make_shared<HitWallEffect>(
 			m_handles[static_cast<int>(EffectType::hitWall)], pos);
+		break;
+	case EffectType::dash:
+		//ダッシュエフェクトの生成
+		effect = std::make_shared<DashEffect>(
+			m_handles[static_cast<int>(EffectType::dash)], pos);
+		break;
+	}
+
+	if (effect) m_effects.push_back(effect);
+	return effect;
+}
+
+std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type, bool isTurn)
+{
+	std::shared_ptr<Effect> effect;//戻り値用エフェクトポインタ
+
+	switch (type)
+	{
+	case EffectType::dash:
+		//ダッシュエフェクトの生成
+		effect = std::make_shared<DashEffect>(
+			m_handles[static_cast<int>(EffectType::dash)], pos, isTurn);
 		break;
 	}
 

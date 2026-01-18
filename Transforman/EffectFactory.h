@@ -9,6 +9,7 @@ enum class EffectType
 {
 	rush,//ラッシュエフェクト
 	hitWall,//壁衝突エフェクト
+	dash,//ダッシュエフェクト
 };
 
 class Effect;
@@ -18,6 +19,7 @@ class EffectFactory
 public:
 	EffectFactory(); 
 	std::weak_ptr<Effect> Create(const Vector2& pos, EffectType type);
+	std::weak_ptr<Effect> Create(const Vector2& pos, EffectType type,bool isTurn);
 	std::weak_ptr<Effect> CreateFollow(std::shared_ptr<PosProvider> target, EffectType type, const Vector2& offset);
 	void Update();
 	void Draw(const std::shared_ptr<Camera>& pCamera);
