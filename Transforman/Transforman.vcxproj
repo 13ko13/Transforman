@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="BulletHitEffect.cpp" />
     <ClCompile Include="Charactor.cpp" />
     <ClCompile Include="DashEffect.cpp" />
     <ClCompile Include="DeathEffect.cpp" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="BulletHitEffect.h" />
     <ClInclude Include="Charactor.h" />
     <ClInclude Include="DashEffect.h" />
     <ClInclude Include="DeathEffect.h" />
