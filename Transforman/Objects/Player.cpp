@@ -471,7 +471,7 @@ void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
 			}
 			bullet->SetType(BulletType::Normal);
-			bullet->SetIsAlive(true);
+			bullet->OnShot();
 			bullet->SetIsRight(m_isRight);
 			break;	//1発撃ったらループを抜ける
 		}
@@ -497,7 +497,7 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 				bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
 			}
 			bullet->SetType(BulletType::Charge);
-			bullet->SetIsAlive(true);
+			bullet->OnShot();
 			bullet->SetIsRight(m_isRight);
 			break;	//1発撃ったらループを抜ける
 		}
@@ -530,7 +530,7 @@ void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			//m_state = PlayerState::ChargeShot;
 		}
 		bullet->SetType(BulletType::Fire);
-		bullet->SetIsAlive(true);
+		bullet->OnShot();
 		bullet->SetIsRight(m_isRight);
 		//火炎放射中の時間を計測する変数に代入
 		m_flameThrowCount = flame_motion_frame;
