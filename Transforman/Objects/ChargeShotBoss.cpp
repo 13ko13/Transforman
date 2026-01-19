@@ -54,6 +54,7 @@ namespace
 
 	//チャージショットを受けたときのダメージ
 	constexpr int hit_chargeshot_damage = 3;
+	constexpr int hit_normalshot_damage = 1;
 
 	constexpr int hit_color_red = 255;//攻撃を受けたときの赤の度合い
 	constexpr int hit_color_green = 100;//攻撃を受けたときの緑の度合い
@@ -323,7 +324,7 @@ void ChargeShotBoss::OnDamage(bool isChargeShot)
 	{
 		if (m_hitPoint < 0) return;//死んでるなら何もしない
 		//通常ショットなら1ダメージ
-		m_hitPoint -= hit_chargeshot_damage;
+		m_hitPoint -= hit_normalshot_damage;
 		//HPが0になったら死亡時処理を呼ぶ
 		if (m_hitPoint <= 0)
 		{
@@ -379,7 +380,7 @@ void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBull
 				//弾の初期位置を設定
 				bullet->SetPos({ m_pos.x - size_width / 2, m_pos.y });
 			}
-			bullet->SetIsAlive(true);
+			bullet->OnShot();
 			//弾を撃ったので状態をアイドルに戻してbreak
 			m_state = State::Idle;
 			break;
