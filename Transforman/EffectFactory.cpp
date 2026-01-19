@@ -27,6 +27,14 @@ EffectFactory::EffectFactory()
 	handle = LoadGraph("img/game/Effect/dash_effect.png");
 	assert(handle >= 0);
 	m_handles.push_back(handle);
+
+	handle = LoadGraph("img/game/Effect/player_dead_effect.png");
+	assert(handle >= 0);
+	m_handles.push_back(handle);
+
+	handle = LoadGraph("img/game/Effect/enemy_dead_effect.png");
+	assert(handle >= 0);
+	m_handles.push_back(handle);
 }
 
 std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type)
@@ -73,6 +81,29 @@ std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type,
 	return effect;
 }
 
+std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type, DeathCharactor charactor)
+{
+	std::shared_ptr<Effect> effect;//戻り値用エフェクトポインタ
+
+	switch (type)
+	{
+	case EffectType::playerDeath:
+		//死亡エフェクトの生成
+		effect = std::make_shared<DeathEffect>(
+			m_handles[static_cast<int>(EffectType::playerDeath)], pos, DeathCharactor::Player);
+
+		break;
+	case EffectType::enemyDeath:
+		//死亡エフェクトの生成
+		effect = std::make_shared<DeathEffect>(
+			m_handles[static_cast<int>(EffectType::enemyDeath)], pos, DeathCharactor::Enemy);
+		break;
+	}
+
+	if (effect) m_effects.push_back(effect);
+	return effect;
+}
+
 std::weak_ptr<Effect> EffectFactory::CreateFollow(
 	std::shared_ptr<PosProvider> target,
 	EffectType type, const Vector2& offset)
@@ -81,13 +112,13 @@ std::weak_ptr<Effect> EffectFactory::CreateFollow(
 	switch (type)
 	{
 	case EffectType::rush:
-		{
+	{
 		//ラッシュエフェクトの生成
 		effect = std::make_shared<RushEffect>(
 			m_handles[static_cast<int>(EffectType::rush)],
 			target, offset);
 		break;
-		}
+	}
 	}
 
 	if (effect) m_effects.push_back(effect);

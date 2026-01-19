@@ -146,6 +146,7 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Charactor.cpp" />
     <ClCompile Include="DashEffect.cpp" />
+    <ClCompile Include="DeathEffect.cpp" />
     <ClCompile Include="HitWallEffect.cpp" />
     <ClCompile Include="RushEffect.cpp" />
     <ClCompile Include="Scenes\ClearScene.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="Charactor.h" />
     <ClInclude Include="DashEffect.h" />
+    <ClInclude Include="DeathEffect.h" />
     <ClInclude Include="HitWallEffect.h" />
     <ClInclude Include="PosProvider.h" />
     <ClInclude Include="RushEffect.h" />

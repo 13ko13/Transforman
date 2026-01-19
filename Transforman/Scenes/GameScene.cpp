@@ -22,7 +22,7 @@ namespace
 {
 	constexpr int p_bullet_max = 10;//プレイヤー弾の最大数
 	constexpr int e_bullet_max = 20;//敵弾の最大数
-	constexpr int fade_interval = 70;//フェードにかかるフレーム数
+	constexpr int fade_interval = 90;//フェードにかかるフレーム数
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -200,7 +200,13 @@ void GameScene::UpdateFadeOut(Input& input)
 {
 	GameContext ctx{ m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input,m_pCamera };
 
-	m_pPlayer->Update(ctx);
+	//ゲームオーバー時のみプレイヤーを更新する
+	if (!m_isClear && m_isGameover)
+	{
+		m_pPlayer->Update(ctx);
+	}
+	//エフェクトファクトリー更新
+	m_pEffectFactory->Update();
 
 	//フレームを++してfade_intervalを超えたら
 	m_frame++;
@@ -240,6 +246,9 @@ void GameScene::DrawFade()
 	{
 		object->Draw(m_pCamera);
 	}
+
+	//エフェクトファクトリーの描画
+	m_pEffectFactory->Draw(m_pCamera);
 
 	//UIマネージャーの描画
 	m_pUIManager->Draw();

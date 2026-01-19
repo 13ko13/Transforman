@@ -18,7 +18,7 @@ namespace
 			constexpr int graph_width = 40;					//画像の横切り取りサイズ
 	constexpr int graph_height = 40;						//画像の縦切り取りサイズ
 	constexpr int rect_offset_y = 12;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
-	constexpr double draw_scale = 2.0f;						//描画スケール	
+	constexpr double p_draw_scale = 2.0f;						//描画スケール	
 
 	constexpr int knockback_duration = 15;					//ノックバックする時間
 	constexpr float knockback_speed = 15.0f;				//ノックバックするときのスピード
@@ -44,7 +44,7 @@ namespace
 	constexpr int graph_index_jump = 8;
 
 	//アニメーション関係
-	constexpr int anim_wait_frame = 5;						//次のアニメーションまでの待機時間
+	constexpr int anim_wait_frame = 7;						//次のアニメーションまでの待機時間
 	constexpr int idle_anim_frame = 4;						//アイドルアニメーションの枚数
 	constexpr int flame_anim_frame = 1;						//火炎放射中のアニメーションの枚数
 	constexpr int walk_anim_frame = 7;						//歩き状態のアニメーションの枚数
@@ -338,7 +338,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 				static_cast<int>(m_pos.y + pCamera->GetDrawOffset().y) - rect_offset_y, //表示位置
 				m_animSrcX, m_animSrcY,												//切り取り開始位置
 				graph_width, graph_height,								//切り取りサイズ
-				draw_scale, 0.0,											//拡大率、回転角度
+				p_draw_scale, 0.0,											//拡大率、回転角度
 				m_handle,											//画像ハンドル
 				true,												//透明度
 				!m_isRight											//反転
@@ -357,7 +357,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 			static_cast<int>(m_pos.y + pCamera->GetDrawOffset().y) - rect_offset_y, //表示位置
 			m_animSrcX, m_animSrcY,												//切り取り開始位置
 			graph_width, graph_height,								//切り取りサイズ
-			draw_scale, 0.0,											//拡大率、回転角度
+			p_draw_scale, 0.0,											//拡大率、回転角度
 			m_handle,											//画像ハンドル
 			true,												//透明度
 			!m_isRight											//反転
@@ -653,7 +653,7 @@ void Player::OnDamage(int dir)
 	m_velocity.x = m_knockbackDir * knockback_speed;
 	m_velocity.y = knockback_jump;
 
-	if (m_hitPoint <= 0) return;//すでにHPが0以下なら処理しない
+	if (m_hitPoint < 0) return;//すでにHPが0以下なら処理しない
 
 	//チャージ状態や、火炎放射中だと
 	//引き継がれたままダメージを受けるので
@@ -662,11 +662,18 @@ void Player::OnDamage(int dir)
 	m_state = PlayerState::Damage;//ステートを切り替える
 	
 	//HPを減らす
-	if (m_hitPoint > 0)
+	if (m_hitPoint >= 0)
 	{
 		m_hitPoint--;
+		if (m_hitPoint == 0)
+		{
+			m_pEffectFactory->Create(
+				{ m_pos.x, m_pos.y },
+				EffectType::playerDeath,
+				DeathCharactor::Player
+			);
+		}
 	}
-
 }
 
 void Player::OnStart()

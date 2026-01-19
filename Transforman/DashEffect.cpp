@@ -7,10 +7,10 @@ namespace
 {
 		constexpr int graph_width = 64;//画像1枚の幅
 		constexpr int graph_height = 64;//画像1枚の高さ
-		constexpr float draw_scale = 1.5f;//描画スケール
-		constexpr int max_anim_num = 16;//最大アニメーション数
-		constexpr int one_anim_frame = 3;//アニメーションの待機フレーム数
-		constexpr int src_y = 11;//画像の縦切り取り位置
+		constexpr float p_draw_scale = 1.5f;//描画スケール
+		constexpr int p_max_anim_num = 16;//最大アニメーション数
+		constexpr int p_one_anim_frame = 3;//アニメーションの待機フレーム数
+		constexpr int p_src_y = 11;//画像の縦切り取り位置
 }
 
 DashEffect::DashEffect(int handle, const Vector2& pos):
@@ -21,9 +21,9 @@ DashEffect::DashEffect(int handle, const Vector2& pos):
 	//固定位置エフェクトなので追従フラグを立てない
 	m_isFollow = false;
 	m_animation.Init(
-				m_handle, src_y,
+				m_handle, p_src_y,
 				{ graph_width, graph_height },
-				max_anim_num, one_anim_frame, draw_scale, false
+				p_max_anim_num, p_one_anim_frame, p_draw_scale, false
 	);
 }
 
@@ -36,9 +36,9 @@ DashEffect::DashEffect(int handle, const Vector2& pos, bool isTurn):
 	m_isFollow = false;
 
 	m_animation.Init(
-				m_handle, src_y,
+				m_handle, p_src_y,
 				{ graph_width, graph_height },
-				max_anim_num, one_anim_frame, draw_scale, false
+				p_max_anim_num, p_one_anim_frame, p_draw_scale, false
 				);
 }
 

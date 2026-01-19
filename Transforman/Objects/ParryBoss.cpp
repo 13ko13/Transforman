@@ -18,9 +18,9 @@ namespace
 
 	//アニメーション関連
 	constexpr int idle_anim_num = 9;//アイドルアニメーション枚数
-	constexpr int one_anim_frame = 7;//1アニメーションあたりのフレーム数
+	constexpr int p_one_anim_frame = 7;//1アニメーションあたりのフレーム数
 	constexpr int fall_one_anim_frame = 10;//落下攻撃1アニメーションあたりのフレーム数
-	constexpr double draw_scale = 5.0f;
+	constexpr double p_draw_scale = 5.0f;
 	constexpr float draw_offset_y = -40.0f;//キャラクターの描画オフセット
 	constexpr float rotate_angle = 0.11f;//傾き角度
 	constexpr int parry_anim_num = 5;//パリィアニメーション枚数
@@ -73,19 +73,19 @@ void ParryBoss::Init()
 {
 	//アイドルアニメーション初期化
 	m_idleAnim.Init(m_handle, 0, { graph_width,graph_height },
-		idle_anim_num, one_anim_frame, draw_scale, true);
+		idle_anim_num, p_one_anim_frame, p_draw_scale, true);
 	//パリィアニメーション初期化
 	m_parryAnim.Init(m_handle, parry_src_y, { graph_width, graph_height }, 
-		parry_anim_num, one_anim_frame, draw_scale, false);
+		parry_anim_num, p_one_anim_frame, p_draw_scale, false);
 	//ジャンプアニメーション初期化
 	m_jumpAnim.Init(m_handle, 2, { graph_width, graph_height }, 
-		5, one_anim_frame, draw_scale, false);
+		5, p_one_anim_frame, p_draw_scale, false);
 	//落下攻撃アニメーション初期化
 	m_fallAttackAnim.Init(m_handle, 8, 2, { graph_width, graph_height }, 
-		15, fall_one_anim_frame, draw_scale, false);
+		15, fall_one_anim_frame, p_draw_scale, false);
 	//ダメージアニメーション初期化
 	m_damageAnim.Init(m_handle, 3, { graph_width, graph_height },
-		5, one_anim_frame, draw_scale, false);
+		5, p_one_anim_frame, p_draw_scale, false);
 }
 
 void ParryBoss::Update(GameContext& ctx)
@@ -315,7 +315,7 @@ void ParryBoss::IdleUpdate(GameContext& ctx)
 			m_jumpFrame = jump_duration;//ジャンプ継続フレーム数をセット
 			//ジャンプアニメーション初期化
 			m_jumpAnim.Init(m_handle, 2, { graph_width, graph_height },
-				5, one_anim_frame, draw_scale, false);
+				5, p_one_anim_frame, p_draw_scale, false);
 		}
 	}
 }
@@ -364,7 +364,7 @@ void ParryBoss::JumpingUpdate(GameContext& ctx)
 			m_state = State::FallAttack;
 			m_velocity.x = 0.0f;
 			//アニメーションリセット
-			m_jumpAnim.Init(m_handle, 2, { graph_width, graph_height }, 5, one_anim_frame, draw_scale, false);
+			m_jumpAnim.Init(m_handle, 2, { graph_width, graph_height }, 5, p_one_anim_frame, p_draw_scale, false);
 		}
 	}
 }
@@ -393,7 +393,7 @@ void ParryBoss::FallAttackUpdate(GameContext& ctx)
 		m_isJump = false;
 		//落下攻撃アニメーションリセット
 		m_fallAttackAnim.Init(m_handle, 8, 2, { graph_width, graph_height },
-			15, fall_one_anim_frame, draw_scale, false);
+			15, fall_one_anim_frame, p_draw_scale, false);
 		m_swordHitBox.SetCenter(0.0f, 0.0f, 0.0f, 0.0f);//当たり判定を無効化
 		//画面を揺らす
 		ctx.pCamera->OnImpact(shake_power);
@@ -430,7 +430,7 @@ void ParryBoss::OnDamage(bool isChargeShot)
 	else
 	{
 		//ダメージアニメーションを初期化
-		m_damageAnim.Init(m_handle, 3, { graph_width, graph_height }, 5, one_anim_frame, draw_scale, false);
+		m_damageAnim.Init(m_handle, 3, { graph_width, graph_height }, 5, p_one_anim_frame, p_draw_scale, false);
 		//通常のダメージ処理
 		m_state = State::Damage;
 	}

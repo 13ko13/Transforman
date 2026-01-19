@@ -16,7 +16,7 @@ namespace
 	constexpr int graph_width = 48;	//画像1枚の幅
 	constexpr int graph_height = 32;//画像1枚の高さ
 	constexpr float draw_offset_y = 20.0f;//キャラクターの描画オフセット
-	constexpr float draw_scale = 5.0f;
+	constexpr float p_draw_scale = 5.0f;
 
 	const Vector2 first_pos = { 2380.0f,-32.0f };
 	constexpr int attack_cooltime = 60;//攻撃のクールタイム
@@ -51,6 +51,15 @@ namespace
 
 	//エフェクトを出す指定位置
 	constexpr float rush_effect_offset_y = 200.0f;
+
+	//チャージショットを受けたときのダメージ
+	constexpr int hit_chargeshot_damage = 3;
+
+	constexpr int hit_color_red = 255;//攻撃を受けたときの赤の度合い
+	constexpr int hit_color_green = 100;//攻撃を受けたときの緑の度合い
+	constexpr int hit_color_blue = 100;//攻撃を受けたときの青の度合い
+
+	constexpr int death_effect_pos_y = 80;//死亡エフェクトを出すときの高さ
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -78,10 +87,10 @@ ChargeShotBoss::~ChargeShotBoss()
 void ChargeShotBoss::Init()
 {
 	const Vector2 frameSize = { graph_width ,graph_height };
-	m_idleAnim.Init(m_handle, 0, frameSize, idle_anim_frame, anim_wait_frame, draw_scale, true);
-	m_prevRushAnim.Init(m_handle, 0, frameSize, rush_anim_frame, anim_wait_prev_rush, draw_scale, true);
-	m_rushAnim.Init(m_handle,0, frameSize, rush_anim_frame, anim_wait_rush, draw_scale, true);
-	m_shotAnim.Init(m_handle, 1, frameSize, shot_anim_frame, anim_wait_shot, draw_scale, false);
+	m_idleAnim.Init(m_handle, 0, frameSize, idle_anim_frame, anim_wait_frame, p_draw_scale, true);
+	m_prevRushAnim.Init(m_handle, 0, frameSize, rush_anim_frame, anim_wait_prev_rush, p_draw_scale, true);
+	m_rushAnim.Init(m_handle, 0, frameSize, rush_anim_frame, anim_wait_rush, p_draw_scale, true);
+	m_shotAnim.Init(m_handle, 1, frameSize, shot_anim_frame, anim_wait_shot, p_draw_scale, false);
 }
 
 void ChargeShotBoss::Update(GameContext& ctx)
@@ -206,7 +215,7 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		DrawFormatString(0, 320, 0xffffff, "ChargeBossState:%d", m_state);
 		DrawFormatString(0, 370, 0xffffff, "PrevRushTime:%d", m_prevRushTime);
 		DrawFormatString(0, 430, 0xffffff, "ChargeBossIsGround:%d", m_isGround);
-		DrawFormatString(0, 445, 0xffffff, "ChargeBossHP:%d", m_hitPoint  );
+		DrawFormatString(0, 445, 0xffffff, "ChargeBossHP:%d", m_hitPoint);
 
 #endif
 
@@ -218,9 +227,9 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		//被ダメージ時に赤くする
 		if (m_isDamage)
 		{
-			SetDrawBright(255, 0, 0);
+			SetDrawBright(hit_color_red, hit_color_green, hit_color_blue);
 		}
-		
+
 		Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
 		//アニメーションの描画
 		switch (m_state)
@@ -299,15 +308,44 @@ void ChargeShotBoss::OnDamage(bool isChargeShot)
 	if (isChargeShot)
 	{
 		if (m_hitPoint < 0) return;//死んでるなら何もしない
-		//チャージショットなら3ダメージ
-		m_hitPoint -= 3;
+
+		//チャージショットを食らった場合3ダメージ
+		m_hitPoint -= hit_chargeshot_damage;
+
+		//HPが0になったら死亡時処理を呼ぶ
+		if (m_hitPoint <= 0)
+		{
+			OnDead();
+		}
+
 	}
 	else
 	{
-		//通常ショットなら1ダメージ
 		if (m_hitPoint < 0) return;//死んでるなら何もしない
-		m_hitPoint--;
+		//通常ショットなら1ダメージ
+		m_hitPoint -= hit_chargeshot_damage;
+		//HPが0になったら死亡時処理を呼ぶ
+		if (m_hitPoint <= 0)
+		{
+			OnDead();
+		}
 	}
+}
+
+void ChargeShotBoss::OnDead()
+{
+	//ボスが死んだのでエフェクトも削除する
+	if (auto rushEffect = m_rushEffect.lock())
+	{
+		rushEffect->Kill();
+	}
+
+	//死亡エフェクトを生成
+	m_pEffectFactory->Create(
+		{ m_pos.x, m_pos.y - death_effect_pos_y },
+		EffectType::enemyDeath,
+		DeathCharactor::Enemy
+	);
 }
 
 void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
@@ -413,7 +451,7 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 		}
 	}
 }
-	
+
 void ChargeShotBoss::PrevRushUpdate(GameContext& ctx)
 {
 	//生きているなら行動させる

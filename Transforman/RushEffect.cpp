@@ -7,9 +7,9 @@ namespace
 {
 	constexpr int graph_width = 128;//画像1枚の幅
 	constexpr int graph_height = 128;//画像1枚の高さ
-	constexpr float draw_scale = 1.5f;//描画スケール
-	constexpr int max_anim_num = 4;//最大アニメーション数
-	constexpr int one_anim_frame = 4;//アニメーションの待機フレーム数
+	constexpr float p_draw_scale = 1.5f;//描画スケール
+	constexpr int p_max_anim_num = 4;//最大アニメーション数
+	constexpr int p_one_anim_frame = 4;//アニメーションの待機フレーム数
 }
 
 RushEffect::RushEffect(
@@ -25,7 +25,7 @@ RushEffect::RushEffect(
 	m_animation.Init(
 		m_handle, 0,
 		{ graph_width, graph_height },
-		max_anim_num, one_anim_frame, draw_scale, true
+		p_max_anim_num, p_one_anim_frame, p_draw_scale, true
 	);
 }
 
@@ -39,7 +39,7 @@ RushEffect::RushEffect(int handle, const Vector2& pos):
 	m_animation.Init(
 				m_handle, 0,
 				{ graph_width, graph_height },
-		max_anim_num, one_anim_frame, draw_scale, true
+		p_max_anim_num, p_one_anim_frame, p_draw_scale, true
 				);
 }
 

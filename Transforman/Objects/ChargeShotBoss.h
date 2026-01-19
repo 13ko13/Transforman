@@ -38,6 +38,11 @@ public:
 	/// ダメージを受けたときに呼ぶ関数
 	/// </summary>
 	void OnDamage(bool isChargeShot) override;
+
+	/// <summary>
+	/// 死亡時演出
+	/// </summary>
+	void OnDead();
 private:
 	int m_GroundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数
