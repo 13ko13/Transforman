@@ -103,7 +103,6 @@ void Animation::Draw(Vector2 pos, bool isTurn)
 		srcX, srcY,
 		static_cast<int>(m_frameSize.x), static_cast<int>(m_frameSize.y),
 		m_scale, m_rotate, m_drawHandle, true, isTurn);
-
 }
 
 void Animation::Draw(int drawHandle, Vector2 pos, bool isTurn)
