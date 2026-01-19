@@ -7,6 +7,7 @@
 #include "../Graphics/Camera.h"
 #include "../Collider/Circle.h"
 #include "../Stages/Stage.h"
+#include "../EffectFactory.h"
 #include <cassert>
 
 
@@ -28,8 +29,10 @@ namespace
 	constexpr int bullet_anim_num = 4;//弾のアニメーション枚数
 }
 
-EnemyBullet::EnemyBullet()
+EnemyBullet::EnemyBullet(std::shared_ptr<EffectFactory> effectFactory):
+	Bullet(effectFactory)
 {
+	
 	m_state = EnemyState::Normal;
 	m_circle.SetPos(m_pos);
 	m_circle.SetRadius(radius);
@@ -83,7 +86,6 @@ void EnemyBullet::Update(GameContext& ctx)
 
 void EnemyBullet::Draw(std::shared_ptr<Camera> pCamera)
 {
-
 	if (m_isAlive)
 	{
 		//アニメーションのフレーム数から表示したいコマ番号を計算で求める
@@ -114,4 +116,10 @@ void EnemyBullet::Movement()
 	//正規化はいらない
 	Vector2 shotVelocity = m_dir * speed;
 	m_pos += shotVelocity;
+}
+
+void EnemyBullet::OnDead()
+{
+	m_isAlive = false;
+	m_pEffectFactory->Create(m_pos, EffectType::hitEnemyBullet);
 }

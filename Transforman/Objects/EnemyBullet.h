@@ -15,7 +15,7 @@ class Player;
 class EnemyBullet : public Bullet
 {
 public:
-	EnemyBullet();
+	EnemyBullet(std::shared_ptr<EffectFactory> effectFactory);
 	~EnemyBullet();
 
 	void Init() override;
@@ -27,6 +27,11 @@ public:
 	/// </summary>
 	/// <param name="dir">設定する方向ベクトル。</param>
 	void SetDir(const Vector2& dir) { m_dir = dir; }
+
+	/// <summary>
+	/// 弾が死んだときに呼び出す関数
+	/// </summary>
+	void OnDead() override;
 private:
 	//変数
 	EnemyState m_state;
