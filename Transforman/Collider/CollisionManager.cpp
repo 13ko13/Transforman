@@ -105,7 +105,7 @@ void CollisionManager::CheckCollisions(
 					enemy->Charactor::OnDamage();
 				}
 				//弾の存在を消す
-				bullet->SetIsAlive(false);
+				bullet->OnDead();
 			}
 		}
 	}
@@ -123,7 +123,7 @@ void CollisionManager::CheckCollisions(
 			CheckCollision(*pPlayer, *bullet))
 		{
 			//弾の存在を消す
-			bullet->SetIsAlive(false);
+			bullet->OnDead();
 			//プレイヤーにノックバックする方向を伝える
 			int dir = 0;
 			bool isRight = false;
