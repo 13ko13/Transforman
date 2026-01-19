@@ -5,6 +5,7 @@
 #include "../Collider/Circle.h"
 #include "EnemyBase.h"
 #include "../Stages/Stage.h"
+#include "../EffectFactory.h"
 #include <cassert>
 
 namespace 
@@ -29,7 +30,7 @@ namespace
 	constexpr int charge_one_anim_frame = 4;//1アニメーションあたりのフレーム数
 	constexpr int charge_graph_width = 32;//画像1枚の幅
 	constexpr int charge_graph_height = 32;//画像1枚の高さ
-	constexpr float charge_draw_scale = 2.0f;//描画スケール
+	constexpr float charge_draw_scale = 3.0f;//描画スケール
 
 	//Fire
 	constexpr int fire_width = 150;
@@ -39,7 +40,8 @@ namespace
 	constexpr int chip_size = 32;//マップチップのサイズ
 }
 
-PlayerBullet::PlayerBullet() :
+PlayerBullet::PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory) :
+	Bullet(pEffectFactory),
 	m_animFrame(0),
 	m_isRight(false),
 	m_flameLifeTime(0.0f)
@@ -242,4 +244,10 @@ void PlayerBullet::OnFlame()
 {
 	//炎が消えるまでの時間をセットする
 	m_flameLifeTime = flame_life_time;
+}
+
+void PlayerBullet::OnDead()
+{
+	m_isAlive = false;
+	m_pEffectFactory->Create(m_pos, EffectType::hitPlayerBullet);
 }

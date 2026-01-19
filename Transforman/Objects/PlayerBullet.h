@@ -17,7 +17,7 @@ class EnemyBase;
 class PlayerBullet : public Bullet
 {
 public:
-	PlayerBullet();
+	PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory);
 	~PlayerBullet();
 
 	void Init() override;
@@ -33,6 +33,11 @@ public:
 	/// 火炎放射を打つという命令が飛ばされたときに呼ぶ関数
 	/// </summary>
 	void OnFlame();
+
+	/// <summary>
+	/// 弾が消えるときの処理
+	/// </summary>
+	void OnDead();
 	
 private:
 	int m_animFrame;//アニメーション中の時間
