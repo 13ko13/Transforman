@@ -46,13 +46,13 @@ GameScene::GameScene(SceneController& controller) :
 	m_pPlayerBullets.resize(p_bullet_max);
 	for (auto& bullet : m_pPlayerBullets)
 	{
-		bullet = std::make_shared<PlayerBullet>();
+		bullet = std::make_shared<PlayerBullet>(m_pEffectFactory);
 	}
 	// 敵の弾の生成
 	m_pEnemyBullets.resize(e_bullet_max);
 	for (auto& bullet : m_pEnemyBullets)
 	{
-		bullet = std::make_shared<EnemyBullet>();
+		bullet = std::make_shared<EnemyBullet>(m_pEffectFactory);
 	}
 	// 敵の生成
 	//チャージショットボス、パリィボス、火炎放射ボス、植物系ボスの4体
