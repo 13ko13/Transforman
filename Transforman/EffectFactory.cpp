@@ -3,6 +3,7 @@
 #include "RushEffect.h"
 #include "HitWallEffect.h"
 #include "DashEffect.h"
+#include "BulletHitEffect.h"
 #include "PosProvider.h"
 #include <DxLib.h>
 #include <cassert>
@@ -28,11 +29,23 @@ EffectFactory::EffectFactory()
 	assert(handle >= 0);
 	m_handles.push_back(handle);
 
+	//プレイヤーの死亡エフェクト
 	handle = LoadGraph("img/game/Effect/player_dead_effect.png");
 	assert(handle >= 0);
 	m_handles.push_back(handle);
 
+	//敵の死亡エフェクト
 	handle = LoadGraph("img/game/Effect/enemy_dead_effect.png");
+	assert(handle >= 0);
+	m_handles.push_back(handle);
+
+	//敵の弾衝突時のエフェクト
+	handle = LoadGraph("img/game/Effect/hit_enemy_shot.png");
+	assert(handle >= 0);
+	m_handles.push_back(handle);
+
+	//プレイヤーの弾衝突時のエフェクト
+	handle = LoadGraph("img/game/Effect/hit_player_shot.png");
 	assert(handle >= 0);
 	m_handles.push_back(handle);
 }
@@ -57,6 +70,16 @@ std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type)
 		//ダッシュエフェクトの生成
 		effect = std::make_shared<DashEffect>(
 			m_handles[static_cast<int>(EffectType::dash)], pos);
+		break;
+	case EffectType::hitEnemyBullet:
+		//弾の衝突エフェクトの生成
+		effect = std::make_shared<BulletHitEffect>(
+			m_handles[static_cast<int>(EffectType::hitEnemyBullet)], pos);
+		break;
+	case EffectType::hitPlayerBullet:
+		//弾の衝突エフェクトの生成
+		effect = std::make_shared<BulletHitEffect>(
+			m_handles[static_cast<int>(EffectType::hitPlayerBullet )], pos);
 		break;
 	}
 

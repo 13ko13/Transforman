@@ -12,7 +12,9 @@ enum class EffectType
 	hitWall,//壁衝突エフェクト
 	dash,//ダッシュエフェクト
 	playerDeath,//プレイヤー死亡エフェクト
-	enemyDeath//敵死亡エフェクト
+	enemyDeath,//敵死亡エフェクト
+	hitEnemyBullet,//敵の弾衝突エフェクト
+	hitPlayerBullet,//プレイヤーの弾衝突エフェクト
 };
 
 class Effect;
