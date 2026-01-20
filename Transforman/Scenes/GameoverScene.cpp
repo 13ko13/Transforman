@@ -21,12 +21,12 @@ GameoverScene::GameoverScene(SceneController& controller) :
 {
 	//ゲームオーバーの文字画像ハンドルロード
 	int handle = LoadGraph("img/gameover/gameover_text.png");
-	assert(handle >= 1);//Nullチェック
+	assert(handle > -1);//Nullチェック
 	m_handles.push_back(handle);
 
 	//ゲームオーバーの背景画像ハンドルロード
 	handle = LoadGraph("img/gameover/Gameover_background.png");
-	assert(handle >= 1);//Nullチェック
+	assert(handle > -1);//Nullチェック
 	m_handles.push_back(handle);
 
 	//updateとdrawの関数ポインタにFadeInUpdateと

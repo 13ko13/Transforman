@@ -58,11 +58,11 @@ PlayerBullet::PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory) :
 	int handle = -1;
 	
 	handle = LoadGraph("img/game/bullet/player_bullet.png");
-	assert(handle >= 0);
+	assert(handle >-1);
 	m_handles.push_back(handle);
 
 	handle = LoadGraph("img/game/bullet/player_charge_bullet.png");
-	assert(handle >= 0);
+	assert(handle >-1);
 	m_handles.push_back(handle);
 }
 

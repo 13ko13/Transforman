@@ -14,7 +14,7 @@ BackGround::BackGround() :
 {
 	m_handle = LoadGraph("img/game/Map/background.png");
 	//チェック
-	assert(m_handle >= 0);
+	assert(m_handle > -1);
 }
 
 BackGround::~BackGround()

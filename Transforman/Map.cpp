@@ -26,12 +26,12 @@ Map::Map(std::shared_ptr<Stage> pStage) :
 	handle = LoadGraph("img/game/map/mapchip_1.png");
 	m_handles.push_back(handle);
 	//チェック
-	assert(handle >= 0);
+	assert(handle > -1);
 
 	//ステージ2のマップチップの読み込み
 	handle = LoadGraph("img/game/map/mapchip_2.png");
 	m_handles.push_back(handle);
-	assert(handle >= 0);
+	assert(handle > -1);
 
 	m_stageType = StageType::Stage1;
 }

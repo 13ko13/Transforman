@@ -16,37 +16,37 @@ EffectFactory::EffectFactory()
 	//エフェクト画像の読み込み
 	//ラッシュエフェクト
 	handle = LoadGraph("img/game/Effect/chargeboss_rush_effect.png");
-	assert(handle >= 0);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	//壁衝突エフェクト
 	handle = LoadGraph("img/game/Effect/chargeboss_hit_wall_effect.png");
-	assert(handle >= 0);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	//ダッシュエフェクト
 	handle = LoadGraph("img/game/Effect/dash_effect.png");
-	assert(handle >= 0);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	//プレイヤーの死亡エフェクト
 	handle = LoadGraph("img/game/Effect/player_dead_effect.png");
-	assert(handle >= 0);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	//敵の死亡エフェクト
 	handle = LoadGraph("img/game/Effect/enemy_dead_effect.png");
-	assert(handle >= 0);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	//敵の弾衝突時のエフェクト
 	handle = LoadGraph("img/game/Effect/hit_enemy_shot.png");
-	assert(handle >= 0);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	//プレイヤーの弾衝突時のエフェクト
 	handle = LoadGraph("img/game/Effect/hit_player_shot.png");
-	assert(handle >= 0);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 }
 

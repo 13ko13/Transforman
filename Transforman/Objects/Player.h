@@ -5,6 +5,7 @@
 #include <vector>
 #include <memory>
 #include "../Collider/Rect.h"
+#include "../Graphics/Animation.h"
 
 enum class PlayerState
 {
@@ -25,6 +26,12 @@ enum class WeaponType
 	Normal,
 	Charge,
 	Fire,
+};
+
+enum class HandleNomber
+{
+	PlayerHandle,//プレイヤーアニメーションハンドル
+	ChargeHandle,//チャージアニメーションハンドル
 };
 
 class PlayerBullet;
@@ -73,6 +80,7 @@ public:
 
 private:
 	//変数一覧
+	std::vector<int> m_handles;
 	int m_jumpFrame;//ジャンプ力
 	int m_shotCooltime;///ショットのクールタイム管理用
 	int m_flameThrowerCT;//火炎放射器のクールタイム管理用
@@ -105,6 +113,15 @@ private:
 	PlayerState m_state;
 	WeaponType m_weaponType;
 
+	int playingEffectHandle = -1;//再生中のエフェクト
+
+	Animation m_chargeAnim;//チャージ中のアニメーション
+
+
+	// エフェクトリソースを読み込む
+	// ループで無限再生されるエフェクトは、パーティクル自体の生成数が無限だったり、
+	// パーティクルの寿命が無限だったりする
+	int effectResourceHandle;
 private:
 	//関数一覧
 	/// <summary>

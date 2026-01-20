@@ -72,7 +72,7 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 	m_GroundNum(0)
 {
 	m_handle = LoadGraph("img/game/Enemy/chargeshot_boss.png");
-	assert(m_handle >= 0);
+	assert(m_handle > -1);
 
 	m_pos = first_pos;
 	m_state = State::None;

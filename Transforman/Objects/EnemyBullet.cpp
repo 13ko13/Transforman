@@ -37,7 +37,7 @@ EnemyBullet::EnemyBullet(std::shared_ptr<EffectFactory> effectFactory):
 	m_circle.SetPos(m_pos);
 	m_circle.SetRadius(radius);
 	m_handle = LoadGraph("img/game/Bullet/EnemyBullet.png");
-	assert(m_handle >= 0);
+	assert(m_handle > - 1);
 }
 
 EnemyBullet::~EnemyBullet()

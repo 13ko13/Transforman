@@ -57,7 +57,7 @@ ParryBoss::ParryBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> e
 	m_playerPrevPos({ 0.0f,0.0f })
 {
 	m_handle = LoadGraph("img/game/Enemy/parry_boss.png");
-	assert(m_handle >= 0);
+	assert(m_handle >-1);
 
 	m_pos = first_pos;
 	m_swordHitBox.SetCenter(0.0f,0.0f,0.0f,0.0f);

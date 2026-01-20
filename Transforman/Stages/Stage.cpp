@@ -49,7 +49,7 @@ void Stage::Load(int stageNom)
 	// 開いてそのハンドルを保管
 	auto handle = FileRead_open(filePath);
 	//handle確認
-	assert(handle >= 0);//ハンドルが読み込まれていないとクラッシュする
+	assert(handle > -1);//ハンドルが読み込まれていないとクラッシュする
 	//マップデータのヘッダを作成
 	DataHeader header;
 	//ファイルの読み込み

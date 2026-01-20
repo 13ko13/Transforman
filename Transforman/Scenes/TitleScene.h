@@ -1,6 +1,12 @@
 #pragma once
 #include "Scene.h"
 
+enum class EffectState
+{
+	Stoped,		// 完全停止済
+	Shooting,	//発射
+};
+
 class TitleScene : public Scene
 {
 public:
@@ -20,6 +26,15 @@ private:
 
 	std::vector<int> m_handles;//画像ハンドルの配列
 	int m_frame;//フェード用のフレーム
+
+	// エフェクトリソースを読み込む
+	// ループで無限再生されるエフェクトは、パーティクル自体の生成数が無限だったり、
+	// パーティクルの寿命が無限だったりする
+	int effectResourceHandle;
+
+	int playingEffectHandle = -1;//再生中のエフェクト
+
+	EffectState effectState = EffectState::Stoped;
 	
 	//メンバ変数ポインタを使用して内部状態を書き換える
 	//update関数とdraw関数を、現在のTitleSceneの状態に合わせて

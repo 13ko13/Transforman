@@ -57,23 +57,23 @@ EnemyHpBar::EnemyHpBar(int maxHitPoint) :
 	int handle = -1;
 	handle = LoadGraph("img/game/Enemy/HP_Bar_Frame.png");//HPバーの枠
 	m_handles.push_back(handle);
-	assert(handle >= 0);//ハンドルnullチェック
+	assert(handle > -1);//ハンドルnullチェック
 
 	handle = LoadGraph("img/game/Enemy/HP_Bar_Heart.png");//HPバーのハート
 	m_handles.push_back(handle);
-	assert(handle >= 0);//ハンドルnullチェック
+	assert(handle > -1);//ハンドルnullチェック
 
 	handle = LoadGraph("img/game/Enemy/HP_Bar_Normal.png");//HPバーの通常カラー
 	m_handles.push_back(handle);
-	assert(handle >= 0);//ハンドルnullチェック
+	assert(handle > -1);//ハンドルnullチェック
 
 	handle = LoadGraph("img/game/Enemy/HP_Bar_Pinch.png");//HPバーのピンチ時カラー
 	m_handles.push_back(handle);
-	assert(handle >= 0);//ハンドルnullチェック
+	assert(handle > -1);//ハンドルnullチェック
 
 	handle = LoadGraph("img/game/Enemy/HP_Bar_Empty.png");
 	m_handles.push_back(handle);
-	assert(handle >= 0);//ハンドルnullチェック
+	assert(handle > -1);//ハンドルnullチェック
 
 	//HPを設定
 	m_currentHP = m_maxHP;
