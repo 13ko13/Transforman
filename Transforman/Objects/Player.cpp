@@ -15,8 +15,8 @@ namespace
 	constexpr int move_speed = 5;							//移動速度
 	constexpr int debug_speed = 10;							//デバッグ用でプレイヤーのスピードを変えたときの値
 	constexpr int size_width = 40;							//キャラクターの横幅
-			constexpr int size_height = 50;					//キャラクターの高さ
-			constexpr int graph_width = 40;					//画像の横切り取りサイズ
+	constexpr int size_height = 50;					//キャラクターの高さ
+	constexpr int graph_width = 40;					//画像の横切り取りサイズ
 	constexpr int graph_height = 40;						//画像の縦切り取りサイズ
 	constexpr int rect_offset_y = 12;						//キャラクターの５場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 	constexpr double p_draw_scale = 2.0f;						//描画スケール	
@@ -735,18 +735,14 @@ void Player::OnParry()
 	m_iFrameTimer = parry_i_frame;
 	m_velocity.x = 0.0f;
 
-	//エフェクシアによりエフェクトを再生する
-	if (playingEffectHandle < 0)
-	{
-		playingEffectHandle = PlayEffekseer2DEffect(effectResourceHandle);
-	}
+	// エフェクトを再生する。
+	playingEffectHandle = PlayEffekseer2DEffect(effectResourceHandle);
 }
 
 void Player::ChangeState(PlayerState state)
 {
 	m_state = state;
 }
-
 
 void Player::UpdateKnockback()
 {
@@ -766,7 +762,6 @@ void Player::UpdateKnockback()
 		m_velocity.x = 0.0f;
 	}
 }
-
 
 void Player::Debug(Input& input)
 {
