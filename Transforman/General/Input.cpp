@@ -13,7 +13,7 @@ Input::Input() :
 							{PeripheralType::pad1,PAD_INPUT_A } };	//パッド:A
 
 	m_inputTable["shot"] = { {PeripheralType::keyboard,KEY_INPUT_Z},	//キーボード:Z
-							{PeripheralType::pad1,PAD_INPUT_A} };		//パッド:Aボタン
+							{PeripheralType::pad1,PAD_INPUT_X} };		//パッド:Xボタン
 
 	m_inputTable["up"] = { {PeripheralType::keyboard,KEY_INPUT_UP},		//キーボード:上矢印
 							{PeripheralType::pad1,PAD_INPUT_UP } };		//パッド:スティック上又は十字上
@@ -28,7 +28,7 @@ Input::Input() :
 							{PeripheralType::pad1,PAD_INPUT_RIGHT } };	 //パッド:スティック右又は十字右
 
 	m_inputTable["jump"] = { {PeripheralType::keyboard,KEY_INPUT_SPACE},//キーボード:スペースキー
-							{PeripheralType::pad1,PAD_INPUT_B	} };	//パッド:Bボタン
+							{PeripheralType::pad1,PAD_INPUT_A	} };	//パッド:Aボタン
 
 	m_inputTable["close"] = { {PeripheralType::keyboard,KEY_INPUT_ESCAPE},//キーボード:スペースキー
 							{PeripheralType::pad1,PAD_INPUT_B	} };	//パッド:Bボタン
