@@ -1,7 +1,7 @@
 #define NOMINMAX
 #include "Player.h"
 #include "../Utility/Geometry.h"
-#include <DxLib.h>
+#include "DxLib.h"
 #include "../General/GameConstants.h"
 #include "PlayerBullet.h"
 #include "../Graphics/Camera.h"
@@ -18,7 +18,7 @@ namespace
 			constexpr int size_height = 50;					//キャラクターの高さ
 			constexpr int graph_width = 40;					//画像の横切り取りサイズ
 	constexpr int graph_height = 40;						//画像の縦切り取りサイズ
-	constexpr int rect_offset_y = 12;						//キャラクターの場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
+	constexpr int rect_offset_y = 12;						//キャラクターの５場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 	constexpr double p_draw_scale = 2.0f;						//描画スケール	
 
 	constexpr int knockback_duration = 15;					//ノックバックする時間
@@ -129,11 +129,11 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 		0, { charge_src.x,charge_src.y }, max_charge_anim_num,
 		charge_one_anim_num, charge_draw_size, true);
 
-	//チャージ中アニメーション初期化
+	//チャージ完了アニメーション初期化
 	m_chargedAnim.Init(
 		m_handles[static_cast<int>(HandleNomber::ChargedHandle)],
 		charged_srcY, { charged_src.x,charged_src.y }, max_charged_anim_num,
-		charged_one_anim_num, charged_draw_size, false);
+		charged_one_anim_num, charged_draw_size, true);
 }
 
 Player::~Player()
@@ -190,6 +190,25 @@ void Player::Update(GameContext& ctx)
 	if (m_shotCooltime <= 0)
 	{
 		PrevShot(ctx.input, ctx.pPlayerBullets);
+	}
+
+	//前のフレームでチャージが完了したかを取得
+	bool wasChargedPrev = m_isCharged;
+	
+	if (m_prevChargeFrame > prev_charge_time)
+	{
+		m_isCharged = true;
+	}
+	else
+	{
+		m_isCharged = false;
+	}
+
+	//前のフレームでも完了していて、今回のフレームでもチャージ完了していたら
+	if (!wasChargedPrev && m_isCharged)
+	{
+		//アニメーションを初期に戻す
+		m_chargeAnim.SetFirst();
 	}
 
 	if (m_isCharged)
@@ -629,7 +648,7 @@ void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 		{
 			//左向き
 			bullet->SetPos({ m_pos.x - size_width / 2 , m_pos.y });
-			////状態遷移
+			//状態遷移
 			//m_state = PlayerState::ChargeShot;
 		}
 		bullet->SetType(BulletType::Fire);
@@ -645,7 +664,7 @@ void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 
 void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
-	if (m_state != PlayerState::Damage ||
+	if (m_state != PlayerState::Damage &&
 		m_state != PlayerState::Dead)
 	{
 		//ボタンが一定フレーム以上
@@ -677,6 +696,10 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 				//チャージショット
 				ChargeShot(pBullets);
 				m_isCharging = false;
+
+				//完了アニメーションを停止する
+				m_isCharging = false;
+				m_isCharged = false;
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
 				m_weaponType == WeaponType::Normal &&
@@ -684,6 +707,9 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 			{
 				//通常ショット
 				Shot(pBullets);
+
+				m_isCharging = false;
+				m_isCharged = false;
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
 				m_weaponType == WeaponType::Fire &&
@@ -692,6 +718,10 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 				//火炎放射
 				FireShot(pBullets);
 				m_state = PlayerState::Fire;
+
+
+				m_isCharging = false;
+				m_isCharged = false;
 			}
 			m_shotCooltime = shot_cooltime;
 			m_prevChargeFrame = 0;
