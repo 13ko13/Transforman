@@ -29,7 +29,8 @@ namespace
 	constexpr float jump_power = 12.0f;						//ジャンプ力
 
 	constexpr int shot_cooltime = 13;						//ショットのクールタイム
-	constexpr int prev_charge_time = 30;					//ショットからチャージショットになるまでの猶予フレーム
+	constexpr int judg_charge_frame = 15;					//チャージ中と判定するまでの入力フレーム数
+	constexpr int prev_charge_time = 60;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
 
@@ -60,12 +61,19 @@ namespace
 	const Vector2 spawn_pos = { 180.0f,583.0f };
 
 	//チャージアニメーション
-	const Vector2 src = { 64,64 };
+	const Vector2 charge_src = { 64,64 };
 	int max_charge_anim_num = 7;//最大アニメーション枚数
 	int charge_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
-	float draw_size = 3.0f;//表示画像のサイズ
+	float charge_draw_size = 2.3f;//表示画像のサイズ
 
-	constexpr int m_blinkingTimer = 5;//無敵中の点滅する時間
+	//チャージ完了アニメーション
+	const Vector2 charged_src = { 64,64 };//切り抜き位置
+	int max_charged_anim_num = 7;//最大アニメーション枚数
+	int charged_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
+	float charged_draw_size = 2.0f;//表示画像サイズ
+	int charged_srcY = 7;		//縦切り取り位置
+
+	constexpr int blinking_timer = 5;//無敵中の点滅する時間
 }
 
 Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -73,6 +81,7 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	m_isJumping(false),
 	m_isPrevJump(false),
 	m_isCharging(false),
+	m_isCharged(false),
 	m_isArrive(false),
 	m_isInvincible(false),
 	m_isCanAction(true),
@@ -102,6 +111,10 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	assert(m_handle > -1);
 	m_handles.push_back(handle);
 
+	handle = LoadGraph("img/game/Player/Charged.png");
+	assert(m_handle > -1);
+	m_handles.push_back(handle);
+
 	m_hitPoint = max_hit_point;//HPを設定した
 	m_isRight = true;//右を向かせておく
 
@@ -110,10 +123,17 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	// パーティクルの寿命が無限だったりする
 	effectResourceHandle = LoadEffekseerEffect("Effekeer_Effect/barrior.efk");
 
+	//チャージ中アニメーション初期化
 	m_chargeAnim.Init(
 		m_handles[static_cast<int>(HandleNomber::ChargeHandle)],
-		0, { src.x,src.y }, max_charge_anim_num,
-		charge_one_anim_num, draw_size, true);
+		0, { charge_src.x,charge_src.y }, max_charge_anim_num,
+		charge_one_anim_num, charge_draw_size, true);
+
+	//チャージ中アニメーション初期化
+	m_chargedAnim.Init(
+		m_handles[static_cast<int>(HandleNomber::ChargedHandle)],
+		charged_srcY, { charged_src.x,charged_src.y }, max_charged_anim_num,
+		charged_one_anim_num, charged_draw_size, false);
 }
 
 Player::~Player()
@@ -161,6 +181,29 @@ void Player::Update(GameContext& ctx)
 		UpdateEffekseer2D();
 	}
 
+	if (m_prevChargeFrame > prev_charge_time)
+	{
+		m_isCharged = true;
+	}
+
+	//クールタイムが0以下の場合ショットの準備を進める
+	if (m_shotCooltime <= 0)
+	{
+		PrevShot(ctx.input, ctx.pPlayerBullets);
+	}
+
+	if (m_isCharged)
+	{
+		//チャージ完了時のみチャージ完了エフェクトの更新を行う
+		m_chargedAnim.Update();
+		//チャージ完了エフェクトのアニメーションが終了したら
+		//アニメーションを最初に戻す
+		if (m_chargedAnim.GetIsEnd())
+		{
+			m_isCharged = false;
+		}
+	}
+
 	//ダメージ状態中または火炎放射中は行動できないようにする
 	if (m_isCanAction)
 	{
@@ -183,12 +226,6 @@ void Player::Update(GameContext& ctx)
 			//ジャンプ中を解除
 			m_jumpFrame = 0;
 			m_isJumping = false;
-		}
-
-		//クールタイムが0以下の場合ショットの準備を進める
-		if (m_shotCooltime <= 0)
-		{
-			PrevShot(ctx.input, ctx.pPlayerBullets);
 		}
 
 		//プレイヤーがパリィボタンを押したらパリィを発動
@@ -377,7 +414,17 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	//チャージ中のみチャージアニメーションを描画する
 	if (m_isCharging)
 	{
-		m_chargeAnim.Draw(m_pos, m_isRight);
+		//チャージ完了時は表示しない
+		if (!m_isCharged)
+		{
+			const Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
+			m_chargeAnim.Draw(drawPos, m_isRight);
+		}
+		else
+		{
+			const Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
+			m_chargedAnim.Draw(drawPos, m_isRight);
+		}
 	}
 
 	//ダメージ受けたときは一定時間表示する→しないを繰り返して
@@ -385,7 +432,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	if (m_isInvincible)
 	{
 		//点滅
-		if (m_blinkingTimer % m_blinkingTimer == 0)
+		if (m_blinkingTimer % blinking_timer == 0)
 		{
 			DrawRectRotaGraph(
 				static_cast<int>(m_pos.x + pCamera->GetDrawOffset().x),
@@ -527,6 +574,7 @@ void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			bullet->SetType(BulletType::Normal);
 			bullet->OnShot();
 			bullet->SetIsRight(m_isRight);
+			m_chargeAnim.SetFirst();
 			break;	//1発撃ったらループを抜ける
 		}
 	}
@@ -553,6 +601,7 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			bullet->SetType(BulletType::Charge);
 			bullet->OnShot();
 			bullet->SetIsRight(m_isRight);
+			m_chargeAnim.SetFirst();
 			break;	//1発撃ったらループを抜ける
 		}
 	}
@@ -586,6 +635,7 @@ void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 		bullet->SetType(BulletType::Fire);
 		bullet->OnShot();
 		bullet->SetIsRight(m_isRight);
+		m_chargeAnim.SetFirst();
 		//火炎放射中の時間を計測する変数に代入
 		m_flameThrowCount = flame_motion_frame;
 		break;	//1発撃ったらループを抜ける
@@ -596,7 +646,7 @@ void Player::FireShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 {
 	if (m_state != PlayerState::Damage ||
-		m_state == PlayerState::Dead)
+		m_state != PlayerState::Dead)
 	{
 		//ボタンが一定フレーム以上
 		//長押しされたらチャージショットの判定にする
@@ -606,8 +656,15 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 		if (input.IsPressed("shot"))
 		{
 			m_prevChargeFrame++;
-			m_isCharging = true;
-			m_chargeAnim.Update();
+			if (m_prevChargeFrame > judg_charge_frame)
+			{
+				m_isCharging = true;
+			}
+			if (!m_isCharged)
+			{
+				//チャージ中アニメーションのUpdate
+				m_chargeAnim.Update();
+			}
 #if _DEBUG
 			DrawFormatString(0, 230, 0xffffff, "チャージ中！");
 #endif
@@ -705,6 +762,12 @@ void Player::Debug(Input& input)
 
 void Player::OnDamage(int dir)
 {
+	//チャージ完了をfalseにする
+	m_isCharged = false;
+	m_isCharging = false;
+	m_shotCooltime = shot_cooltime;
+	m_prevChargeFrame = 0;
+
 	m_knockbackDir = dir;//ノックバックする方向を決める
 	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
 

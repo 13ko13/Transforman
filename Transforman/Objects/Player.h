@@ -32,6 +32,7 @@ enum class HandleNomber
 {
 	PlayerHandle,//プレイヤーアニメーションハンドル
 	ChargeHandle,//チャージアニメーションハンドル
+	ChargedHandle,//チャージ完了時アニメーションハンドル
 };
 
 class PlayerBullet;
@@ -77,7 +78,6 @@ public:
 	/// </summary>
 	/// <returns>現在のヒットポイントの値を返します。</returns>
 	const int GetHitPoint() const { return m_hitPoint; }
-
 private:
 	//変数一覧
 	std::vector<int> m_handles;
@@ -93,7 +93,8 @@ private:
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
 	bool m_isPrevJump;//ジャンプ準備中かどうか
-	bool m_isCharging;//チャージショットをしているかどうか
+	bool m_isCharging;//チャージしているかどうか
+	bool m_isCharged;//チャージが完了しているかどうか
 	bool m_isArrive;//ボス部屋に到着したかどうか
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
 	bool m_isCanAction;//プレイヤーが現在行動可能かどうか
@@ -116,6 +117,7 @@ private:
 	int playingEffectHandle = -1;//再生中のエフェクト
 
 	Animation m_chargeAnim;//チャージ中のアニメーション
+	Animation m_chargedAnim;//チャージ完了アニメーション
 
 
 	// エフェクトリソースを読み込む

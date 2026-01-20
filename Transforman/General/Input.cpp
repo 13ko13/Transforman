@@ -13,7 +13,7 @@ Input::Input() :
 							{PeripheralType::pad1,PAD_INPUT_A } };	//パッド:A
 
 	m_inputTable["shot"] = { {PeripheralType::keyboard,KEY_INPUT_Z},	//キーボード:Z
-							{PeripheralType::pad1,PAD_INPUT_X} };		//パッド:Xボタン
+							{PeripheralType::pad1,PAD_INPUT_C} };		//パッド:Xボタン
 
 	m_inputTable["up"] = { {PeripheralType::keyboard,KEY_INPUT_UP},		//キーボード:上矢印
 							{PeripheralType::pad1,PAD_INPUT_UP } };		//パッド:スティック上又は十字上
@@ -40,7 +40,7 @@ Input::Input() :
 							{PeripheralType::pad1,PAD_INPUT_L	} };//パッド:L1ボタン
 
 	m_inputTable["parry"] = { {PeripheralType::keyboard,KEY_INPUT_X},//キーボード:Xキー
-							{PeripheralType::pad1,PAD_INPUT_X	} };//パッド:Xボタン
+							{PeripheralType::pad1,PAD_INPUT_X	} };//パッド:Yボタン
 #ifdef _DEBUG
 	//デバッグ用キー
 	//プレイヤーのステート切り替え
