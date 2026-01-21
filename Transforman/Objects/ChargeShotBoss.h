@@ -58,6 +58,7 @@ private:
 	bool m_isRushing;//突進中かどうか
 	int m_actionCooldown;//次の行動までのフレーム数
 	bool m_isStart;//ボス戦が始まっているかどうか
+	bool m_isPlayingFlash;//ノズルフラッシュを再生しているかどうか
 
 	std::weak_ptr<Effect> m_rushEffect;//突進エフェクト
 

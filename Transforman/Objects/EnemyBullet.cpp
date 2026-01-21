@@ -13,31 +13,39 @@
 
 namespace
 {
-	constexpr int radius = 20;
+	constexpr int radius = 50;
 	constexpr float speed = 13.0f;
 	constexpr int way_num = 5;
 	constexpr float angle_30 = DX_PI_F / 6.0f;
 	constexpr int bullet_num = 128;
 	constexpr int chip_size = 32;//マップチップのサイズ
-	constexpr int graph_width = 32;//画像の幅
-	constexpr int graph_height = 32;//画像の高さ
-	constexpr int src_idx_y = 1;//画像の縦の切り取り位置インデックス
-	constexpr int ext_rate = 3;//弾のサイズ
-
-	//アニメーション関連
-	constexpr int anim_wait_frame = 6;//次のアニメーションに移る際の待機時間
-	constexpr int bullet_anim_num = 4;//弾のアニメーション枚数
+	constexpr int graph_width = 44;//画像の幅
+	constexpr int graph_height = 44;//画像の高さ
+	constexpr int src_idx_x = 5;//画像の縦の切り取り位置インデックス
+	constexpr int src_idx_y = 8;//画像の縦の切り取り位置インデックス
+	constexpr float draw_size = 4.0f;//弾の描画サイズ
+	constexpr int max_anim_num = 3;//アニメーションの最大枚数
+	constexpr int one_anim_frame = 4;//1コマを見せる時間
 }
 
 EnemyBullet::EnemyBullet(std::shared_ptr<EffectFactory> effectFactory):
 	Bullet(effectFactory)
 {
-	
 	m_state = EnemyState::Normal;
 	m_circle.SetPos(m_pos);
 	m_circle.SetRadius(radius);
-	m_handle = LoadGraph("img/game/Bullet/EnemyBullet.png");
+	m_handle = LoadGraph("img/game/Bullet/enemy_bullet.png");
 	assert(m_handle > - 1);
+
+	m_isRight = false;
+
+	//弾のアニメーション初期化
+	m_bulletAnim.Init(
+		m_handle,
+		src_idx_x, src_idx_y,
+		{ graph_width, graph_height },
+		max_anim_num, one_anim_frame,
+		draw_size, true);
 }
 
 EnemyBullet::~EnemyBullet()
@@ -61,6 +69,9 @@ void EnemyBullet::Update(GameContext& ctx)
 		//当たり判定を中心に設定する
 		m_circle.SetPos(m_pos);
 
+		//弾のアニメーションを更新
+		m_bulletAnim.Update();
+
 		//弾の移動処理
 		Movement();
 
@@ -72,15 +83,8 @@ void EnemyBullet::Update(GameContext& ctx)
 			m_pos.x > mapSize.w * chip_size + radius)
 		{
 			m_isAlive = false;
+			m_bulletAnim.SetFirst();
 		}
-	}
-
-	//現在のアニメーションのフレーム数が
-	//現在のステートの描画枚数を超えたら
-	//現在のアニメーションのフレーム数を0にする
-	if (m_animFrame >= bullet_anim_num * anim_wait_frame)
-	{
-		m_animFrame = 0;
 	}
 }
 
@@ -88,18 +92,8 @@ void EnemyBullet::Draw(std::shared_ptr<Camera> pCamera)
 {
 	if (m_isAlive)
 	{
-		//アニメーションのフレーム数から表示したいコマ番号を計算で求める
-		int animNo = m_animFrame / anim_wait_frame;
-
-		//アニメーションの進行に合わせてグラフィックの横切り取り位置を変更する
-		int srcX = animNo * graph_width;
-		int srcY = src_idx_y * graph_height;
-
-		DrawRectRotaGraph(static_cast<int>(m_pos.x + pCamera->GetDrawOffset().x ),
-			static_cast<int>(m_pos.y + pCamera->GetDrawOffset().y),
-			srcX, srcY,
-			graph_width, graph_height,
-			ext_rate, 0.0, m_handle, true);
+		Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
+		m_bulletAnim.Draw(drawPos, m_isRight);
 
 #if _DEBUG
 		m_circle.Draw(pCamera);

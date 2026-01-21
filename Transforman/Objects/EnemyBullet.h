@@ -1,6 +1,7 @@
 #pragma once
 #include "Bullet.h"
 #include <memory>
+#include "../Graphics/Animation.h"
 
 enum class EnemyState
 {
@@ -29,12 +30,23 @@ public:
 	void SetDir(const Vector2& dir) { m_dir = dir; }
 
 	/// <summary>
+	/// 弾が右を向くかどうかを設定
+	/// </summary>
+	/// <param name="isRight">右向きかどうか</param>
+	void SetIsRight(const bool isRight) { m_isRight = isRight; }
+
+	/// <summary>
 	/// 弾が死んだときに呼び出す関数
 	/// </summary>
 	void OnDead() override;
 private:
 	//変数
+	bool m_isRight;//右向きかどうか
+
+	//エネミーステート
 	EnemyState m_state;
+
+	Animation m_bulletAnim;//弾のアニメーション
 
 	//関数
 	/// <summary>

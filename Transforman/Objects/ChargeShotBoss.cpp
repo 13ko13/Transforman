@@ -79,6 +79,9 @@ namespace
 	constexpr int flash_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
 	constexpr float flash_draw_size = 5.5f;//表示画像のサイズ
 	constexpr float flash_draw_pos_offset_x = 50.0f;//描画の際に発射口に合わせるためのオフセット
+
+	//弾の描画オフセット
+	constexpr float draw_bullet_offset = 16.0f;
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -87,6 +90,7 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 	m_actionCooldown(0),
 	m_isRushing(false),
 	m_isStart(false),
+	m_isPlayingFlash(false),
 	m_GroundNum(0)
 {
 	//ボス自身の画像ハンドル
@@ -254,6 +258,16 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		//ショットアニメーション更新
 		m_shotAnim.Update();
 	}
+
+	if (m_isPlayingFlash)
+	{
+		m_flashAnim.Update();
+		if (m_flashAnim.GetIsEnd())
+		{
+			m_isPlayingFlash = false;
+			m_flashAnim.SetFirst();//アニメーション初期化
+		}
+	}
 }
 
 void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
@@ -302,6 +316,14 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 		case State::Shot:
 			m_shotAnim.Draw(drawPos, !m_isRight);
 
+			m_chargeAnim.Draw(drawPos, !m_isRight);
+			
+			break;
+		}
+
+		//発射口の光を描画する
+		if (m_isPlayingFlash)
+		{
 			//右向きの場合
 			if (m_isRight)
 			{
@@ -309,16 +331,13 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 				flashDrawPos.x += flash_draw_pos_offset_x;
 				m_flashAnim.Draw(flashDrawPos, !m_isRight);
 			}
+			//左向きの場合
 			else
 			{
 				Vector2 flashDrawPos = m_pos + pCamera->GetDrawOffset();
 				flashDrawPos.x -= flash_draw_pos_offset_x;
 				m_flashAnim.Draw(flashDrawPos, !m_isRight);
 			}
-
-			m_chargeAnim.Draw(drawPos, !m_isRight);
-			
-			break;
 		}
 
 		//描画後に明るさを元に戻す
@@ -447,18 +466,40 @@ void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBull
 				{
 					bullet->SetDir({ 1.0f,0.0f });
 					//弾の初期位置を設定
-					bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
+					bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y - draw_bullet_offset });
+					//向きを設定
+					//向きを設定
+					if (m_isRight)
+					{
+						bullet->SetIsRight(false);
+					}
+					else
+					{
+						bullet->SetIsRight(true);
+					}
 				}
 				else
 				{
 					bullet->SetDir({ -1.0f,0.0f });
 					//弾の初期位置を設定
-					bullet->SetPos({ m_pos.x - size_width / 2, m_pos.y });
+					bullet->SetPos({ m_pos.x - size_width / 2, m_pos.y - draw_bullet_offset });
+
+					//向きを設定
+					if (m_isRight)
+					{
+						bullet->SetIsRight(false);
+					}
+					else
+					{
+						bullet->SetIsRight(true);
+					}
 				}
 				bullet->OnShot();
 
-				//ノズルフラッシュアニメーションを初期化
-				m_flashAnim.SetFirst();
+
+				//フラッシュを開始
+				m_isPlayingFlash = true;
+				m_flashAnim.SetFirst();//アニメーション初期化
 
 				//弾を撃ったので状態をアイドルに戻してbreak
 				m_state = State::Idle;
