@@ -15,8 +15,8 @@ namespace
 	constexpr int move_speed = 5;							//移動速度
 	constexpr int debug_speed = 10;							//デバッグ用でプレイヤーのスピードを変えたときの値
 	constexpr int size_width = 40;							//キャラクターの横幅
-	constexpr int size_height = 50;					//キャラクターの高さ
-	constexpr int graph_width = 40;					//画像の横切り取りサイズ
+	constexpr int size_height = 50;							//キャラクターの高さ
+	constexpr int graph_width = 40;							//画像の横切り取りサイズ
 	constexpr int graph_height = 40;						//画像の縦切り取りサイズ
 	constexpr int rect_offset_y = 12;						//キャラクターの５場所と矩形の場所を合わせる(微妙に頭の上の当たり判定が大きくなってしまうため)
 	constexpr double p_draw_scale = 2.0f;						//描画スケール	
@@ -62,18 +62,20 @@ namespace
 
 	//チャージアニメーション
 	const Vector2 charge_src = { 64,64 };
-	int max_charge_anim_num = 7;//最大アニメーション枚数
-	int charge_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
-	float charge_draw_size = 2.3f;//表示画像のサイズ
+	constexpr int max_charge_anim_num = 7;//最大アニメーション枚数
+	constexpr int charge_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
+	constexpr float charge_draw_size = 2.3f;//表示画像のサイズ
 
 	//チャージ完了アニメーション
 	const Vector2 charged_src = { 64,64 };//切り抜き位置
-	int max_charged_anim_num = 7;//最大アニメーション枚数
-	int charged_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
-	float charged_draw_size = 2.0f;//表示画像サイズ
-	int charged_srcY = 7;		//縦切り取り位置
+	constexpr int max_charged_anim_num = 7;//最大アニメーション枚数
+	constexpr int charged_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
+	constexpr float charged_draw_size = 2.0f;//表示画像サイズ
+	constexpr int charged_srcY = 7;		//縦切り取り位置
 
 	constexpr int blinking_timer = 5;//無敵中の点滅する時間
+
+	constexpr float barrior_draw_offset_y = 27.0f;//エフェクシアのバリアエフェクトを描画する際のオフセット
 }
 
 Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -101,18 +103,20 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	m_damageAnimFrame(0),
 	m_knockbackDir(0),
 	m_parryCooltime(0),
-	m_iFrameTimer(0)
+	m_iFrameTimer(0),
+	m_cameraOffset({0,0}),
+	m_playingEffectHandle(-1)
 {
 	int handle = LoadGraph("img/game/Player/transforman_player.png");
-	assert(m_handle > -1);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	handle = LoadGraph("img/game/Player/Charge.png");
-	assert(m_handle > -1);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	handle = LoadGraph("img/game/Player/Charged.png");
-	assert(m_handle > -1);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	m_hitPoint = max_hit_point;//HPを設定した
@@ -121,7 +125,8 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	// エフェクトリソースを読み込む
 	// ループで無限再生されるエフェクトは、パーティクル自体の生成数が無限だったり、
 	// パーティクルの寿命が無限だったりする
-	effectResourceHandle = LoadEffekseerEffect("Effekeer_Effect/barrior.efk");
+	m_effectResourceHandle = LoadEffekseerEffect("Effekseer_Effect/barrior.efk");
+	assert(m_effectResourceHandle > -1);
 
 	//チャージ中アニメーション初期化
 	m_chargeAnim.Init(
@@ -140,7 +145,7 @@ Player::~Player()
 {
 	DeleteGraph(m_handle);
 	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
-	DeleteEffekseerEffect(effectResourceHandle);
+	DeleteEffekseerEffect(m_effectResourceHandle);
 }
 
 void Player::Init()
@@ -172,14 +177,6 @@ void Player::Update(GameContext& ctx)
 	//パリィ可能状態にする
 	m_parryCooltime--;
 
-	if (playingEffectHandle >= 0) // 再生中エフェクトのハンドルがあれば.
-	{
-		// 再生中のエフェクトを移動
-		SetPosPlayingEffekseer2DEffect(playingEffectHandle, m_pos.x, m_pos.y,0);
-
-		// Effekseerにより再生中のエフェクトを更新する。
-		UpdateEffekseer2D();
-	}
 
 	if (m_prevChargeFrame > prev_charge_time)
 	{
@@ -317,11 +314,11 @@ void Player::Update(GameContext& ctx)
 		{
 			//ステートを戻す
 			m_state = PlayerState::Idle;
-			if (playingEffectHandle >= 0)
+			if (m_playingEffectHandle >= 0)
 			{
 				//エフェクシアのエフェクトを停止する
-				StopEffekseer2DEffect(playingEffectHandle);
-				playingEffectHandle = -1;
+				StopEffekseer2DEffect(m_playingEffectHandle);
+				m_playingEffectHandle = -1;
 			}
 		}
 		break;
@@ -394,6 +391,15 @@ void Player::Update(GameContext& ctx)
 	{
 		m_pos.x = Graphic::screen_width + size_width * 0.5f;
 	}
+
+	m_cameraOffset = ctx.pCamera->GetDrawOffset();
+	const Vector2 drawPos = m_cameraOffset + m_pos;
+
+	if (m_playingEffectHandle >= 0) // 再生中エフェクトのハンドルがあれば.
+	{
+		// 再生中のエフェクトを移動
+		SetPosPlayingEffekseer2DEffect(m_playingEffectHandle, drawPos.x, drawPos.y + barrior_draw_offset_y, 0);
+	}
 }
 
 void Player::Draw(std::shared_ptr<Camera> pCamera)
@@ -417,12 +423,6 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 	//DrawFormatString(0, 415, 0xffffff, "ParryCooltime : %d", m_parryCooltime);
 	DrawFormatString(0, 15, 0xffffff, "HP: %d", m_hitPoint);
 #endif
-
-	// Effekseerにより再生中のエフェクトを描画する。
-	if (playingEffectHandle >= 0)
-	{
-		DrawEffekseer2D();
-	}
 
 	//操作方法
 	DrawFormatString(Graphic::screen_width - 160, 64, 0xffffff, "Jump : B");
@@ -736,7 +736,11 @@ void Player::OnParry()
 	m_velocity.x = 0.0f;
 
 	// エフェクトを再生する。
-	playingEffectHandle = PlayEffekseer2DEffect(effectResourceHandle);
+	if (m_effectResourceHandle >= 0)
+	{
+		m_playingEffectHandle = PlayEffekseer2DEffect(m_effectResourceHandle);
+		assert(m_playingEffectHandle > -1);
+	}
 }
 
 void Player::ChangeState(PlayerState state)

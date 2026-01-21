@@ -3,6 +3,13 @@
 #include <vector>
 #include <memory>
 
+enum class HandleNomber
+{
+	ChargeShotBoss,//ボス自身の画像
+	Charge,//チャージ中
+	NozzleFlash,//発射口の光
+};
+
 class EnemyBullet;
 class Player;
 class EffectFactory;
@@ -44,6 +51,8 @@ public:
 	/// </summary>
 	void OnDead();
 private:
+	std::vector<int> m_handles;//ハンドルの配列
+
 	int m_GroundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数
 	bool m_isRushing;//突進中かどうか
@@ -52,9 +61,11 @@ private:
 
 	std::weak_ptr<Effect> m_rushEffect;//突進エフェクト
 
-	Animation m_rushAnim;
-	Animation m_prevRushAnim;
-	Animation m_shotAnim;
+	Animation m_rushAnim;//突進中のアニメーション
+	Animation m_prevRushAnim;//突進準備中のアニメーション
+	Animation m_shotAnim;//弾発射中のアニメーション
+	Animation m_chargeAnim;//チャージ中のアニメーション
+	Animation m_flashAnim;//発射口の光
 
 	enum class State
 	{

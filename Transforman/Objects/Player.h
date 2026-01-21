@@ -28,13 +28,6 @@ enum class WeaponType
 	Fire,
 };
 
-enum class HandleNomber
-{
-	PlayerHandle,//プレイヤーアニメーションハンドル
-	ChargeHandle,//チャージアニメーションハンドル
-	ChargedHandle,//チャージ完了時アニメーションハンドル
-};
-
 class PlayerBullet;
 class EffectFactory;
 class Player : public Charactor, public std::enable_shared_from_this<Player>
@@ -79,6 +72,13 @@ public:
 	/// <returns>現在のヒットポイントの値を返します。</returns>
 	const int GetHitPoint() const { return m_hitPoint; }
 private:
+	enum class HandleNomber
+	{
+		PlayerHandle,//プレイヤーアニメーションハンドル
+		ChargeHandle,//チャージアニメーションハンドル
+		ChargedHandle,//チャージ完了時アニメーションハンドル
+	};
+
 	//変数一覧
 	std::vector<int> m_handles;
 	int m_jumpFrame;//ジャンプ力
@@ -114,7 +114,9 @@ private:
 	PlayerState m_state;
 	WeaponType m_weaponType;
 
-	int playingEffectHandle = -1;//再生中のエフェクト
+	Vector2 m_cameraOffset;//カメラのオフセットをメンバ変数として持つ
+
+	int m_playingEffectHandle = -1;//再生中のエフェクト
 
 	Animation m_chargeAnim;//チャージ中のアニメーション
 	Animation m_chargedAnim;//チャージ完了アニメーション
@@ -123,7 +125,7 @@ private:
 	// エフェクトリソースを読み込む
 	// ループで無限再生されるエフェクトは、パーティクル自体の生成数が無限だったり、
 	// パーティクルの寿命が無限だったりする
-	int effectResourceHandle;
+	int m_effectResourceHandle;
 private:
 	//関数一覧
 	/// <summary>

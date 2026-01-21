@@ -8,6 +8,7 @@
 #include "../EffectFactory.h"
 #include "../Effect.h"
 #include "../Stages/Stage.h"
+#include "../Graphics/Animation.h"
 
 namespace
 {
@@ -60,7 +61,24 @@ namespace
 	constexpr int hit_color_green = 100;//攻撃を受けたときの緑の度合い
 	constexpr int hit_color_blue = 100;//攻撃を受けたときの青の度合い
 
+	//死亡エフェクト
 	constexpr int death_effect_pos_y = 80;//死亡エフェクトを出すときの高さ
+
+	//チャージアニメーション
+	const Vector2 charge_src = { 64,64 };
+	constexpr int max_charge_anim_num = 7;//最大アニメーション枚数
+	constexpr int charge_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
+	constexpr float charge_draw_size = 5.5f;//表示画像のサイズ
+
+	constexpr int fire_frame_idx = 6;//攻撃アニメーションの発射フレーム
+
+	//ノズルフラッシュアニメーション
+	constexpr int flash_src_y = 26;//縦の切り取り位置
+	const Vector2 flash_src = { 64,64 };//切り取りサイズ
+	constexpr int max_flash_anim_num = 9;//最大アニメーション枚数
+	constexpr int flash_one_anim_num = 5;//アニメーション一枚一枚を表示するフレーム数
+	constexpr float flash_draw_size = 5.5f;//表示画像のサイズ
+	constexpr float flash_draw_pos_offset_x = 50.0f;//描画の際に発射口に合わせるためのオフセット
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -71,8 +89,20 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 	m_isStart(false),
 	m_GroundNum(0)
 {
-	m_handle = LoadGraph("img/game/Enemy/chargeshot_boss.png");
-	assert(m_handle > -1);
+	//ボス自身の画像ハンドル
+	int handle = LoadGraph("img/game/Enemy/chargeshot_boss.png");
+	m_handles.push_back(handle);
+	assert(handle > -1);
+
+	//チャージ中の画像ハンドル
+	handle = LoadGraph("img/game/Enemy/charge.png");
+	m_handles.push_back(handle);
+	assert(handle > -1);
+
+	//発射口の光の画像ハンドル
+	handle = LoadGraph("img/game/Enemy/nozzle_flash.png");
+	m_handles.push_back(handle);
+	assert(handle > -1);
 
 	m_pos = first_pos;
 	m_state = State::None;
@@ -82,16 +112,36 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 
 ChargeShotBoss::~ChargeShotBoss()
 {
-	DeleteGraph(m_handle);
+	for (auto& handle : m_handles)
+	{
+		//ハンドルを解放
+		DeleteGraph(handle);
+	}
 }
 
 void ChargeShotBoss::Init()
 {
 	const Vector2 frameSize = { graph_width ,graph_height };
-	m_idleAnim.Init(m_handle, 0, frameSize, idle_anim_frame, anim_wait_frame, p_draw_scale, true);
-	m_prevRushAnim.Init(m_handle, 0, frameSize, rush_anim_frame, anim_wait_prev_rush, p_draw_scale, true);
-	m_rushAnim.Init(m_handle, 0, frameSize, rush_anim_frame, anim_wait_rush, p_draw_scale, true);
-	m_shotAnim.Init(m_handle, 1, frameSize, shot_anim_frame, anim_wait_shot, p_draw_scale, false);
+	//待機状態アニメーションの初期化
+	m_idleAnim.Init(m_handles[static_cast<int>(HandleNomber::ChargeShotBoss)], 0, frameSize, idle_anim_frame, anim_wait_frame, p_draw_scale, true);
+	//突進準備中アニメーションの初期化
+	m_prevRushAnim.Init(m_handles[static_cast<int>(HandleNomber::ChargeShotBoss)], 0, frameSize, rush_anim_frame, anim_wait_prev_rush, p_draw_scale, true);
+	//突進中アニメーションの初期化
+	m_rushAnim.Init(m_handles[static_cast<int>(HandleNomber::ChargeShotBoss)], 0, frameSize, rush_anim_frame, anim_wait_rush, p_draw_scale, true);
+	//弾発射中のアニメーションの初期化
+	m_shotAnim.Init(m_handles[static_cast<int>(HandleNomber::ChargeShotBoss)], 1, frameSize, shot_anim_frame, anim_wait_shot, p_draw_scale, false);
+
+	//チャージ中アニメーション初期化
+	m_chargeAnim.Init(
+		m_handles[static_cast<int>(HandleNomber::Charge)],
+		0, { charge_src.x,charge_src.y }, max_charge_anim_num,
+		charge_one_anim_num, charge_draw_size, true);
+
+	//ノズルフラッシュアニメーション初期化
+	m_flashAnim.Init(
+		m_handles[static_cast<int>(HandleNomber::NozzleFlash)],
+		flash_src_y, { flash_src.x,flash_src.y }, max_flash_anim_num,
+		flash_one_anim_num, flash_draw_size, false);
 }
 
 void ChargeShotBoss::Update(GameContext& ctx)
@@ -176,6 +226,8 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		break;
 	case State::Shot:
 		ShotUpdate(ctx.pEnemyBullets, ctx.pPlayer);
+		//フラッシュアニメーションを更新
+		m_flashAnim.Update();
 		break;
 	}
 
@@ -231,7 +283,7 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 			SetDrawBright(hit_color_red, hit_color_green, hit_color_blue);
 		}
 
-		Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
+		const Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
 		//アニメーションの描画
 		switch (m_state)
 		{
@@ -249,6 +301,23 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 			break;
 		case State::Shot:
 			m_shotAnim.Draw(drawPos, !m_isRight);
+
+			//右向きの場合
+			if (m_isRight)
+			{
+				Vector2 flashDrawPos = m_pos + pCamera->GetDrawOffset();
+				flashDrawPos.x += flash_draw_pos_offset_x;
+				m_flashAnim.Draw(flashDrawPos, !m_isRight);
+			}
+			else
+			{
+				Vector2 flashDrawPos = m_pos + pCamera->GetDrawOffset();
+				flashDrawPos.x -= flash_draw_pos_offset_x;
+				m_flashAnim.Draw(flashDrawPos, !m_isRight);
+			}
+
+			m_chargeAnim.Draw(drawPos, !m_isRight);
+			
 			break;
 		}
 
@@ -353,45 +422,56 @@ void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBull
 	std::shared_ptr<Player> pPlayer)
 {
 	//アニメーションの発射フレームでのみ弾を打つ
-	const int fireFrameIdx = 6;
+	const int fireFrameIdx = fire_frame_idx;
 
 	//現在のアニメーションのフレーム数を取得
 	int currentFrame = m_shotAnim.GetNowAnimNum();
 
-	//発射フレームに達していなければ何もしない
-	if (currentFrame < fireFrameIdx) return;
-	//弾を撃つ処理
-	for (auto& bullet : pBullets)
+	//発射フレームに達していなければチャージ中アニメ―ションを更新
+	if (currentFrame < fireFrameIdx)
 	{
-		//弾を撃つ
-		if (!bullet->GetIsAlive())
-		{
-			//プレイヤーの場所を取得して
-			//弾の向きを決定する
-			if (pPlayer->GetPos().x > m_pos.x)
-			{
-				bullet->SetDir({ 1.0f,0.0f });
-				//弾の初期位置を設定
-				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
-			}
-			else
-			{
-				bullet->SetDir({ -1.0f,0.0f });
-				//弾の初期位置を設定
-				bullet->SetPos({ m_pos.x - size_width / 2, m_pos.y });
-			}
-			bullet->OnShot();
-			//弾を撃ったので状態をアイドルに戻してbreak
-			m_state = State::Idle;
-			break;
-		}
+		m_chargeAnim.Update();
+		return;
 	}
-
-	//アニメーションが最後まで行ったら
-	//状態をアイドルに戻す
-	if (m_shotAnim.GetIsEnd())
+	else
 	{
-		m_state = State::Idle;
+		//弾を撃つ処理
+		for (auto& bullet : pBullets)
+		{
+			//弾を撃つ
+			if (!bullet->GetIsAlive())
+			{
+				//プレイヤーの場所を取得して
+				//弾の向きを決定する
+				if (pPlayer->GetPos().x > m_pos.x)
+				{
+					bullet->SetDir({ 1.0f,0.0f });
+					//弾の初期位置を設定
+					bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
+				}
+				else
+				{
+					bullet->SetDir({ -1.0f,0.0f });
+					//弾の初期位置を設定
+					bullet->SetPos({ m_pos.x - size_width / 2, m_pos.y });
+				}
+				bullet->OnShot();
+
+				//ノズルフラッシュアニメーションを初期化
+				m_flashAnim.SetFirst();
+
+				//弾を撃ったので状態をアイドルに戻してbreak
+				m_state = State::Idle;
+				break;
+			}
+		}
+
+		//アニメーションが最後まで行ったら
+		//状態をアイドルに戻す
+		if (m_shotAnim.GetIsEnd())
+		{
+			m_state = State::Idle;
+		}
 	}
 }
 

@@ -16,6 +16,7 @@
 #include "ClearScene.h"
 #include "../Main/Application.h"
 #include "../EffectFactory.h"
+#include "../../Dxlib_h/EffekseerForDXLib.h"
 #include <DxLib.h>
 
 namespace
@@ -194,6 +195,9 @@ void GameScene::UpdateNormal(Input& input)
 		//絶対にreturnする
 		return;
 	}
+
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer2D();
 }
 
 void GameScene::UpdateFadeOut(Input& input)
@@ -286,4 +290,7 @@ void GameScene::DrawNormal()
 
 	//エフェクトファクトリーの描画
 	m_pEffectFactory->Draw(m_pCamera);
+
+	//Effekseer描画
+	DrawEffekseer2D();
 }
