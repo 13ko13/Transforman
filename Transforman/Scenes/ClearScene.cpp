@@ -30,13 +30,14 @@ ClearScene::ClearScene(SceneController& controller) :
 	assert(handle > -1 && "クリアシーンの背景画像");//Nullチェック
 	m_handles.push_back(handle);
 
-	//updateとdrawの関数ポインタにFadeInUpdateと
+	//updateとdrawの関数ポインタに
+	//FadeInUpdateと
 	//FadeDrawを参照させる
 	m_update = &ClearScene::UpdateFadeIn;
 	m_draw = &ClearScene::DrawFade;
 
 	//frameにfade中にかかる秒数を代入
-	m_frame = fade_interval;	//初期化関数呼び出し
+	m_frame = fade_interval;//初期化関数呼び出し
 	Init();
 }
 
