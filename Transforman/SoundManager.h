@@ -1,20 +1,25 @@
 #pragma once
+#include <vector>
+#include <string>
+#include <map>
+#include <cassert>
 
 enum class SoundType
 {
 	Decision,//決定
 };
 
+struct SoundData
+{
+	int handle = -1;//サウンドハンドル
+	int volume = 255;//0～255
+	bool isLoop = false;//デフォルトのループ設定
+	bool loaded = false;//ロード済みフラグ
+};
+
 class SoundManager
 {
-private:
-	SoundManager();//newも変数宣言もできないようにする
-	SoundManager(const SoundManager& sm) = delete;//コピーコンストラクタを削除
-	void operator=(const SoundManager& sm) = delete;//代入を削除
-
 public:
-	~SoundManager();
-
 	/// <summary>
 	/// SoundManagerのシングルトンインスタンスを取得する
 	/// </summary>
@@ -22,14 +27,65 @@ public:
 	/// <note>SoundManagerの実体はこの関数内部で生成され、ずっととどまり続ける
 	static SoundManager& GetInstance();
 
-	/// <summary>
-	/// 音を再生する
-	/// </summary>
-	void PlaySound();
+	~SoundManager();
 
 	/// <summary>
-	/// 音を停止する
+	/// 音に関する情報をロードする関数
 	/// </summary>
-	void StopSound();
+	/// <param name="type">音の種類</param>
+	/// <param name="path">ファイル名</param>
+	/// <param name="volume">音量</param>
+	/// <param name="defaultLoop">デフォルトのループ設定</param>
+	void Load(
+		SoundType type,
+		const std::string& path,
+		int volume = 255,
+		bool defaultLoop = false);
+
+	/// <summary>
+	/// 再生
+	/// </summary>
+	/// <param name="soundType">音の種類</param>
+	void Play(SoundType soundType);
+
+	/// <summary>
+	/// 再生(ループするとき)
+	/// </summary>
+	/// <param name="soundType">種類</param>
+	/// <param name="loop">ループするかどうか(指定しないとループしない)</param>
+	void Play(SoundType soundType,bool loop);
+
+	/// <summary>
+	/// 指定の音を停止する
+	/// </summary>
+	/// <param name="type">音の種類</param>
+	void StopSound(SoundType type);
+
+	/// <summary>
+	/// すべての音を停止させる
+	/// </summary>
+	void StopAll();
+
+	/// <summary>
+	/// 音量を変更
+	/// </summary>
+	/// <param name="type">音の種類</param>
+	/// <param name="volume">音量</param>
+	void SetVolume(SoundType type, int volume);
+
+	/// <summary>
+	/// ロードしているかどうかを返す関数
+	/// </summary>
+	/// <param name="type">種類</param>
+	/// <returns>ロード済み:true,未ロード:false</returns>
+	bool IsLoaded(SoundType type) const;
+
+private:
+	std::map<SoundType, SoundData> m_sounds;
+
+private:
+	SoundManager();//newも変数宣言もできないようにする
+	SoundManager(const SoundManager& sm) = delete;//コピーコンストラクタを削除
+	void operator=(const SoundManager& sm) = delete;//代入を削除
 };
 
