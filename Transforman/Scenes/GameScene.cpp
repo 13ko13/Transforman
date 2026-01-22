@@ -17,6 +17,7 @@
 #include "../Main/Application.h"
 #include "../EffectFactory.h"
 #include "../../Dxlib_h/EffekseerForDXLib.h"
+#include "../SoundManager.h"
 #include <DxLib.h>
 
 namespace
@@ -109,6 +110,9 @@ GameScene::GameScene(SceneController& controller) :
 	m_frame = fade_interval;
 
 	Init();
+
+	//BGMÇçƒê∂
+	SoundManager::GetInstance().Play(SoundType::GameBgm, true);
 }
 
 void GameScene::Init()
