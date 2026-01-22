@@ -9,6 +9,7 @@
 #include "../Effect.h"
 #include "../Stages/Stage.h"
 #include "../Graphics/Animation.h"
+#include "../SoundManager.h"
 
 namespace
 {
@@ -500,6 +501,8 @@ void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBull
 				//フラッシュを開始
 				m_isPlayingFlash = true;
 				m_flashAnim.SetFirst();//アニメーション初期化
+				//発射音を再生
+				SoundManager::GetInstance().Play(SoundType::BossShot);
 
 				//弾を撃ったので状態をアイドルに戻してbreak
 				m_state = State::Idle;
