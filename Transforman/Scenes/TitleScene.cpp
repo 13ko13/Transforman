@@ -7,6 +7,7 @@
 #include <assert.h>
 #include "../../Dxlib_h/EffekseerForDXLib.h"
 #include "../SoundManager.h"
+#include "../SoundManager.h"
 
 namespace
 {
@@ -46,6 +47,9 @@ TitleScene::TitleScene(SceneController& controller) :
 	// パーティクルの寿命が無限だったりする
 	/*effectResourceHandle = LoadEffekseerEffect("Effekseer_Effect/barrior.efk");
 	assert(effectResourceHandle > -1);*/
+
+	//BGMを再生
+	SoundManager::GetInstance().Play(SoundType::TitleBgm,true);
 }
 
 TitleScene::~TitleScene()
@@ -58,6 +62,8 @@ TitleScene::~TitleScene()
 	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
 	/*DeleteEffekseerEffect(effectResourceHandle);*/
 	m_controller.Init();
+
+	SoundManager::GetInstance().StopSound(SoundType::TitleBgm);
 } 
 
 void TitleScene::UpdateFadeIn(Input&)
