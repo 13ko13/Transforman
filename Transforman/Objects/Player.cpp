@@ -6,6 +6,7 @@
 #include "PlayerBullet.h"
 #include "../Graphics/Camera.h"
 #include "../EffectFactory.h"
+#include "../SoundManager.h"
 #include <cassert>
 #include "../../Dxlib_h/EffekseerForDXLib.h"
 
@@ -78,6 +79,9 @@ namespace
 	constexpr float barrior_draw_offset_y = 27.0f;//エフェクシアのバリアエフェクトを描画する際のオフセット
 
 	const Vector2 effect_pos_offset = { 40.0f,0.0f };
+
+	//チャージ音(単体)を鳴らす感覚
+	constexpr int charge_se_interval = 60;
 }
 
 Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -141,6 +145,8 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 		m_handles[static_cast<int>(HandleNomber::ChargedHandle)],
 		charged_srcY, { charged_src.x,charged_src.y }, max_charged_anim_num,
 		charged_one_anim_num, charged_draw_size, true);
+
+	m_nextChargeFrame = 0;
 }
 
 Player::~Player()
@@ -596,6 +602,7 @@ void Player::Shot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			bullet->OnShot();
 			bullet->SetIsRight(m_isRight);
 			m_chargeAnim.SetFirst();
+			SoundManager::GetInstance().Play(SoundType::NormalShot);
 			break;	//1発撃ったらループを抜ける
 		}
 	}
@@ -677,6 +684,14 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 		if (input.IsPressed("shot"))
 		{
 			m_prevChargeFrame++;
+
+			//チャージ時間1秒ごとにチャージ音を鳴らす
+			if (m_prevChargeFrame > charge_se_interval * m_nextChargeFrame)
+			{
+				SoundManager::GetInstance().Play(SoundType::PlayerCharge);
+				m_nextChargeFrame++;
+			}
+
 			if (m_prevChargeFrame > judg_charge_frame)
 			{
 				m_isCharging = true;
@@ -727,6 +742,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 			}
 			m_shotCooltime = shot_cooltime;
 			m_prevChargeFrame = 0;
+			m_nextChargeFrame = 0;
 		}
 	}
 }

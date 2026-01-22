@@ -89,6 +89,7 @@ private:
 	int m_blinkingTimer;//無敵中の点滅中のタイム管理用
 	int m_parryCooltime;//パリィを打てるまでのクールタイム管理用
 	int m_iFrameTimer;//パリィ後の無敵中の時間
+	int m_nextChargeFrame;//次にチャージ音を鳴らすフレーム
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
