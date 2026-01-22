@@ -16,7 +16,7 @@ class Player;
 class EnemyBullet : public Bullet
 {
 public:
-	EnemyBullet(std::shared_ptr<EffectFactory> effectFactory);
+	EnemyBullet(std::shared_ptr<EffectFactory> effectFactory, std::shared_ptr<Map> pMap);
 	~EnemyBullet();
 
 	void Init() override;

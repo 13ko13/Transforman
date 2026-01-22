@@ -5,10 +5,11 @@
 
 struct GameContext;
 class EffectFactory;
+class Map;
 class Bullet : public Object
 {
 public:
-	Bullet(std::shared_ptr<EffectFactory> effectfactory);
+	Bullet(std::shared_ptr<EffectFactory> effectfactory, std::shared_ptr<Map> pMap);
 	virtual ~Bullet();
 
 	virtual void Init() override;
@@ -21,10 +22,12 @@ public:
 	virtual void OnDead();
 	void OnShot();
 
-
 	const Circle& GetCircle() const { return m_circle; }
 
+private:
+
 protected:
+	std::shared_ptr<Map> m_pMap;
 	Vector2 m_dir;
 	bool m_isAlive;
 	Circle m_circle;

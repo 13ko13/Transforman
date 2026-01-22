@@ -6,9 +6,10 @@
 #include "EnemyBase.h"
 #include "../Stages/Stage.h"
 #include "../EffectFactory.h"
+#include "../Map.h"
 #include <cassert>
 
-namespace 
+namespace
 {
 	constexpr float speed = 10.0f;
 	constexpr int normal_shot_radius = 15;
@@ -36,12 +37,12 @@ namespace
 	constexpr int fire_width = 150;
 	constexpr int fire_height = 30;
 	constexpr float flame_life_time = 30.0f;//炎の残る時間
-	
+
 	constexpr int chip_size = 32;//マップチップのサイズ
 }
 
-PlayerBullet::PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory) :
-	Bullet(pEffectFactory),
+PlayerBullet::PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory, std::shared_ptr<Map> pMap) :
+	Bullet(pEffectFactory, pMap),
 	m_animFrame(0),
 	m_isRight(false),
 	m_flameLifeTime(0.0f)
@@ -51,25 +52,25 @@ PlayerBullet::PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory) :
 	m_circle.SetRadius(normal_shot_radius);
 	//左上を基準に当たり判定を設定
 	m_rect.SetLT(
-		m_pos.x ,m_pos.y ,
+		m_pos.x, m_pos.y,
 		fire_width, fire_height);
 
 	//画像をロード
 	int handle = -1;
-	
+
 	handle = LoadGraph("img/game/bullet/player_bullet.png");
-	assert(handle >-1);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 
 	handle = LoadGraph("img/game/bullet/player_charge_bullet.png");
-	assert(handle >-1);
+	assert(handle > -1);
 	m_handles.push_back(handle);
 }
 
 PlayerBullet::~PlayerBullet()
 {
 	//画像の開放
-	for(auto handle : m_handles)
+	for (auto handle : m_handles)
 	{
 		DeleteGraph(handle);
 	}
@@ -80,7 +81,7 @@ void PlayerBullet::Init()
 	//通常弾アニメーション初期化
 	m_normalAnim.Init(
 		m_handles[static_cast<int>(HandleNumber::Normal)],
-		0, { normal_graph_width ,normal_graph_height},
+		0, { normal_graph_width ,normal_graph_height },
 		normal_max_anim_num, normal_one_anim_frame,
 		normal_draw_scale, true);
 	//チャージ弾アニメーション初期化
@@ -120,7 +121,7 @@ void PlayerBullet::Update(GameContext& ctx)
 			//ステージ外に出てしまった場合は存在状態を
 			//保持している変数にfalseを代入
 			const auto& mapSize = ctx.pStage->GetMapSize();
-			if (m_pos.x < 0 - normal_shot_radius||
+			if (m_pos.x < 0 - normal_shot_radius ||
 				m_pos.x > mapSize.w * chip_size + normal_shot_radius)
 			{
 				m_isAlive = false;
@@ -224,7 +225,7 @@ void PlayerBullet::Draw(std::shared_ptr<Camera> pCamera)
 #endif
 			//アニメーションの描画
 			m_chargeAnim.Draw(
-				{m_pos.x + pCamera->GetDrawOffset().x,
+				{ m_pos.x + pCamera->GetDrawOffset().x,
 				m_pos.y + pCamera->GetDrawOffset().y }, !m_isRight
 			);
 			break;

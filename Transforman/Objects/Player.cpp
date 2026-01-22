@@ -76,6 +76,8 @@ namespace
 	constexpr int blinking_timer = 5;//無敵中の点滅する時間
 
 	constexpr float barrior_draw_offset_y = 27.0f;//エフェクシアのバリアエフェクトを描画する際のオフセット
+
+	const Vector2 effect_pos_offset = { 40.0f,0.0f };
 }
 
 Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -610,7 +612,7 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			if (m_isRight)
 			{
 				//右向き
-				bullet->SetPos({ m_pos.x + size_width / 2, m_pos.y });
+				bullet->SetPos({ m_pos.x + size_width / 2 , m_pos.y });
 			}
 			else
 			{

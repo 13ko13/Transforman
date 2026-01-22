@@ -28,8 +28,8 @@ namespace
 	constexpr int one_anim_frame = 4;//1ƒRƒ}‚ðŒ©‚¹‚éŽžŠÔ
 }
 
-EnemyBullet::EnemyBullet(std::shared_ptr<EffectFactory> effectFactory):
-	Bullet(effectFactory)
+EnemyBullet::EnemyBullet(std::shared_ptr<EffectFactory> pEffectFactory, std::shared_ptr<Map> pMap):
+	Bullet(pEffectFactory,pMap)
 {
 	m_state = EnemyState::Normal;
 	m_circle.SetPos(m_pos);

@@ -165,6 +165,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Objects\ParryBoss.cpp" />
     <ClCompile Include="SaveManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Stages\Stage.cpp" />
     <ClCompile Include="Graphics\Animation.cpp" />
     <ClCompile Include="Main\Application.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Objects\ParryBoss.h" />
     <ClInclude Include="SaveData.h" />
     <ClInclude Include="SaveManager.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="Stages\Stage.h" />
     <ClInclude Include="Graphics\Animation.h" />
     <ClInclude Include="Main\Application.h" />

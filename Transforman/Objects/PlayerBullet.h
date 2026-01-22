@@ -17,7 +17,7 @@ class EnemyBase;
 class PlayerBullet : public Bullet
 {
 public:
-	PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory);
+	PlayerBullet(std::shared_ptr<EffectFactory> pEffectFactory,std::shared_ptr<Map> pMap);
 	~PlayerBullet();
 
 	void Init() override;
@@ -59,4 +59,6 @@ private:
 		Normal = 0,
 		Charge = 1
 	};
+
+private:
 };

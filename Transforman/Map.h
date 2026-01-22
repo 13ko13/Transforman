@@ -24,6 +24,7 @@ public:
 	void Update();
 	void Draw(Camera camera);
 	bool IsCollision(const Rect hitRect, Rect& chipRect);
+	bool IsCollision(const Circle bulletCircle, Rect& chipRect);
 	void SetStageType(StageType stageType) { m_stageType = stageType; };
 private:
 	std::shared_ptr<Stage> m_pStage;//ステージのポインタ
