@@ -39,7 +39,7 @@ void SoundManager::Load(SoundType type, const std::string& path, int volume, boo
 	if (data.loaded) return;
 
 	int handle = LoadSoundMem(path.c_str());//パスを通してサウンドハンドルを取得
-	assert(handle > -1 && "音をロードできていません");//ロードできていなければクラッシュ
+	assert(handle != - 1&& "音をロードできていません");//ロードできていなければクラッシュ
 
 	data.handle = handle;
 	data.loaded = true;

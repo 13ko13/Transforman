@@ -7,6 +7,11 @@
 enum class SoundType
 {
 	Decision,//決定
+	NormalShot,//通常ショット
+	GameBgm,//ゲームシーンBGM
+	TitleBgm,//タイトルシーンBGM
+	BossShot,//ボスのショット
+	PlayerCharge,//プレイヤーのチャージ
 };
 
 struct SoundData
