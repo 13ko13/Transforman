@@ -6,6 +6,7 @@
 #include "GameScene.h"
 #include <assert.h>
 #include "../../Dxlib_h/EffekseerForDXLib.h"
+#include "../SoundManager.h"
 
 namespace
 {
@@ -24,7 +25,7 @@ TitleScene::TitleScene(SceneController& controller) :
 	//タイトルロゴハンドルに画像のハンドルを渡す
 	int handle = -1;
 
-	handle = LoadGraph("img/title/title_logo.png");
+	handle = LoadGraph("img/title/title_logo_2.png");
 	assert(handle > -1);	//Nullチェック
 	m_handles.push_back(handle);
 
@@ -80,6 +81,8 @@ void TitleScene::UpdateNormal(Input& input)
 	//関数を切り替えてフェードアウトに入る
 	if (input.IsTriggered("ok"))
 	{
+		SoundManager::GetInstance().Play(SoundType::Decision);
+
 		m_update = &TitleScene::UpdateFadeOut;
 		m_draw = &TitleScene::DrawFade;
 		//フェードアウトの最初　念のため　
