@@ -11,7 +11,12 @@
 namespace
 {
 	constexpr int effect_num = 8000;
-	constexpr int desition_volume = 100;
+	constexpr int desition_volume = 70;//決定音の音量
+	constexpr int normal_shot_vol = 70;//通常ショットの音量
+	constexpr int game_bgm_volume = 60;//ゲームシーンBGMの音量
+	constexpr int title_bgm_volume = 60;//タイトルシーンBGMの音量
+	constexpr int boss_shot_volume = 50;//ボスのショット時のSEの音量
+	constexpr int player_charge_vol = 50;//プレイヤーのチャージ音
 }
 
 Application::Application():
@@ -79,14 +84,19 @@ bool Application::Init()
 	//サウンドマネージャーの初期化
 	auto& sm = SoundManager::GetInstance();
 	sm.Load(SoundType::Decision, "Sound/SE/decision.wav", desition_volume, false);
-	
+	sm.Load(SoundType::NormalShot, "Sound/SE/normal_shot.wav", normal_shot_vol, false);
+	sm.Load(SoundType::GameBgm, "Sound/BGM/game.mp3", game_bgm_volume, true);
+	sm.Load(SoundType::TitleBgm, "Sound/BGM/title.mp3", title_bgm_volume, true);
+	sm.Load(SoundType::BossShot , "Sound/SE/boss_shot.wav", boss_shot_volume, false);
+	sm.Load(SoundType::PlayerCharge, "Sound/SE/player_charge.wav", player_charge_vol, false);
+
 	return true;
 }
 
 void Application::Run()
 {
 	SetDrawScreen(DX_SCREEN_BACK);
-	Input input;//入力のためのオブジェクト
+	Input input;//入力のためのオブジェクト 
 	SceneController controller;//シーンを管理するオブジェクト
 	controller.ChangeScene(std::make_shared<TitleScene>(controller));
 	controller.Init();
