@@ -6,10 +6,12 @@
 #include "../Scenes/TitleScene.h"
 #include "../General/GameConstants.h"
 #include "EffekseerForDXLib.h"
+#include "../SoundManager.h"
 
 namespace
 {
 	constexpr int effect_num = 8000;
+	constexpr int desition_volume = 100;
 }
 
 Application::Application():
@@ -74,6 +76,9 @@ bool Application::Init()
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
 
+	//サウンドマネージャーの初期化
+	auto& sm = SoundManager::GetInstance();
+	sm.Load(SoundType::Decision, "Sound/SE/decision.wav", desition_volume, false);
 	
 	return true;
 }
