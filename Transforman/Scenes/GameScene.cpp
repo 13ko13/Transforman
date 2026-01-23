@@ -115,6 +115,11 @@ GameScene::GameScene(SceneController& controller) :
 	SoundManager::GetInstance().Play(SoundType::GameBgm, true);
 }
 
+GameScene::~GameScene()
+{
+	SoundManager::GetInstance().StopSound(SoundType::GameBgm);
+}
+
 void GameScene::Init()
 {
 	// 各オブジェクトの初期化

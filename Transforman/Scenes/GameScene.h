@@ -25,6 +25,7 @@ class GameScene : public Scene
 {
 public:
 	GameScene(SceneController& controller);
+	~GameScene();
 	void Init() override;
 	void Update(Input& input) override;
 	void Draw()override;
