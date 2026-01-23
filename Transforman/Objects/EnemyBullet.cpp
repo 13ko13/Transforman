@@ -19,10 +19,10 @@ namespace
 	constexpr float angle_30 = DX_PI_F / 6.0f;
 	constexpr int bullet_num = 128;
 	constexpr int chip_size = 32;//マップチップのサイズ
-	constexpr int graph_width = 44;//画像の幅
-	constexpr int graph_height = 44;//画像の高さ
-	constexpr int src_idx_x = 5;//画像の縦の切り取り位置インデックス
-	constexpr int src_idx_y = 8;//画像の縦の切り取り位置インデックス
+	constexpr int graph_width = 32;//画像の幅
+	constexpr int graph_height = 32;//画像の高さ
+	constexpr int src_idx_x = 15;//画像の縦の切り取り位置インデックス
+	constexpr int src_idx_y = 6;//画像の縦の切り取り位置インデックス
 	constexpr float draw_size = 4.0f;//弾の描画サイズ
 	constexpr int max_anim_num = 3;//アニメーションの最大枚数
 	constexpr int one_anim_frame = 4;//1コマを見せる時間
