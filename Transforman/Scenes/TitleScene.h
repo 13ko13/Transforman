@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "../Graphics/Animation.h"
 
 //enum class EffectState
 //{
@@ -19,15 +20,20 @@ public:
 private:
 	enum class HandleNumber
 	{
-		TitleLogo,
-		Abutton,
-		Bbutton,
+		TitleLogo,//ロゴ
+		Abutton,//Press A Button
+		Background,//背景
+		Player,//プレイヤー
+		Enemy,//敵
+		Spark,//電気
 	};
 
 	std::vector<int> m_handles;//画像ハンドルの配列
 	int m_frame;//フェード用のフレーム
 
-	
+	Animation m_playerAnim;//プレイヤーのアニメーション
+	Animation m_enemyAnim;//敵のアニメーション
+
 	/////////////////////////////////////////////
 	/////////////////エフェクシア///////////////
 	///////////////////////////////////////////
