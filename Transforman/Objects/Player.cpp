@@ -81,7 +81,7 @@ namespace
 	const Vector2 effect_pos_offset = { 40.0f,0.0f };
 
 	//チャージ音(単体)を鳴らす感覚
-	constexpr int charge_se_interval = 60;
+	constexpr int charge_se_interval = 30;
 }
 
 Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -146,7 +146,7 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 		charged_srcY, { charged_src.x,charged_src.y }, max_charged_anim_num,
 		charged_one_anim_num, charged_draw_size, true);
 
-	m_nextChargeFrame = 0;
+	m_nextChargeFrame = 1;
 }
 
 Player::~Player()
@@ -717,6 +717,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 				//完了アニメーションを停止する
 				m_isCharging = false;
 				m_isCharged = false;
+				m_nextChargeFrame = 1;
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
 				m_weaponType == WeaponType::Normal &&
@@ -727,6 +728,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 
 				m_isCharging = false;
 				m_isCharged = false;
+				m_nextChargeFrame = 1;
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
 				m_weaponType == WeaponType::Fire &&
@@ -742,7 +744,7 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 			}
 			m_shotCooltime = shot_cooltime;
 			m_prevChargeFrame = 0;
-			m_nextChargeFrame = 0;
+			m_nextChargeFrame = 1;
 		}
 	}
 }
