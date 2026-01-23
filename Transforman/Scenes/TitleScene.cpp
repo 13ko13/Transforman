@@ -21,6 +21,27 @@ namespace
 
 	constexpr int blinking_min_alpha = 175;//Press A Button の最小透明度
 	constexpr int blinking_rate = 80;//透明度が変化する度合い
+
+	constexpr int logo_pos_offset_y = 150.0f;
+
+	//プレイヤー
+	constexpr int p_graph_width = 40;							//画像の横切り取りサイズ
+	constexpr int p_graph_height = 40;						//画像の縦切り取りサイズ
+	constexpr int p_max_anim_num = 5;						//アニメーションの最大枚数
+	constexpr int p_one_anim_frame = 8;						//アニメーションの1枚を見せる長さ
+	constexpr float p_draw_scale = 15.0f;					//描画サイズ
+	//敵
+	constexpr int e_graph_width = 48;							//画像の横切り取りサイズ
+	constexpr int e_graph_height = 32;						//画像の縦切り取りサイズ
+	constexpr int e_max_anim_num = 4;						//アニメーションの最大枚数
+	constexpr int e_one_anim_frame = 10;						//アニメーションの1枚を見せる長さ
+	constexpr float e_draw_scale = 15.0f;					//描画サイズ
+
+	constexpr float p_draw_window_rate_x = 0.27f;			//プレイヤーを描画する位置がウィンドウの幅の何割当たりか
+	constexpr float p_draw_window_rate_y = 0.8f;			//プレイヤーを描画する位置がウィンドウの高さの何割当たりか
+
+	constexpr float e_draw_window_rate_x = 0.73f;			//敵を描画する位置がウィンドウの幅の何割当たりか
+	constexpr float e_draw_window_rate_y = 0.8f;			//敵を描画する位置がウィンドウの高さの何割当たりか
 }
 
 TitleScene::TitleScene(SceneController& controller) :
@@ -41,6 +62,14 @@ TitleScene::TitleScene(SceneController& controller) :
 	assert(handle > -1);	//Nullチェック
 	m_handles.push_back(handle);
 
+	handle = LoadGraph("img/title/player.png");
+	assert(handle > -1);	//Nullチェック
+	m_handles.push_back(handle);
+
+	handle = LoadGraph("img/title/enemy.png");
+	assert(handle > -1);	//Nullチェック
+	m_handles.push_back(handle);
+
 	//updateとdrawの関数ポインタにFadeInUpdateと
 	//FadeDrawを参照させる
 	m_update = &TitleScene::UpdateFadeIn;
@@ -57,6 +86,22 @@ TitleScene::TitleScene(SceneController& controller) :
 
 	//BGMを再生
 	SoundManager::GetInstance().Play(SoundType::TitleBgm,true);
+
+	//プレイヤーアニメーションを初期化
+	m_playerAnim.Init(
+		m_handles[static_cast<int>(TitleScene::HandleNumber::Player)],
+		0,
+		{ p_graph_width,p_graph_height },
+		p_max_anim_num, p_one_anim_frame,
+		p_draw_scale, true);
+
+	//敵アニメーションを初期化
+	m_enemyAnim.Init(
+		m_handles[static_cast<int>(TitleScene::HandleNumber::Enemy)],
+		0,
+		{ e_graph_width,e_graph_height },
+		e_max_anim_num, e_one_anim_frame,
+		e_draw_scale, true);
 }
 
 TitleScene::~TitleScene()
@@ -75,6 +120,11 @@ TitleScene::~TitleScene()
 
 void TitleScene::UpdateFadeIn(Input&)
 {
+	//プレイヤーのアニメーションの更新
+	m_playerAnim.Update();
+	//敵のアニメーションの更新
+	m_enemyAnim.Update();
+
 	//フレームが0以下になったらUpdateとDrawの関数ポインタに
 	//関数を参照させる
 	if (--m_frame <= 0)
@@ -89,6 +139,11 @@ void TitleScene::UpdateFadeIn(Input&)
 
 void TitleScene::UpdateNormal(Input& input)
 {
+	//プレイヤーのアニメーションの更新
+	m_playerAnim.Update();
+	//敵のアニメーションの更新
+	m_enemyAnim.Update();
+
 	m_frame++;
 	//okボタンが押されたら
 	//関数を切り替えてフェードアウトに入る
@@ -144,6 +199,11 @@ void TitleScene::UpdateNormal(Input& input)
 
 void TitleScene::UpdateFadeOut(Input&)
 {
+	//プレイヤーのアニメーションの更新
+	m_playerAnim.Update();
+	//敵のアニメーションの更新
+	m_enemyAnim.Update();
+
 	//フレームを++してfade_intervalを超えたら
 	if (++m_frame >= fade_interval)
 	{
@@ -184,10 +244,22 @@ void TitleScene::DrawNormal()
 
 	//ロゴを表示
 	DrawRotaGraph(
-		wsize.w / 2, wsize.h / 2,
+		wsize.w / 2, wsize.h / 2 - logo_pos_offset_y,
 		static_cast<double>(title_logo_size),
 		0.0f, 
 		m_handles[static_cast<int>(TitleScene::HandleNumber::TitleLogo)],
+		true);
+
+	//プレイヤーを表示
+	m_playerAnim.Draw(
+		{ static_cast<float>(wsize.w * p_draw_window_rate_x),
+		static_cast<float>(wsize.h * p_draw_window_rate_y) },
+		false);
+
+	//敵を表示
+	m_enemyAnim.Draw(
+		{ static_cast<float>(wsize.w * e_draw_window_rate_x),
+		static_cast<float>(wsize.h * e_draw_window_rate_y) },
 		true);
 
 	int blinkingRate = blinking_min_alpha + blinking_rate * sinf(m_frame * 0.1f);// + 1.0f * 0.5f
