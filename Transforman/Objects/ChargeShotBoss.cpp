@@ -530,7 +530,7 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 		Rect chipRect;	//当たったマップチップの矩形
 		HitMap(chipRect);//マップとの接地判定
 
-		bool isColWall = m_pos.x < stageEnd - Graphic::screen_width + size_width / 2 ||
+		bool isColWall = m_pos.x <= stageEnd - Graphic::screen_width + chip_size + size_width / 2 ||
 			m_pos.x >= stageEnd - chip_size * 2 - size_width / 2;//ボス部屋の端の壁に当たったかどうか
 		if (!isColWall && !m_isRushing)
 		{
