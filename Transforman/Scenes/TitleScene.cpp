@@ -18,6 +18,9 @@ namespace
 	constexpr float a_button_size = 0.5f;//Aボタン画像の表示サイズ
 	constexpr float effect_pos_x = 500.0f;
 	constexpr float effect_pos_y = 500.0f;
+
+	constexpr int blinking_min_alpha = 175;//Press A Button の最小透明度
+	constexpr int blinking_rate = 80;//透明度が変化する度合い
 }
 
 TitleScene::TitleScene(SceneController& controller) :
@@ -31,6 +34,10 @@ TitleScene::TitleScene(SceneController& controller) :
 	m_handles.push_back(handle);
 
 	handle = LoadGraph("img/title/press_a_button.png");
+	assert(handle > -1);	//Nullチェック
+	m_handles.push_back(handle);
+
+	handle = LoadGraph("img/title/background.png");
 	assert(handle > -1);	//Nullチェック
 	m_handles.push_back(handle);
 
@@ -167,22 +174,28 @@ void TitleScene::DrawNormal()
 {
 	//ウィンドウサイズを変数に保存
 	const auto wsize = Application::GetInstance().GetWindowSize();
-	//ロゴを表示
-	DrawRotaGraph(wsize.w / 2, wsize.h / 2, static_cast<double>(title_logo_size),
-		0.0f, m_handles[static_cast<int>(TitleScene::HandleNumber::TitleLogo)], true);
 
-	int blinkingRate = 175 + 80 * sinf(m_frame * 0.1f);// + 1.0f * 0.5f
+	//背景を表示
+	DrawExtendGraph(
+		0, 0,
+		wsize.w, wsize.h, 
+		m_handles[static_cast<int>(TitleScene::HandleNumber::Background)], 
+		true);
+
+	//ロゴを表示
+	DrawRotaGraph(
+		wsize.w / 2, wsize.h / 2,
+		static_cast<double>(title_logo_size),
+		0.0f, 
+		m_handles[static_cast<int>(TitleScene::HandleNumber::TitleLogo)],
+		true);
+
+	int blinkingRate = blinking_min_alpha + blinking_rate * sinf(m_frame * 0.1f);// + 1.0f * 0.5f
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,blinkingRate);//aブレンド
 	//「Aボタンでスタート」を表示
 	DrawRotaGraph(wsize.w / 2, wsize.h / 2 + a_button_offset_y,
 		static_cast<double>(a_button_size), 0.0f, m_handles[static_cast<int>(TitleScene::HandleNumber::Abutton)], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);//ブレンドしない
-
-	//if (playingEffectHandle >= 0) // 再生中エフェクトのハンドルがあれば.
-	//{
-	//	// Effekseerにより再生中のエフェクトを描画する。
-	//	DrawEffekseer2D();
-	//}
 }
 
 void TitleScene::Init()
