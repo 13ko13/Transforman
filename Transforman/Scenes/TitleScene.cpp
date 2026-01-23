@@ -37,11 +37,23 @@ namespace
 	constexpr int e_one_anim_frame = 10;						//アニメーションの1枚を見せる長さ
 	constexpr float e_draw_scale = 15.0f;					//描画サイズ
 
+	//プレイヤー
 	constexpr float p_draw_window_rate_x = 0.27f;			//プレイヤーを描画する位置がウィンドウの幅の何割当たりか
-	constexpr float p_draw_window_rate_y = 0.8f;			//プレイヤーを描画する位置がウィンドウの高さの何割当たりか
+	constexpr float p_draw_window_rate_y = 0.75f;			//プレイヤーを描画する位置がウィンドウの高さの何割に当たりか
 
+	//電気
+	constexpr float s_draw_window_rate_y = 0.75f;			//雷を描画する位置がウィンドウサイズの高さ何割に当たるか
+
+	//敵
 	constexpr float e_draw_window_rate_x = 0.73f;			//敵を描画する位置がウィンドウの幅の何割当たりか
-	constexpr float e_draw_window_rate_y = 0.8f;			//敵を描画する位置がウィンドウの高さの何割当たりか
+	constexpr float e_draw_window_rate_y = 0.75f;			//敵を描画する位置がウィンドウの高さの何割当たりか
+
+	//プレイヤーと敵の間の雷
+	constexpr int s_graph_width = 256;						//雷の画像の幅
+	constexpr int s_graph_height = 128;						//雷の画像の高さ
+	constexpr int s_max_anim_num = 4;						//雷のアニメーションの最大枚数
+	constexpr int s_one_anim_frame = 6;						//雷のアニメーションの1コマを見せる時間
+	constexpr float s_draw_scale = 2.0f;					//雷の描画サイズ
 }
 
 TitleScene::TitleScene(SceneController& controller) :
@@ -67,6 +79,10 @@ TitleScene::TitleScene(SceneController& controller) :
 	m_handles.push_back(handle);
 
 	handle = LoadGraph("img/title/enemy.png");
+	assert(handle > -1);	//Nullチェック
+	m_handles.push_back(handle);
+
+	handle = LoadGraph("img/title/spark.png");
 	assert(handle > -1);	//Nullチェック
 	m_handles.push_back(handle);
 
@@ -102,6 +118,14 @@ TitleScene::TitleScene(SceneController& controller) :
 		{ e_graph_width,e_graph_height },
 		e_max_anim_num, e_one_anim_frame,
 		e_draw_scale, true);
+
+	//電気のアニメーションを初期化
+	m_sparkAnim.Init(
+		m_handles[static_cast<int>(TitleScene::HandleNumber::Spark)],
+		0,
+		{ s_graph_width ,s_graph_height },
+		s_max_anim_num, s_one_anim_frame,
+		s_draw_scale, true);
 }
 
 TitleScene::~TitleScene()
@@ -124,6 +148,8 @@ void TitleScene::UpdateFadeIn(Input&)
 	m_playerAnim.Update();
 	//敵のアニメーションの更新
 	m_enemyAnim.Update();
+	//雷のアニメーションの更新
+	m_sparkAnim.Update();
 
 	//フレームが0以下になったらUpdateとDrawの関数ポインタに
 	//関数を参照させる
@@ -143,6 +169,8 @@ void TitleScene::UpdateNormal(Input& input)
 	m_playerAnim.Update();
 	//敵のアニメーションの更新
 	m_enemyAnim.Update();
+	//雷のアニメーションの更新
+	m_sparkAnim.Update();
 
 	m_frame++;
 	//okボタンが押されたら
@@ -203,6 +231,8 @@ void TitleScene::UpdateFadeOut(Input&)
 	m_playerAnim.Update();
 	//敵のアニメーションの更新
 	m_enemyAnim.Update();
+	//雷のアニメーションの更新
+	m_sparkAnim.Update();
 
 	//フレームを++してfade_intervalを超えたら
 	if (++m_frame >= fade_interval)
@@ -261,6 +291,12 @@ void TitleScene::DrawNormal()
 		{ static_cast<float>(wsize.w * e_draw_window_rate_x),
 		static_cast<float>(wsize.h * e_draw_window_rate_y) },
 		true);
+
+	//雷を表示
+	m_sparkAnim.Draw(
+		{ static_cast<float>(wsize.w / 2),
+		static_cast<float>(wsize.h * s_draw_window_rate_y) },
+		false);
 
 	int blinkingRate = blinking_min_alpha + blinking_rate * sinf(m_frame * 0.1f);// + 1.0f * 0.5f
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,blinkingRate);//aブレンド
