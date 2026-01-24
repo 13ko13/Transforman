@@ -15,8 +15,16 @@ namespace
 	constexpr int normal_shot_vol = 70;//通常ショットの音量
 	constexpr int game_bgm_volume = 60;//ゲームシーンBGMの音量
 	constexpr int title_bgm_volume = 60;//タイトルシーンBGMの音量
-	constexpr int boss_shot_volume = 50;//ボスのショット時のSEの音量
-	constexpr int player_charge_vol = 50;//プレイヤーのチャージ音
+	constexpr int charge_shot_vol = 50;//チャージショット時のSEの音量
+	constexpr int player_charge_vol = 50;//プレイヤーのチャージ音量
+	constexpr int player_charge_finished_vol = 60;//プレイヤーのチャージ完了音量
+	constexpr int jump_volume = 50;//ジャンプの音量
+	constexpr int hit_shot_volume = 60;//弾が当たった時の音量
+	constexpr int pinch_volume = 60;//プレイヤーがピンチになった時の音の音量
+	constexpr int rush_volume = 60;//敵の突進時の音の音量
+	constexpr int thunder_volume = 60;//雷の音量
+	constexpr int player_damage_vol = 60;//プレイヤーが被弾したと音の音量
+	constexpr int player_death_vol = 130;//プレイヤーが死んだときの音の音量
 }
 
 Application::Application():
@@ -41,7 +49,7 @@ bool Application::Init()
 {
 	SetGraphMode(m_windowSize.w, m_windowSize.h, Graphic::color_bit);
 	//ウィンドwモード設定
-	ChangeWindowMode(true);
+	ChangeWindowMode(false);
 	//ゲーム名
 	SetWindowText("TransforMan");
 
@@ -54,7 +62,7 @@ bool Application::Init()
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
 	// Effekseerを初期化する。
-		// 引数には画面に表示する最大パーティクル数を設定する。
+	// 引数には画面に表示する最大パーティクル数を設定する。
 	if (Effkseer_Init(effect_num) == -1)
 	{
 		DxLib_End();
@@ -87,9 +95,17 @@ bool Application::Init()
 	sm.Load(SoundType::NormalShot, "Sound/SE/normal_shot.wav", normal_shot_vol, false);
 	sm.Load(SoundType::GameBgm, "Sound/BGM/game.mp3", game_bgm_volume, true);
 	sm.Load(SoundType::TitleBgm, "Sound/BGM/title.mp3", title_bgm_volume, true);
-	sm.Load(SoundType::BossShot , "Sound/SE/boss_shot.wav", boss_shot_volume, false);
+	sm.Load(SoundType::BossShot , "Sound/SE/charge_shot.wav", charge_shot_vol, false);
 	sm.Load(SoundType::PlayerCharge, "Sound/SE/player_charge.wav", player_charge_vol, false);
-
+	sm.Load(SoundType::PlayerChargeFinished, "Sound/SE/player_charge_finished.wav", player_charge_finished_vol, false);
+	sm.Load(SoundType::PlayerChargeShot, "Sound/SE/charge_shot.wav", charge_shot_vol, false);
+	sm.Load(SoundType::Jump, "Sound/SE/jump.mp3", jump_volume, false);
+	sm.Load(SoundType::HitShot, "Sound/SE/hit_shot.mp3", hit_shot_volume, false);
+	sm.Load(SoundType::Pinch, "Sound/SE/pinch.mp3", hit_shot_volume, false);
+	sm.Load(SoundType::Rush, "Sound/SE/rush.mp3", rush_volume, false);
+	sm.Load(SoundType::Thunder, "Sound/SE/thunder.wav", thunder_volume, false);
+	sm.Load(SoundType::PlayerDamage, "Sound/SE/player_damage.mp3", player_damage_vol, false);
+	sm.Load(SoundType::PlayerDeath, "Sound/SE/player_death.mp3", player_death_vol, false);
 	return true;
 }
 
