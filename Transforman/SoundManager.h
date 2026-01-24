@@ -12,6 +12,15 @@ enum class SoundType
 	TitleBgm,//タイトルシーンBGM
 	BossShot,//ボスのショット
 	PlayerCharge,//プレイヤーのチャージ
+	PlayerChargeFinished,//プレイヤーのチャージ完了音
+	PlayerChargeShot,//プレイヤーのチャージショット音
+	Jump,//プレイヤーのジャンプ音
+	HitShot,//弾が当たった時の音
+	Pinch,//プレイヤーのHPがピンチになった時の音
+	Rush,//敵の突進時の音
+	Thunder,//雷の音
+	PlayerDamage,//プレイヤーがダメージを食らった時の音
+	PlayerDeath,//プレイヤーが死んだときの音
 };
 
 struct SoundData
