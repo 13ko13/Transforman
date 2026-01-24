@@ -50,9 +50,16 @@ public:
 	/// 死亡時演出
 	/// </summary>
 	void OnDead();
+
+	/// <summary>
+	/// 攻撃をパリィされたときの処理
+	/// </summary>
+	void OnParried(int dir) override;
 private:
 	std::vector<int> m_handles;//ハンドルの配列
 
+	int m_knockbackDir;//ノックバックする方向
+	int m_knockackTimer;//残りノックバック時間
 	int m_GroundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数
 	bool m_isRushing;//突進中かどうか
@@ -76,6 +83,8 @@ private:
 		PrevRush,//突進準備
 		Rush,//突進
 		Shot,//弾
+		Knockback,//ノックバック
+		Stan,//怯み
 	};
 	State m_state;//状態
 
@@ -114,5 +123,15 @@ private:
 	/// </summary>
 	/// <param name="ctx">オブジェクトクラスを継承しているオブジェクトの構造体</param>
 	void IdleUpdate(GameContext& ctx);
+
+	/// <summary>
+	/// ノックバック時の更新処理
+	/// </summary>
+	void KnockbackUpdate(GameContext& ctx);
+
+	/// <summary>
+	/// スタン時の更新処理
+	/// </summary>
+	void StanUpdate();
 };
 

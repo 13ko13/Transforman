@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "ChargeShotBoss.h"
 #include "EnemyBullet.h"
 #include <DxLib.h>
@@ -21,15 +22,15 @@ namespace
 	constexpr float p_draw_scale = 5.0f;
 
 	const Vector2 first_pos = { 2380.0f,-32.0f };
-	constexpr int attack_cooltime = 60;//攻撃のクールタイム
+	constexpr int attack_cooltime = 120;//攻撃のクールタイム
 	constexpr int appear_time = 60;//出現からノーマルに遷移するまでの時間
 	constexpr float bullet_pos_offset = 10.0f;
 	constexpr float appear_gravity = 6.0f;//出現中の重力
-	constexpr float move_speed = 12.0f;//突進の速さ
+	constexpr float move_speed = 15.0f;//突進の速さ
 	constexpr float prev_rush_speed = 0.001f;//突進準備中のほんの少し動く時のスピード
-	constexpr int action_cooldown = 70;//次の行動までのフレーム数
+	constexpr int action_cooldown = 120;//次の行動までのフレーム数
 
-	constexpr int prev_rush_frame = 60;//突進準備中の時間
+	constexpr int prev_rush_frame = 40;//突進準備中の時間
 	//アニメーション関連
 	constexpr int graph_idx_idle = 0;//待機状態
 	constexpr int graph_idx_appear = 0;//出現状態(画像がないので1アイドルと同じ状態)
@@ -83,6 +84,11 @@ namespace
 
 	//弾の描画オフセット
 	constexpr float draw_bullet_offset = 16.0f;
+
+	//ノックバック
+	constexpr int knockback_duration = 19;//ノックバックする時間
+	constexpr int knockback_speed = 20.0f;//ノックバック時のスピード
+	constexpr int knockback_jump = -10.0f;//ノックバック時のy軸へのベクトルの強さ
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -113,6 +119,9 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 	m_state = State::None;
 	//体力設定
 	m_hitPoint = max_hitpoint;
+
+	m_knockackTimer = 0;
+	m_knockbackDir = 0;
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -234,6 +243,11 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		//フラッシュアニメーションを更新
 		m_flashAnim.Update();
 		break;
+	case State::Knockback:
+		KnockbackUpdate(ctx);
+		break;
+	case State::Stan:
+		StanUpdate();
 	}
 
 	if (m_state == State::Appear ||
@@ -438,6 +452,25 @@ void ChargeShotBoss::OnDead()
 	);
 }
 
+void ChargeShotBoss::OnParried(int dir)
+{
+	m_knockbackDir = dir;//ノックバックする方向を決める
+	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
+
+	//ノックバックするための方向と速度を代入する
+	m_velocity.x = m_knockbackDir * knockback_speed;
+	m_velocity.y = knockback_jump;
+
+	//ステートをノックバック状態にする
+	m_state = State::Knockback;
+
+	//中断されたのでエフェクトを削除する
+	if (auto rushEffect = m_rushEffect.lock())
+	{
+		rushEffect->Kill();
+	}
+}
+
 void ChargeShotBoss::ShotUpdate(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 	std::shared_ptr<Player> pPlayer)
 {
@@ -569,6 +602,9 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 			effectPos.y -= rush_effect_offset_y;//エフェクトの位置調整
 			m_pEffectFactory->Create(effectPos, EffectType::hitWall);
 
+			//ぶつかった時の音を鳴らす
+			SoundManager::GetInstance().Play(SoundType::Thunder);
+
 			//ステートをアイドルに戻す
 			m_state = State::Idle;
 			m_isRushing = false;
@@ -612,6 +648,8 @@ void ChargeShotBoss::PrevRushUpdate(GameContext& ctx)
 			const Vector2 offset = { 0.0f,0.0f };
 			m_rushEffect = m_pEffectFactory->CreateFollow(shared_from_this(), EffectType::rush, offset);
 			m_state = State::Rush;
+			//突進時の音を鳴らす
+			SoundManager::GetInstance().Play(SoundType::Rush);
 		}
 	}
 }
@@ -649,4 +687,40 @@ void ChargeShotBoss::IdleUpdate(GameContext& ctx)
 		//ランダムな攻撃方法をとる
 		Attack(ctx.pEnemyBullets, ctx.pPlayer);
 	}
+}
+
+void ChargeShotBoss::KnockbackUpdate(GameContext& ctx)
+{
+	m_knockackTimer--;
+
+	Charactor::Update(ctx);
+
+	Rect chipRect;	//当たったマップチップの矩形
+	HitMap(chipRect);//マップとの接地判定
+
+	// 減速量
+	constexpr float decel = 2.0f;
+
+	if (m_knockbackDir > 0) {         // 右へノックバック中（velocity.x > 0 から 0 へ）
+		m_velocity.x = std::max(0.0f, m_velocity.x - decel);
+	}
+	else if (m_knockbackDir < 0) {  // 左へノックバック中（velocity.x < 0 から 0 へ）
+		m_velocity.x = std::min(0.0f, m_velocity.x + decel);
+	}
+	else 
+	{
+		// dir==0 の安全策
+		m_velocity.x = 0.0f;
+	}
+
+	if (m_knockackTimer < 0)
+	{
+		m_state = State::Stan;
+	}
+}
+
+void ChargeShotBoss::StanUpdate()
+{
+	Rect chipRect;	//当たったマップチップの矩形
+	HitMap(chipRect);//マップとの接地判定
 }
