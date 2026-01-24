@@ -70,6 +70,22 @@ private:
 	static bool CheckCollision(const Rect& swordRect, const Player& player);
 
 	/// <summary>
+	/// 敵の弾とプレイヤーのバリアの当たり判定をチェックする
+	/// </summary>
+	/// <param name="barriorRect">バリアの当たり判定</param>
+	/// <param name="bullet">敵の弾の当たり判定</param>
+	/// <returns>true:当たっている,false:当たっていない</returns>
+	static bool CheckCollision(const Rect& barriorRect, const EnemyBullet& bullet);
+
+	/// <summary>
+	/// 敵の当たり判定とバリアの当たり判定
+	/// </summary>
+	/// <param name="barriorRect">バリアの矩形</param>
+	/// <param name="enemyRect">敵の矩形</param>
+	/// <returns>true:当たっている,false:当たっていない</returns>
+	static bool CheckCollision(const Rect& barriorRect, const Rect& enemyRect);
+
+	/// <summary>
 	/// エネミーリストから死亡しているエネミーを削除する
 	/// </summary>
 	/// <param name="pEnemies"></param>
