@@ -31,7 +31,7 @@ namespace
 
 	constexpr int shot_cooltime = 13;						//ショットのクールタイム
 	constexpr int judg_charge_frame = 15;					//チャージ中と判定するまでの入力フレーム数
-	constexpr int prev_charge_time = 60;					//ショットからチャージショットになるまでの猶予フレーム
+	constexpr int prev_charge_time = 120;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
 
@@ -80,8 +80,16 @@ namespace
 
 	const Vector2 effect_pos_offset = { 40.0f,0.0f };
 
-	//チャージ音(単体)を鳴らす感覚
-	constexpr int charge_se_interval = 30;
+	//チャージし始めてからチャージ音を鳴らすまでの時間
+	constexpr int charge_se_start = 30;
+
+	//プレイヤーがピンチになるときのHP
+	constexpr int pinch_hp = 3;
+
+	//パリィ時のバリア
+	constexpr float barrior_width = 170.0f;
+	constexpr float barrior_height = 80.0f;
+	constexpr float barrior_pos_offset_y = 20.0f;
 }
 
 Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -94,6 +102,8 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	m_isInvincible(false),
 	m_isCanAction(true),
 	m_isStartDash(false),
+	m_isChargeSound(false),
+	m_isJumpSound(false),
 	m_jumpFrame(0),
 	m_shotCooltime(0),
 	m_flameThrowerCT(0),
@@ -110,7 +120,7 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	m_knockbackDir(0),
 	m_parryCooltime(0),
 	m_iFrameTimer(0),
-	m_cameraOffset({0,0}),
+	m_cameraOffset({ 0,0 }),
 	m_playingEffectHandle(-1)
 {
 	int handle = LoadGraph("img/game/Player/transforman_player.png");
@@ -146,7 +156,8 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 		charged_srcY, { charged_src.x,charged_src.y }, max_charged_anim_num,
 		charged_one_anim_num, charged_draw_size, true);
 
-	m_nextChargeFrame = 1;
+	//バリアの矩形を当たらないところに初期化する
+	m_shieldRect.SetCenter(0, 0, 0, 0);
 }
 
 Player::~Player()
@@ -168,7 +179,7 @@ void Player::Update(GameContext& ctx)
 	Debug(ctx.input);
 #endif
 
-	if(m_hitPoint <= 0)
+	if (m_hitPoint <= 0)
 	{
 		m_state = PlayerState::Dead;//死亡状態にする
 	}
@@ -199,7 +210,7 @@ void Player::Update(GameContext& ctx)
 
 	//前のフレームでチャージが完了したかを取得
 	bool wasChargedPrev = m_isCharged;
-	
+
 	if (m_prevChargeFrame > prev_charge_time)
 	{
 		m_isCharged = true;
@@ -214,6 +225,8 @@ void Player::Update(GameContext& ctx)
 	{
 		//アニメーションを初期に戻す
 		m_chargeAnim.SetFirst();
+		SoundManager::GetInstance().Play(SoundType::PlayerChargeFinished);
+		SoundManager::GetInstance().StopSound(SoundType::PlayerCharge);
 	}
 
 	if (m_isCharged)
@@ -240,6 +253,7 @@ void Player::Update(GameContext& ctx)
 			if (m_isGround)
 			{
 				m_isJumping = true;
+				m_isJumpSound = false;
 			}
 			//ジャンプ
 			Jump();
@@ -253,7 +267,7 @@ void Player::Update(GameContext& ctx)
 		}
 
 		//プレイヤーがパリィボタンを押したらパリィを発動
-		if (ctx.input.IsTriggered("parry") && 
+		if (ctx.input.IsTriggered("parry") &&
 			m_parryCooltime < 0 &&
 			m_isGround &&
 			m_state != PlayerState::Damage)
@@ -281,7 +295,7 @@ void Player::Update(GameContext& ctx)
 			m_isInvincible = false;
 		}
 	}
-	
+
 	//None,
 	//Idle,
 	//Walk,
@@ -315,27 +329,39 @@ void Player::Update(GameContext& ctx)
 		animMax = jump_anim_frame;
 		break;
 	case PlayerState::Parry:
+	{
+		//バリアの矩形を更新する
+		m_shieldRect.SetCenter(
+			m_pos.x, m_pos.y - barrior_pos_offset_y,
+			barrior_width, barrior_height);
+
 		//パリィ更新処理
-		m_isInvincible = true;
 		m_iFrameTimer--;
 		if (m_iFrameTimer < 0)
 		{
 			//ステートを戻す
 			m_state = PlayerState::Idle;
+
 			if (m_playingEffectHandle >= 0)
 			{
 				//エフェクシアのエフェクトを停止する
-				StopEffekseer2DEffect(m_playingEffectHandle);
+				auto manager = GetEffekseer2DManager();
+				manager.Get()->SendTrigger(m_playingEffectHandle, 1);
 				m_playingEffectHandle = -1;
+
+				//バリアの矩形を無効化する
+				m_shieldRect.SetCenter(0.0f, 0.0f, 0.0f, 0.0f);
 			}
 		}
-		break;
+	}
+	break;
 	case PlayerState::Fire:
 		//行動不能にする
 		m_isCanAction = false;
 		m_animSrcY = graph_height * graph_index_shot;
 		animMax = flame_anim_frame;
 		m_velocity.x = 0.0f;
+
 		m_flameThrowCount--;
 		if (m_flameThrowCount <= 0)
 		{
@@ -433,10 +459,16 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 #endif
 
 	//操作方法
-	DrawFormatString(Graphic::screen_width - 160, 64, 0xffffff, "Jump : B");
+	/*DrawFormatString(Graphic::screen_width - 160, 64, 0xffffff, "Jump : B");
 	DrawFormatString(Graphic::screen_width - 160, 64 + 15, 0xffffff, "Shot : A");
 	DrawFormatString(Graphic::screen_width - 160, 64 + 30, 0xffffff, "Move : Lスティック");
-	DrawFormatString(Graphic::screen_width - 160, 64 + 45, 0xffffff, "Parry : X");
+	DrawFormatString(Graphic::screen_width - 160, 64 + 45, 0xffffff, "Parry : X");*/
+
+	//バリアの矩形を可視化
+#ifdef _DEBUG
+	m_shieldRect.Draw(0xffaaff, false, pCamera);
+#endif // DEBUG
+
 
 	//チャージ中のみチャージアニメーションを描画する
 	if (m_isCharging)
@@ -470,7 +502,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 				m_handles[static_cast<int>(HandleNomber::PlayerHandle)],				//画像ハンドル
 				true,																	//透明度
 				!m_isRight																//反転
-				);
+			);
 		}
 		else
 		{
@@ -489,7 +521,7 @@ void Player::Draw(std::shared_ptr<Camera> pCamera)
 			m_handles[static_cast<int>(HandleNomber::PlayerHandle)],				//画像ハンドル
 			true,																	//透明度
 			!m_isRight																//反転
-			);
+		);
 	}
 
 }
@@ -500,6 +532,10 @@ void Player::OnArriveEnemy()
 	m_isCanAction = false;
 	m_velocity.x = 0.0f;
 	m_state = PlayerState::Idle;
+
+	//エフェクシアのエフェクトを停止する
+	auto manager = GetEffekseer2DManager();
+	manager.Get()->SendTrigger(m_playingEffectHandle, 1);
 }
 
 void Player::Jump()
@@ -515,6 +551,13 @@ void Player::Jump()
 	if (m_jumpFrame < max_jump_frame)
 	{
 		m_velocity.y = -jump_power;
+		//ジャンプ音を鳴らしていないなら鳴らす
+		if (!m_isJumpSound)
+		{
+			//ジャンプ音を再生
+			SoundManager::GetInstance().Play(SoundType::Jump);
+			m_isJumpSound = true;
+		}
 	}
 }
 
@@ -557,9 +600,9 @@ void Player::Move(Input& input)
 		{
 			m_isStartDash = true;
 			m_pEffectFactory->Create(
-								{ m_pos.x, m_pos.y + 12.0f },
-								EffectType::dash,
-								!m_isRight
+				{ m_pos.x, m_pos.y + 12.0f },
+				EffectType::dash,
+				!m_isRight
 			);
 		}
 	}
@@ -630,6 +673,8 @@ void Player::ChargeShot(std::vector<std::shared_ptr<PlayerBullet>>& pBullets)
 			bullet->OnShot();
 			bullet->SetIsRight(m_isRight);
 			m_chargeAnim.SetFirst();
+			//チャージショット放出音を再生
+			SoundManager::GetInstance().Play(SoundType::PlayerChargeShot);
 			break;	//1発撃ったらループを抜ける
 		}
 	}
@@ -685,11 +730,11 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 		{
 			m_prevChargeFrame++;
 
-			//チャージ時間1秒ごとにチャージ音を鳴らす
-			if (m_prevChargeFrame > charge_se_interval * m_nextChargeFrame)
+			//チャージ音を鳴らしていなければならす
+			if (m_prevChargeFrame >= charge_se_start && !m_isChargeSound)
 			{
 				SoundManager::GetInstance().Play(SoundType::PlayerCharge);
-				m_nextChargeFrame++;
+				m_isChargeSound = true;
 			}
 
 			if (m_prevChargeFrame > judg_charge_frame)
@@ -717,7 +762,6 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 				//完了アニメーションを停止する
 				m_isCharging = false;
 				m_isCharged = false;
-				m_nextChargeFrame = 1;
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
 				m_weaponType == WeaponType::Normal &&
@@ -728,7 +772,6 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 
 				m_isCharging = false;
 				m_isCharged = false;
-				m_nextChargeFrame = 1;
 			}
 			else if (m_prevChargeFrame < prev_charge_time &&
 				m_weaponType == WeaponType::Fire &&
@@ -744,7 +787,9 @@ void Player::PrevShot(Input& input, std::vector<std::shared_ptr<PlayerBullet>>& 
 			}
 			m_shotCooltime = shot_cooltime;
 			m_prevChargeFrame = 0;
-			m_nextChargeFrame = 1;
+			m_isChargeSound = false;
+			//チャージ音を停止する
+			SoundManager::GetInstance().StopSound(SoundType::PlayerCharge);
 		}
 	}
 }
@@ -759,6 +804,8 @@ void Player::OnParry()
 	if (m_effectResourceHandle >= 0)
 	{
 		m_playingEffectHandle = PlayEffekseer2DEffect(m_effectResourceHandle);
+		auto manager = GetEffekseer2DManager();
+		manager.Get()->SendTrigger(m_playingEffectHandle, 0);
 		assert(m_playingEffectHandle > -1);
 	}
 }
@@ -772,7 +819,7 @@ void Player::UpdateKnockback()
 {
 	m_knockackTimer--;
 
-	// 減速量（好みで調整)
+	// 減速量
 	constexpr float decel = 1.0f;
 
 	if (m_knockbackDir > 0) {         // 右へノックバック中（velocity.x > 0 から 0 へ）
@@ -816,6 +863,8 @@ void Player::OnDamage(int dir)
 	m_isCharging = false;
 	m_shotCooltime = shot_cooltime;
 	m_prevChargeFrame = 0;
+	SoundManager::GetInstance().StopSound(SoundType::PlayerCharge);
+	m_isChargeSound = false;
 
 	m_knockbackDir = dir;//ノックバックする方向を決める
 	m_knockackTimer = knockback_duration;//ノックバックする時間を決める
@@ -824,6 +873,16 @@ void Player::OnDamage(int dir)
 	m_velocity.x = m_knockbackDir * knockback_speed;
 	m_velocity.y = knockback_jump;
 
+	//エフェクシアのエフェクトを停止する
+	auto manager = GetEffekseer2DManager();
+	manager.Get()->SendTrigger(m_playingEffectHandle, 1);
+
+	//プレイヤーのHPが2になったらピンチ時の音を鳴らす
+	if (m_hitPoint == pinch_hp)
+	{
+		SoundManager::GetInstance().Play(SoundType::Pinch);
+	}
+
 	if (m_hitPoint < 0) return;//すでにHPが0以下なら処理しない
 
 	//チャージ状態や、火炎放射中だと
@@ -831,11 +890,12 @@ void Player::OnDamage(int dir)
 	//一度アイドルにリセットする
 	m_state = PlayerState::Idle;
 	m_state = PlayerState::Damage;//ステートを切り替える
-	
+
 	//HPを減らす
-	if (m_hitPoint >= 0)
+	if (m_hitPoint > 0)
 	{
 		m_hitPoint--;
+
 		if (m_hitPoint == 0)
 		{
 			m_pEffectFactory->Create(
@@ -843,6 +903,14 @@ void Player::OnDamage(int dir)
 				EffectType::playerDeath,
 				DeathCharactor::Player
 			);
+
+			//死亡音を鳴らす
+			SoundManager::GetInstance().Play(SoundType::PlayerDeath);
+		}
+		else
+		{
+			//被弾音を鳴らす
+			SoundManager::GetInstance().Play(SoundType::PlayerDamage);
 		}
 	}
 }
@@ -851,4 +919,9 @@ void Player::OnStart()
 {
 	//行動可能にする
 	m_isCanAction = true;
+}
+
+void Player::OnSuccessParry()
+{
+
 }

@@ -71,6 +71,17 @@ public:
 	/// </summary>
 	/// <returns>現在のヒットポイントの値を返します。</returns>
 	const int GetHitPoint() const { return m_hitPoint; }
+
+	/// <summary>
+	/// バリアの矩形を返す関数
+	/// </summary>
+	/// <returns>バリアの矩形</returns>
+	const Rect GetBarriorRect() const {return m_shieldRect;	}
+
+	/// <summary>
+	/// パリィが成功したときの処理
+	/// </summary>
+	void OnSuccessParry();
 private:
 	enum class HandleNomber
 	{
@@ -89,7 +100,6 @@ private:
 	int m_blinkingTimer;//無敵中の点滅中のタイム管理用
 	int m_parryCooltime;//パリィを打てるまでのクールタイム管理用
 	int m_iFrameTimer;//パリィ後の無敵中の時間
-	int m_nextChargeFrame;//次にチャージ音を鳴らすフレーム
 
 	/// <note>ジャンプが可能:true,ジャンプ不可能:false</note>
 	bool m_isJumping;///ジャンプしているかどうか
@@ -100,6 +110,8 @@ private:
 	bool m_isInvincible;//ダメージを食らった後の無敵中かどうか
 	bool m_isCanAction;//プレイヤーが現在行動可能かどうか
 	bool m_isStartDash;//ダッシュを始めたかどうか
+	bool m_isChargeSound;//チャージ音を鳴らしているかどうか
+	bool m_isJumpSound;//ジャンプ音を鳴らしているかどうか
 
 	int m_prevChargeFrame;//チャージショットのためのフレーム数
 	int m_animSrcX;		  //現在のアニメーションの横の切り取り位置
@@ -111,6 +123,8 @@ private:
 	int m_knockbackDir;			//ノックバックする方向
 
 	int m_hitPoint;//現在のHP
+
+	Rect m_shieldRect;//パリィ中のシールドの矩形当たり判定
 
 	PlayerState m_state;
 	WeaponType m_weaponType;
