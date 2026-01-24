@@ -39,6 +39,11 @@ public:
 	/// </summary>
 	/// <returns>‘Ì—Í</returns>
 	virtual int GetHitPoint() const { return m_hitPoint; }
+
+	/// <summary>
+	/// UŒ‚‚ğƒpƒŠƒB‚³‚ê‚½‚Æ‚«‚Ìˆ—
+	/// </summary>
+	virtual void OnParried(int dir) abstract;
 private:
 
 protected:

@@ -8,6 +8,7 @@
 #include "../Collider/Circle.h"
 #include "../Stages/Stage.h"
 #include "../EffectFactory.h"
+#include "../SoundManager.h"
 #include <cassert>
 
 
@@ -116,4 +117,6 @@ void EnemyBullet::OnDead()
 {
 	m_isAlive = false;
 	m_pEffectFactory->Create(m_pos, EffectType::hitEnemyBullet);
+	//Á‚¦‚é‚Æ‚«‚Ì‰¹‚ğ–Â‚ç‚·
+	SoundManager::GetInstance().Play(SoundType::HitShot);
 }
