@@ -12,7 +12,7 @@
 
 namespace
 {
-	constexpr int shake_power = 3;//カメラを揺らすときの力
+	constexpr int shake_power = 2;//カメラを揺らすときの力
 }
 
 void CollisionManager::CheckCollisions(
@@ -67,12 +67,12 @@ void CollisionManager::CheckCollisions(
 				dir = -1;
 
 				//プレイヤーが死んでいるとき以外画面を揺らす
-				if(pPlayer->GetHitPoint() !=0)
+				if (pPlayer->GetHitPoint() != 0)
 				{
 					//画面を揺らす
 					pCamera->OnImpact(shake_power);
 				}
-				
+
 			}
 			//プレイヤーが死んでいないならダメージ処理を行う
 			if (pPlayer->GetHitPoint() != 0)
@@ -203,6 +203,47 @@ void CollisionManager::CheckCollisions(
 		}
 	}
 
+	//敵の弾とプレイヤーのバリア
+	for (auto& bullet : pEnemyBullets)
+	{
+		if (bullet->GetIsAlive() &&
+			!pPlayer->GetIsDead() &&
+			CheckCollision(pPlayer->GetBarriorRect(), *bullet))
+		{
+			//弾を消す
+			bullet->OnDead();
+
+			//画面を揺らす
+			pCamera->OnImpact(shake_power);
+		}
+	}
+
+	//敵とバリア
+	for (auto& enemy : pEnemies)
+	{
+		if (!enemy->GetIsDead() &&
+			!pPlayer->GetIsDead() &&
+			CheckCollision(pPlayer->GetBarriorRect(), enemy->GetColRect()))
+		{
+			//ノックバックする方向
+			int dir = 0;
+
+			//パリィ成功時の関数を呼ぶ
+			pPlayer->OnSuccessParry();
+			if (pPlayer->GetPos().x > enemy->GetPos().x)//プレイヤーが右にいる場合
+			{
+				//敵のノックバックする方向は左
+				dir = -1;
+			}
+			else//プレイヤーが左にいる
+			{
+				//敵のノックバックする方向は右
+				dir = 1;
+			}
+			enemy->OnParried(dir);
+		}
+	}
+
 	RemoveDeadEnemies(pEnemies);
 }
 
@@ -224,6 +265,16 @@ bool CollisionManager::CheckCollision(const Player& player, const EnemyBullet& b
 bool CollisionManager::CheckCollision(const Rect& swordRect, const Player& player)
 {
 	return swordRect.IsCollRect(player.GetColRect());
+}
+
+bool CollisionManager::CheckCollision(const Rect& barriorRect, const EnemyBullet& bullet)
+{
+	return bullet.GetCircle().IsCollWithRect(barriorRect);
+}
+
+bool CollisionManager::CheckCollision(const Rect& barriorRect, const Rect& enemyRect)
+{
+	return barriorRect.IsCollRect(enemyRect);
 }
 
 void CollisionManager::RemoveDeadEnemies(std::vector<std::shared_ptr<EnemyBase>>& pEnemies)
