@@ -33,6 +33,11 @@ public:
 	/// </summary>
 	void OnDamage(bool isChargeShot) override;
 
+	/// <summary>
+	/// 攻撃をパリィされたときの処理
+	/// </summary>
+	void OnParried(int dir) override;
+
 private:
 	/// <summary>
 	/// 攻撃行動を行う関数

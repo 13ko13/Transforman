@@ -47,6 +47,11 @@ void FlameBoss::OnDamage(bool isChargeShot)
 {
 }
 
+void FlameBoss::OnParried(int dir)
+{
+
+}
+
 void FlameBoss::Attack()
 {
 }
