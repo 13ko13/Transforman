@@ -435,3 +435,7 @@ void ParryBoss::OnDamage(bool isChargeShot)
 		m_state = State::Damage;
 	}
 }
+
+void ParryBoss::OnParried(int dir)
+{
+}
