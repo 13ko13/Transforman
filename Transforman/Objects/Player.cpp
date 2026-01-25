@@ -36,7 +36,7 @@ namespace
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
 
 	constexpr int parry_i_frame = 60;						//パリィ後の無敵時間
-	constexpr int parry_cooltime = 0;						//パリィのクールタイム
+	constexpr int parry_cooltime = 360;						//パリィのクールタイム
 
 	//アニメーション用のグラフのインデックス
 	constexpr int graph_index_idle = 0;
@@ -275,7 +275,6 @@ void Player::Update(GameContext& ctx)
 			//状態をパリィに変更
 			m_state = PlayerState::Parry;
 			OnParry();
-			printfDx("パリィをした");
 		}
 	}
 
@@ -530,6 +529,7 @@ void Player::OnArriveEnemy()
 {
 	m_isArrive = true;
 	m_isCanAction = false;
+	m_isRight = true;
 	m_velocity.x = 0.0f;
 	m_state = PlayerState::Idle;
 
