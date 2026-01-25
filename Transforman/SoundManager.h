@@ -21,6 +21,7 @@ enum class SoundType
 	Thunder,//雷の音
 	PlayerDamage,//プレイヤーがダメージを食らった時の音
 	PlayerDeath,//プレイヤーが死んだときの音
+	Stan,//チャージショットボスの音
 };
 
 struct SoundData
