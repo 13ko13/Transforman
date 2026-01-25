@@ -4,6 +4,7 @@
 #include <DxLib.h>
 #include "Player.h"
 #include <cassert>
+#include <cmath>
 #include "../Graphics/Camera.h"
 #include "../General/GameConstants.h"
 #include "../EffectFactory.h"
@@ -50,7 +51,7 @@ namespace
 
 	constexpr int max_hitpoint = 30;//ボスの最大体力
 
-	constexpr int shake_power = 7;//地面に着地したときのカメラの揺れ力
+	constexpr int camera_shake_power = 7;//地面に着地したときのカメラの揺れ力
 
 	//エフェクトを出す指定位置
 	constexpr float rush_effect_offset_y = 200.0f;
@@ -89,6 +90,14 @@ namespace
 	constexpr int knockback_duration = 19;//ノックバックする時間
 	constexpr int knockback_speed = 20.0f;//ノックバック時のスピード
 	constexpr int knockback_jump = -10.0f;//ノックバック時のy軸へのベクトルの強さ
+
+	constexpr int boss_shake_power = 3;//スタン時の揺らす力
+	constexpr int shake_frame = 60;//スタン時に揺らす時間
+	constexpr float shake_rate = 0.8f;//揺らすときの速さの割合
+	constexpr int shake_range = 3;//揺らす振幅
+
+	//スタンエフェクト
+	constexpr float stan_offset_x = size_width / 2;
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -98,7 +107,9 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 	m_isRushing(false),
 	m_isStart(false),
 	m_isPlayingFlash(false),
-	m_GroundNum(0)
+	m_groundNum(0),
+	m_drawOffset({0.0f,0.0f}),
+	m_shakingTimer(0)
 {
 	//ボス自身の画像ハンドル
 	int handle = LoadGraph("img/game/Enemy/chargeshot_boss.png");
@@ -170,12 +181,12 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	//地面についている間は地面についた回数をカウント
 	if (m_isGround)
 	{
-		m_GroundNum++;
+		m_groundNum++;
 	}
 	//一番最初に地面についた瞬間のみカメラを揺らす
-	if (m_GroundNum == 1)
+	if (m_groundNum == 1)
 	{
-		ctx.pCamera->OnImpact(shake_power);
+		ctx.pCamera->OnImpact(camera_shake_power);
 	}
 
 	//常にプレイヤーの方向を見る
@@ -273,6 +284,16 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		//ショットアニメーション更新
 		m_shotAnim.Update();
 	}
+	else if (m_state == State::Knockback)
+	{
+		//アイドルアニメーション更新(ノックバック中も)
+		m_idleAnim.Update();
+	}
+	else if (m_state == State::Stan)
+	{
+		//スタン中もアニメーションはアイドル
+		m_idleAnim.Update();
+	}
 
 	if (m_isPlayingFlash)
 	{
@@ -312,7 +333,7 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 			SetDrawBright(hit_color_red, hit_color_green, hit_color_blue);
 		}
 
-		const Vector2 drawPos = m_pos + pCamera->GetDrawOffset();
+		const Vector2 drawPos = m_pos + pCamera->GetDrawOffset() + m_drawOffset;
 		//アニメーションの描画
 		switch (m_state)
 		{
@@ -330,9 +351,13 @@ void ChargeShotBoss::Draw(std::shared_ptr<Camera> pCamera)
 			break;
 		case State::Shot:
 			m_shotAnim.Draw(drawPos, !m_isRight);
-
 			m_chargeAnim.Draw(drawPos, !m_isRight);
-			
+			break;
+		case State::Knockback:
+			m_idleAnim.Draw(drawPos, !m_isRight);
+			break;
+		case State::Stan:
+			m_idleAnim.Draw(drawPos, !m_isRight);
 			break;
 		}
 
@@ -460,6 +485,9 @@ void ChargeShotBoss::OnParried(int dir)
 	//ノックバックするための方向と速度を代入する
 	m_velocity.x = m_knockbackDir * knockback_speed;
 	m_velocity.y = knockback_jump;
+
+	//揺らす時間をセットする
+	m_shakingTimer = shake_frame;
 
 	//ステートをノックバック状態にする
 	m_state = State::Knockback;
@@ -608,7 +636,7 @@ void ChargeShotBoss::RushUpdate(GameContext& ctx)
 			//ステートをアイドルに戻す
 			m_state = State::Idle;
 			m_isRushing = false;
-			ctx.pCamera->OnImpact(shake_power);
+			ctx.pCamera->OnImpact(camera_shake_power);
 		}
 	}
 }
@@ -716,6 +744,7 @@ void ChargeShotBoss::KnockbackUpdate(GameContext& ctx)
 	if (m_knockackTimer < 0)
 	{
 		m_state = State::Stan;
+		OnStan();
 	}
 }
 
@@ -723,4 +752,40 @@ void ChargeShotBoss::StanUpdate()
 {
 	Rect chipRect;	//当たったマップチップの矩形
 	HitMap(chipRect);//マップとの接地判定
+
+	m_shakingTimer--;
+	if (m_shakingTimer > 0)
+	{
+		//sin波により揺れる間隔の早さと、振幅を描画オフセットに追加する
+		m_drawOffset.x = static_cast<float>(std::sin(static_cast<double>(m_shakingTimer * shake_rate)) * shake_range);
+	}
+	else
+	{
+		m_drawOffset = { 0.0f,0.0f };
+		//揺れが終了したらアイドルに戻す
+		m_state = State::Idle;
+		m_velocity = { 0.0f,0.0f };
+		m_isRushing = false;
+		//ボスの右側にエフェクト
+		Vector2 effectPos = m_pos;
+		effectPos.x += stan_offset_x;
+		m_pEffectFactory->Create(effectPos, EffectType::stanEffect);
+		//ボスの左側にエフェクト
+		effectPos.x -= stan_offset_x * 2.0f;
+		m_pEffectFactory->Create(effectPos, EffectType::stanEffect);
+	}
+}
+
+void ChargeShotBoss::OnStan()
+{
+	//ボスの右側にエフェクト
+	Vector2 effectPos = m_pos;
+	effectPos.x += stan_offset_x;
+	m_pEffectFactory->Create(effectPos, EffectType::stanEffect);
+	//ボスの左側にエフェクト
+	effectPos.x -= stan_offset_x * 2.0f;
+	m_pEffectFactory->Create(effectPos, EffectType::stanEffect);
+
+	//スタン時の音を出す
+	SoundManager::GetInstance().Play(SoundType::Stan);
 }

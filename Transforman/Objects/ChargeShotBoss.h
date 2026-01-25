@@ -60,12 +60,15 @@ private:
 
 	int m_knockbackDir;//ノックバックする方向
 	int m_knockackTimer;//残りノックバック時間
-	int m_GroundNum;//地面に触れた回数
+	int m_groundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数
+	int m_shakingTimer;//スタン中の微量の揺れの時間
 	bool m_isRushing;//突進中かどうか
 	int m_actionCooldown;//次の行動までのフレーム数
 	bool m_isStart;//ボス戦が始まっているかどうか
 	bool m_isPlayingFlash;//ノズルフラッシュを再生しているかどうか
+
+	Vector2 m_drawOffset;//描画のみずらす
 
 	std::weak_ptr<Effect> m_rushEffect;//突進エフェクト
 
@@ -133,5 +136,10 @@ private:
 	/// スタン時の更新処理
 	/// </summary>
 	void StanUpdate();
+
+	/// <summary>
+	/// パリィされて、スタンした瞬間に呼ぶ関数
+	/// </summary>
+	void OnStan();
 };
 
