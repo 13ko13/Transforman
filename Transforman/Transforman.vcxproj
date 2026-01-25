@@ -179,6 +179,7 @@
     <ClCompile Include="Graphics\Fade.cpp" />
     <ClCompile Include="Scenes\GameScene.cpp" />
     <ClCompile Include="Scenes\TextScene.cpp" />
+    <ClCompile Include="StanEffect.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UserInterface.cpp" />
     <ClCompile Include="Utility\Geometry.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="General\GameConstants.h" />
     <ClInclude Include="Scenes\GameScene.h" />
     <ClInclude Include="Scenes\TextScene.h" />
+    <ClInclude Include="StanEffect.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UserInterface.h" />
     <ClInclude Include="Utility\Geometry.h" />
