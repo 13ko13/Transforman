@@ -4,6 +4,7 @@
 #include "HitWallEffect.h"
 #include "DashEffect.h"
 #include "BulletHitEffect.h"
+#include "StanEffect.h"
 #include "PosProvider.h"
 #include <DxLib.h>
 #include <cassert>
@@ -48,6 +49,11 @@ EffectFactory::EffectFactory()
 	handle = LoadGraph("img/game/Effect/hit_player_shot.png");
 	assert(handle > -1);
 	m_handles.push_back(handle);
+
+	//チャージショットボスのスタンエフェクト
+	handle = LoadGraph("img/game/Effect/stan.png");
+	assert(handle > -1);
+	m_handles.push_back(handle);
 }
 
 std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type)
@@ -81,6 +87,9 @@ std::weak_ptr<Effect> EffectFactory::Create(const Vector2& pos, EffectType type)
 		effect = std::make_shared<BulletHitEffect>(
 			m_handles[static_cast<int>(EffectType::hitPlayerBullet )], pos);
 		break;
+	case EffectType::stanEffect:
+		effect = std::make_shared<StanEffect>(
+			m_handles[static_cast<int>(EffectType::stanEffect)], pos);
 	}
 
 	if (effect) m_effects.push_back(effect);

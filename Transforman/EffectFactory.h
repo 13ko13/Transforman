@@ -15,6 +15,7 @@ enum class EffectType
 	enemyDeath,//敵死亡エフェクト
 	hitEnemyBullet,//敵の弾衝突エフェクト
 	hitPlayerBullet,//プレイヤーの弾衝突エフェクト
+	stanEffect,//チャージショットボスのスタンエフェクト
 };
 
 class Effect;
