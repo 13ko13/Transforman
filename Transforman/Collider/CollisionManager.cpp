@@ -241,6 +241,7 @@ void CollisionManager::CheckCollisions(
 				dir = 1;
 			}
 			enemy->OnParried(dir);
+			pCamera->OnImpact(shake_power);
 		}
 	}
 
