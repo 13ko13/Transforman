@@ -25,6 +25,7 @@ namespace
 	constexpr int thunder_volume = 60;//雷の音量
 	constexpr int player_damage_vol = 60;//プレイヤーが被弾したと音の音量
 	constexpr int player_death_vol = 130;//プレイヤーが死んだときの音の音量
+	constexpr int stan_volume = 60;//スタンの時の音量
 }
 
 Application::Application():
@@ -106,6 +107,7 @@ bool Application::Init()
 	sm.Load(SoundType::Thunder, "Sound/SE/thunder.wav", thunder_volume, false);
 	sm.Load(SoundType::PlayerDamage, "Sound/SE/player_damage.mp3", player_damage_vol, false);
 	sm.Load(SoundType::PlayerDeath, "Sound/SE/player_death.mp3", player_death_vol, false);
+	sm.Load(SoundType::Stan, "Sound/SE/stan.wav", stan_volume, false);
 	return true;
 }
 
