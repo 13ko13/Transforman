@@ -50,7 +50,7 @@ bool Application::Init()
 {
 	SetGraphMode(m_windowSize.w, m_windowSize.h, Graphic::color_bit);
 	//ウィンドwモード設定
-	ChangeWindowMode(false);
+	ChangeWindowMode(true);
 	//ゲーム名
 	SetWindowText("TransforMan");
 
@@ -89,6 +89,8 @@ bool Application::Init()
 	// Zバッファへの書き込みを有効にする。
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
 	SetWriteZBuffer3D(TRUE);
+
+	AddFontResourceEx("data/Melonano_Ver.1.31.ttf", FR_PRIVATE, NULL);
 
 	//サウンドマネージャーの初期化
 	auto& sm = SoundManager::GetInstance();
@@ -146,6 +148,7 @@ void Application::Run()
 
 void Application::Terminate()
 {
+	RemoveFontResourceEx("data/Melonano_Ver.1.31.ttf", FR_PRIVATE, NULL);
 	Effkseer_End();// Effekseerを終了する。
 	DxLib_End();
 }

@@ -19,7 +19,7 @@ namespace
 	constexpr float effect_pos_x = 500.0f;
 	constexpr float effect_pos_y = 500.0f;
 
-	constexpr int blinking_min_alpha = 175;//Press A Button の最小透明度
+	constexpr int blinking_min_alpha = 100;//Press A Button の最小透明度
 	constexpr int blinking_rate = 80;//透明度が変化する度合い
 
 	constexpr int logo_pos_offset_y = 150.0f;

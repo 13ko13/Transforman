@@ -13,6 +13,7 @@
 namespace
 {
 	constexpr int shake_power = 2;//ƒJƒƒ‰‚ð—h‚ç‚·‚Æ‚«‚Ì—Í
+	constexpr int parry_shake_power = 8;//ƒpƒŠƒB¬Œ÷Žž‚ÌƒJƒƒ‰‚ð—h‚ç‚·—Í
 }
 
 void CollisionManager::CheckCollisions(
@@ -241,7 +242,7 @@ void CollisionManager::CheckCollisions(
 				dir = 1;
 			}
 			enemy->OnParried(dir);
-			pCamera->OnImpact(shake_power);
+			pCamera->OnImpact(parry_shake_power);
 		}
 	}
 

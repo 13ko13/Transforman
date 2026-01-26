@@ -53,7 +53,7 @@ private:
 		None,//何もしない
 		Appear,//出現
 		Idle,//待機,
-		Parry,//パリィ
+		Parry,//パリィ		
 		Jumping,//ジャンプ
 		FallAttack,//落下攻撃
 		Damage,//ダメージ

@@ -47,11 +47,6 @@ public:
 	void OnDamage(bool isChargeShot) override;
 
 	/// <summary>
-	/// 死亡時演出
-	/// </summary>
-	void OnDead();
-
-	/// <summary>
 	/// 攻撃をパリィされたときの処理
 	/// </summary>
 	void OnParried(int dir) override;
@@ -63,6 +58,8 @@ private:
 	int m_groundNum;//地面に触れた回数
 	int m_prevRushTime;//突進準備中の現在のフレーム数
 	int m_shakingTimer;//スタン中の微量の揺れの時間
+	int m_nextEffectTimer;//次のエフェクトを出すまでのタイマー
+
 	bool m_isRushing;//突進中かどうか
 	int m_actionCooldown;//次の行動までのフレーム数
 	bool m_isStart;//ボス戦が始まっているかどうか
@@ -88,6 +85,9 @@ private:
 		Shot,//弾
 		Knockback,//ノックバック
 		Stan,//怯み
+		Death,//死亡
+
+		MaxState,//ステートの数
 	};
 	State m_state;//状態
 
@@ -141,5 +141,10 @@ private:
 	/// パリィされて、スタンした瞬間に呼ぶ関数
 	/// </summary>
 	void OnStan();
+
+	/// <summary>
+	/// 殺された後の更新処理
+	/// </summary>
+	void DeathUpdate();
 };
 

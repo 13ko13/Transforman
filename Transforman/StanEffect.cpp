@@ -5,7 +5,7 @@ namespace
 {
 	constexpr int graph_width = 64;//画像1枚の幅
 	constexpr int graph_height = 256;//画像1枚の高さ
-	constexpr float draw_scale = 1.0f;//描画スケール
+	constexpr float draw_scale = 1.5f;//描画スケール
 	constexpr int max_anim_num = 5;//最大アニメーション数
 	constexpr int one_anim_frame = 4;//アニメーションの待機フレーム数
 }

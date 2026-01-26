@@ -15,8 +15,8 @@ public:
 private:
 	enum class handleNumber
 	{
-		clearText,
-		clearBackground
+		clearBackground,
+		pressAbutton,
 	};
 
 	std::vector<int> m_handles;//クリアシーンのテキスト画像ハンドル
@@ -42,5 +42,7 @@ private:
 	DrawFunc_t m_draw;//drawメンバ関数ポインタ
 
 	Animation m_backgroundAnim;//クリアシーン背景アニメーション
-	Animation m_clearTextAnim;//クリアシーン文字アニメーション
+
+	int m_clearFonthandle;//クリアフォントハンドル
+	int m_shadowClearFontH;//クリアフォントハンドルの影
 };

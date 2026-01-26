@@ -93,11 +93,14 @@ namespace
 
 	constexpr int boss_shake_power = 3;//スタン時の揺らす力
 	constexpr int shake_frame = 60;//スタン時に揺らす時間
-	constexpr float shake_rate = 0.8f;//揺らすときの速さの割合
-	constexpr int shake_range = 3;//揺らす振幅
+	constexpr float shake_rate = 1.5f;//揺らすときの速さの割合
+	constexpr int shake_range = 5;//揺らす振幅
 
 	//スタンエフェクト
 	constexpr float stan_offset_x = size_width / 2;
+
+	//死亡エフェクトを生成する数
+	constexpr int top_death_effect_num = 2;//上に出すエフェクトの数
 }
 
 ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
@@ -109,7 +112,8 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 	m_isPlayingFlash(false),
 	m_groundNum(0),
 	m_drawOffset({0.0f,0.0f}),
-	m_shakingTimer(0)
+	m_shakingTimer(0),
+	m_nextEffectTimer(0)
 {
 	//ボス自身の画像ハンドル
 	int handle = LoadGraph("img/game/Enemy/chargeshot_boss.png");
@@ -171,12 +175,6 @@ void ChargeShotBoss::Init()
 
 void ChargeShotBoss::Update(GameContext& ctx)
 {
-	//HPが0になったら死亡フラグを立てる
-	if (m_hitPoint <= 0)
-	{
-		m_isDead = true;
-	}
-
 	m_animFrame++;
 	//地面についている間は地面についた回数をカウント
 	if (m_isGround)
@@ -211,17 +209,9 @@ void ChargeShotBoss::Update(GameContext& ctx)
 	//ボタンでステート切り替え
 	if (ctx.input.IsTriggered("changeState(enemy)"))
 	{
-		if (m_state == State::Idle)
-		{
-			m_state = State::PrevRush;
-			m_prevRushTime = prev_rush_frame;
-			return;
-		}
-		if (m_state == State::Rush)
-		{
-			m_state = State::Idle;
-			return;
-		}
+		//m_state = static_cast<State>(static_cast<int>(m_state) + 1 % static_cast<int>(State::MaxState));
+		m_hitPoint -= max_hitpoint;
+		OnDamage(true);
 	}
 #endif // DEBUG
 
@@ -259,6 +249,10 @@ void ChargeShotBoss::Update(GameContext& ctx)
 		break;
 	case State::Stan:
 		StanUpdate();
+		break;
+	case State::Death:
+		DeathUpdate();
+		break;
 	}
 
 	if (m_state == State::Appear ||
@@ -440,41 +434,23 @@ void ChargeShotBoss::OnDamage(bool isChargeShot)
 
 		//チャージショットを食らった場合3ダメージ
 		m_hitPoint -= hit_chargeshot_damage;
-
-		//HPが0になったら死亡時処理を呼ぶ
-		if (m_hitPoint <= 0)
-		{
-			OnDead();
-		}
-
 	}
 	else
 	{
 		if (m_hitPoint < 0) return;//死んでるなら何もしない
 		//通常ショットなら1ダメージ
 		m_hitPoint -= hit_normalshot_damage;
-		//HPが0になったら死亡時処理を呼ぶ
-		if (m_hitPoint <= 0)
+	}
+	//HPが0になったらステートを死亡状態にする
+	if (m_hitPoint <= 0)
+	{
+		m_state = State::Death;
+		//ボスが死んだのでエフェクトも削除する
+		if (auto rushEffect = m_rushEffect.lock())
 		{
-			OnDead();
+			rushEffect->Kill();
 		}
 	}
-}
-
-void ChargeShotBoss::OnDead()
-{
-	//ボスが死んだのでエフェクトも削除する
-	if (auto rushEffect = m_rushEffect.lock())
-	{
-		rushEffect->Kill();
-	}
-
-	//死亡エフェクトを生成
-	m_pEffectFactory->Create(
-		{ m_pos.x, m_pos.y - death_effect_pos_y },
-		EffectType::enemyDeath,
-		DeathCharactor::Enemy
-	);
 }
 
 void ChargeShotBoss::OnParried(int dir)
@@ -788,4 +764,57 @@ void ChargeShotBoss::OnStan()
 
 	//スタン時の音を出す
 	SoundManager::GetInstance().Play(SoundType::Stan);
+}
+
+void ChargeShotBoss::DeathUpdate()
+{
+	m_nextEffectTimer++;
+
+		//　上に2つ、真ん中に1つ、下に2つエフェクトを出す
+		//0フレーム目で左上のエフェクトを生成
+		//上の死亡エフェクトを生成
+	if (m_nextEffectTimer == 1)
+	{
+		m_pEffectFactory->Create(
+			{ m_pos.x  - size_width / 2, m_pos.y - death_effect_pos_y },
+			EffectType::enemyDeath,
+			DeathCharactor::Enemy);
+	}
+	//20フレーム目を越えたら右上のエフェクトを生成
+	else if (m_nextEffectTimer == 20)
+	{
+		m_pEffectFactory->Create(
+			{ m_pos.x + size_width / 2, m_pos.y - death_effect_pos_y },
+			EffectType::enemyDeath,
+			DeathCharactor::Enemy);
+	}
+	//40フレーム目を越えたら真ん中のエフェクトを生成
+	else if (m_nextEffectTimer == 40)
+	{
+		m_pEffectFactory->Create(
+			{ m_pos.x , m_pos.y  },
+			EffectType::enemyDeath,
+			DeathCharactor::Enemy);
+	}
+	//60フレーム目を越えたら左下のエフェクトを生成
+	else if (m_nextEffectTimer == 60)
+	{
+		m_pEffectFactory->Create(
+			{ m_pos.x - size_width / 2, m_pos.y + death_effect_pos_y },
+			EffectType::enemyDeath,
+			DeathCharactor::Enemy);
+	}
+	else if (m_nextEffectTimer == 80)
+	{
+		m_pEffectFactory->Create(
+			{ m_pos.x + size_width / 2, m_pos.y + death_effect_pos_y },
+			EffectType::enemyDeath,
+			DeathCharactor::Enemy);
+
+		//HPが0になっているなら死亡フラグを立てる
+		if (m_hitPoint <= 0)
+		{
+			m_isDead = true;
+		}
+	}
 }
