@@ -8,13 +8,13 @@ namespace
 	constexpr int graph_height = 30;//HPバーと高さ
 
 	//描画位置オフセット
-	constexpr int draw_offset_x = 130;
+	constexpr int draw_offset_x = 150;
 	constexpr int draw_offset_y = 90;
 
 	constexpr int pinch_hp = 2;//ピンチと判断するHP
 	constexpr int normal_hp = 3;//通常と判断するHP
 
-	constexpr int normal_hp_offset = 55;//通常HPの描画位置オフセット
+	constexpr int normal_hp_offset = 75;//通常HPの描画位置オフセット
 	constexpr int next_hp_offset = 25;//次のHPの描画位置オフセット
 
 	constexpr double graph_size = 5.0; //拡大率
