@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include "../StageType.h"
+#include "../Utility/Geometry.h"
 
 //プロトタイプ宣言
 class Input;
@@ -49,6 +50,7 @@ private:
 	std::shared_ptr<EffectFactory> m_pEffectFactory;//エフェクトファクトリー
 
 	int m_frame;//フェード用のフレーム
+	int m_fontHandle;//フォントのハンドル
 
 	//関数ポインタをつかって状態遷移を楽にする
 	using UpdateFunc_t = void(GameScene::*)(Input&);
@@ -58,11 +60,16 @@ private:
 	using DrawFunc_t = void(GameScene::*)();
 	DrawFunc_t m_draw;//drawメンバ関数ポインタ
 
-	bool m_isClear;
+	bool m_isStageClear;
 	bool m_isGameover;
+	bool m_isGameClear;
+
+	bool m_isFade;
+
+	Vector2 m_stageTypeTextPos;
+	int m_textFadeFrame;//テキストのフェード用フレーム
 
 private:
-
 	//メンバ変数ポインタを使用して内部状態を書き換える
 	//update関数とdraw関数を、現在のGameSceneの状態に合わせて
 	//切り替えていく

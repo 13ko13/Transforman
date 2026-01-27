@@ -26,25 +26,33 @@ namespace
 	constexpr int p_bullet_max = 10;//プレイヤー弾の最大数
 	constexpr int e_bullet_max = 20;//敵弾の最大数
 	constexpr int fade_interval = 90;//フェードにかかるフレーム数
+
+	//ステージ数の文字の大きさ
+	constexpr int font_size = 80;
+
+	//テキスト
+	constexpr int text_fade_interval = 50;//テキストのフェードにかかる時間
 }
 
 GameScene::GameScene(SceneController& controller, StageType stageType) :
 	Scene(controller),
-	m_isClear(false),
-	m_isGameover(false)
+	m_isStageClear(false),
+	m_isGameover(false),
+	m_isGameClear(false),
+	m_isFade(false),
+	m_textFadeFrame(0)
 {
 	//ステージデータのロード
 	m_pStage = std::make_shared<Stage>();
 	m_pStage->Load(1);
 	//マップチップの生成
 	m_pMap = std::make_shared<Map>(m_pStage);
-	m_pMap->SetStageType(StageType::Stage1);
 
 	//エフェクトファクトリーの生成
 	m_pEffectFactory = std::make_shared<EffectFactory>();
 
 	// プレイヤーの生成
-	m_pPlayer = std::make_shared<Player>(m_pMap,m_pEffectFactory);
+	m_pPlayer = std::make_shared<Player>(m_pMap, m_pEffectFactory);
 	// プレイヤーの弾の生成
 	m_pPlayerBullets.resize(p_bullet_max);
 	for (auto& bullet : m_pPlayerBullets)
@@ -55,13 +63,13 @@ GameScene::GameScene(SceneController& controller, StageType stageType) :
 	m_pEnemyBullets.resize(e_bullet_max);
 	for (auto& bullet : m_pEnemyBullets)
 	{
-		bullet = std::make_shared<EnemyBullet>(m_pEffectFactory,m_pMap);
+		bullet = std::make_shared<EnemyBullet>(m_pEffectFactory, m_pMap);
 	}
 	// 敵の生成
 	//チャージショットボス、パリィボス、火炎放射ボス、植物系ボスの4体
 	m_pEnemies.resize(0);
 	//チャージショットボスを試しに追加する
-	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>(m_pMap, m_pEffectFactory);
+	m_pChargeShotBoss = std::make_shared<ChargeShotBoss>(m_pMap, m_pEffectFactory,stageType);
 	m_pEnemies.push_back(m_pChargeShotBoss);
 	//ToDo:1ステージ完成したらコメント化を解除する
 	m_pParryBoss = std::make_shared<ParryBoss>(m_pMap, m_pEffectFactory);
@@ -103,7 +111,7 @@ GameScene::GameScene(SceneController& controller, StageType stageType) :
 	//UIマネージャーの生成
 	m_pUIManager = std::make_shared<UIManager>(m_pPlayer, m_pChargeShotBoss);
 
-	//updateとdrawをフェードインパターンにに切り替えておく
+	//updateとdrawをフェードインパターンに切り替えておく
 	m_update = &GameScene::UpdateFadeIn;
 	m_draw = &GameScene::DrawFade;
 
@@ -114,6 +122,17 @@ GameScene::GameScene(SceneController& controller, StageType stageType) :
 
 	//BGMを再生
 	SoundManager::GetInstance().Play(SoundType::GameBgm, true);
+
+	m_fontHandle = CreateFontToHandle("Melonano", font_size, 0, DX_FONTTYPE_NORMAL);
+
+	char tex[] = "STAGE 1";
+	int textW = GetDrawStringWidthToHandle(tex, sizeof(tex), m_fontHandle);
+
+	auto wsize = Application::GetInstance().GetWindowSize();
+	int drawPosX = wsize.w / 2 - textW / 2;
+	int drawPosY = wsize.h / 2 - font_size / 2;
+	//文字の位置を初期化
+	m_stageTypeTextPos = { static_cast<float>(drawPosX),static_cast<float>(drawPosY) };
 }
 
 GameScene::~GameScene()
@@ -182,6 +201,16 @@ void GameScene::UpdateNormal(Input& input)
 	//エフェクトファクトリー更新
 	m_pEffectFactory->Update();
 
+
+	if (!m_isFade)
+	{
+		m_textFadeFrame++;
+	}
+	else
+	{
+		m_textFadeFrame--;
+	}
+
 	/*std::vector<TextScene::PageDesc> pages = {
 		{"img/game/text/move.png"}
 	};
@@ -194,7 +223,7 @@ void GameScene::UpdateNormal(Input& input)
 		m_draw = &GameScene::DrawFade;
 		//フェードアウトの最初　念のため
 		m_frame = 0;
-		m_isClear = false;//クリアしていない
+		m_isStageClear = false;//クリアしていない
 		m_isGameover = true;//ゲームオーバーになった
 		//絶対にreturnする
 		return;
@@ -203,7 +232,7 @@ void GameScene::UpdateNormal(Input& input)
 	{
 		m_update = &GameScene::UpdateFadeOut;
 		m_draw = &GameScene::DrawFade;
-		m_isClear = true;//クリアしていない
+		m_isStageClear = true;//クリアしていない
 		m_isGameover = false;//ゲームオーバーになった
 		//フェードアウトの最初　念のため
 		m_frame = 0;
@@ -220,7 +249,7 @@ void GameScene::UpdateFadeOut(Input& input)
 	GameContext ctx{ m_pEnemyBullets,m_pPlayerBullets,m_pPlayer,m_pStage,input,m_pCamera };
 
 	//ゲームオーバー時のみプレイヤーを更新する
-	if (!m_isClear && m_isGameover)
+	if (!m_isStageClear && m_isGameover)
 	{
 		m_pPlayer->Update(ctx);
 	}
@@ -232,7 +261,7 @@ void GameScene::UpdateFadeOut(Input& input)
 	//プレイヤーがゲームをクリアしたなら
 	//クリアシーンに遷移する
 	//死んだならゲームオーバーシーンに遷移する
-	if (!m_isClear && m_isGameover)
+	if (!m_isStageClear && m_isGameover)
 	{
 		if (m_frame >= fade_interval)
 		{
@@ -242,12 +271,40 @@ void GameScene::UpdateFadeOut(Input& input)
 			return;
 		}
 	}
-	else if (m_isClear && !m_isGameover)
+	else if (m_isStageClear && !m_isGameover)
 	{
+		//現在のクリア済みステージにアクセスする
 		if (m_frame >= fade_interval)
 		{
-			m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
+			switch (m_controller.GetStageType())
+			{
+			case StageType::Stage1:
+				m_controller.OnClearStage1();
+				break;
+			case StageType::Stage2:
+				m_controller.OnCrearStage2();
+				break;
+			case StageType::Stage3:
+				m_controller.OnCrearStage3();
+				break;
+			case StageType::Clear:
+				m_isGameClear = true;
+				break;
+			}
 
+			//ステージタイプがゲームクリアじゃなければ
+			if (m_controller.GetStageType() != StageType::Clear)
+			{
+				//次のステージレベルへ
+				m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_controller.GetStageType()));
+			}
+			else
+			{
+				//ゲームクリアになっていたら
+				//クリアシーンへ
+				m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
+			}
+			
 			//絶対にreturnする
 			return;
 		}
@@ -308,4 +365,22 @@ void GameScene::DrawNormal()
 
 	//Effekseer描画
 	DrawEffekseer2D();
+
+	auto rate = static_cast<float>(m_textFadeFrame) / static_cast<float>(text_fade_interval);
+	//aブレンド
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));//DxLibのAlphaブレンドが0～255
+	//ステージ数の描画
+	DrawStringToHandle(
+		m_stageTypeTextPos.x,
+		m_stageTypeTextPos.y,
+		"STAGE 1",
+		0xff00ff, 
+		m_fontHandle);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	if (rate >= 1)
+	{
+		m_isFade = true;
+	}
+
 }
