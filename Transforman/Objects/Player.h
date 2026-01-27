@@ -82,6 +82,18 @@ public:
 	/// パリィが成功したときの処理
 	/// </summary>
 	void OnSuccessParry();
+
+	/// <summary>
+	/// パリィのクールタイムを取得
+	/// </summary>
+	/// <returns>現在のパリィのクールタイム</returns>
+	const int GetParryCooltime() { return m_parryCooltime; };
+
+	/// <summary>
+	/// パリィのクールタイムの最大値を取得
+	/// </summary>
+	/// <returns>パリィのクールタイムの最大値</returns>
+	const int GetMaxParryCooltime();
 private:
 	enum class HandleNomber
 	{

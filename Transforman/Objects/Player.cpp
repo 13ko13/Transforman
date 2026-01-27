@@ -433,6 +433,8 @@ void Player::Update(GameContext& ctx)
 		// 再生中のエフェクトを移動
 		SetPosPlayingEffekseer2DEffect(m_playingEffectHandle, drawPos.x, drawPos.y + barrior_draw_offset_y, 0);
 	}
+
+	m_parryCooltime = std::max(0, m_parryCooltime - 1);
 }
 
 void Player::Draw(std::shared_ptr<Camera> pCamera)
@@ -924,4 +926,9 @@ void Player::OnStart()
 void Player::OnSuccessParry()
 {
 
+}
+
+const int Player::GetMaxParryCooltime()
+{
+	return parry_cooltime;
 }
