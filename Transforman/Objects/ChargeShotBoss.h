@@ -2,6 +2,7 @@
 #include "EnemyBase.h"
 #include <vector>
 #include <memory>
+#include "../StageType.h"
 
 enum class HandleNomber
 {
@@ -20,7 +21,7 @@ class ChargeShotBoss : public EnemyBase,
 public:
 	ChargeShotBoss(std::shared_ptr<Map> pMap,
 		std::shared_ptr<EffectFactory> effectfactory,
-		);
+		StageType& stagaType);
 	~ChargeShotBoss();
 
 	void Init() override;
@@ -31,11 +32,13 @@ public:
 	/// プレイヤーが到着したときに呼び出される関数
 	/// </summary>
 	void OnArrive() override;
+
 	/// <summary>
 	/// ボス戦が始まっているかどうかを返す関数
 	/// </summary>
 	/// <returns>true:始まっている,false:始まっていない</returns>
 	bool GetIsStart() { return m_isStart; }
+
 	/// <summary>
 	/// 現在のチャージショットボスのステートを取得する
 	/// </summary>
@@ -67,6 +70,7 @@ private:
 	bool m_isPlayingFlash;//ノズルフラッシュを再生しているかどうか
 
 	Vector2 m_drawOffset;//描画のみずらす
+	StageType m_stageType;//ステージタイプ
 
 	std::weak_ptr<Effect> m_rushEffect;//突進エフェクト
 

@@ -104,7 +104,8 @@ namespace
 	constexpr int top_death_effect_num = 2;//上に出すエフェクトの数
 }
 
-ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory) :
+ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectfactory,
+	StageType& stagaType) :
 	EnemyBase(size_width, size_height, pMap, effectfactory),
 	m_prevRushTime(0),
 	m_actionCooldown(0),
@@ -138,6 +139,8 @@ ChargeShotBoss::ChargeShotBoss(std::shared_ptr<Map> pMap, std::shared_ptr<Effect
 
 	m_knockackTimer = 0;
 	m_knockbackDir = 0;
+
+	m_stageType = stagaType;
 }
 
 ChargeShotBoss::~ChargeShotBoss()
@@ -391,11 +394,27 @@ void ChargeShotBoss::Attack(std::vector<std::shared_ptr<EnemyBullet>>& pBullets,
 	//地面についていないときは行動しない
 	if (!m_isGround) return;
 
-	//ランダムな確率でチャージショットと
-	//突進を出してくるようにする
+	//ステージ1ならチャージショットのみ行う
+	//ステージ2なら突進のみおこなう
+	//ステージ3なら両方をランダムに行ってくる
 	const int stateShot = 0;
 	const int stateRush = 1;
-	const int random = GetRand(1);
+	int random = 0;
+
+	switch (m_stageType)
+	{
+	case StageType::Stage1:
+		random = stateShot;
+		break;
+	case StageType::Stage2:
+		random = stateRush;
+		break;
+	case StageType::Stage3:
+		random = GetRand(1);
+		break;
+	}
+	
+	
 	if (random == stateShot &&
 		m_state == State::Idle &&
 		m_actionCooldown <= 0)
