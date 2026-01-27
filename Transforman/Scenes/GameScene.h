@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include <memory>
 #include <vector>
+#include "../StageType.h"
 
 //プロトタイプ宣言
 class Input;
@@ -24,7 +25,7 @@ class EffectFactory;
 class GameScene : public Scene
 {
 public:
-	GameScene(SceneController& controller);
+	GameScene(SceneController& controller,StageType stageType);
 	~GameScene();
 	void Init() override;
 	void Update(Input& input) override;
@@ -59,6 +60,7 @@ private:
 
 	bool m_isClear;
 	bool m_isGameover;
+
 private:
 
 	//メンバ変数ポインタを使用して内部状態を書き換える

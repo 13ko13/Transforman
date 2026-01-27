@@ -18,6 +18,7 @@
 #include "../EffectFactory.h"
 #include "../../Dxlib_h/EffekseerForDXLib.h"
 #include "../SoundManager.h"
+#include "TextScene.h"
 #include <DxLib.h>
 
 namespace
@@ -27,7 +28,7 @@ namespace
 	constexpr int fade_interval = 90;//フェードにかかるフレーム数
 }
 
-GameScene::GameScene(SceneController& controller) :
+GameScene::GameScene(SceneController& controller, StageType stageType) :
 	Scene(controller),
 	m_isClear(false),
 	m_isGameover(false)
@@ -180,6 +181,11 @@ void GameScene::UpdateNormal(Input& input)
 
 	//エフェクトファクトリー更新
 	m_pEffectFactory->Update();
+
+	/*std::vector<TextScene::PageDesc> pages = {
+		{"img/game/text/move.png"}
+	};
+	m_controller.PushScene(std::make_shared<TextScene>(m_controller,pages));*/
 
 	//プレイヤーが死んだらフェードアウトに遷移する
 	if (m_pPlayer->GetIsDead())

@@ -19,7 +19,8 @@ class ChargeShotBoss : public EnemyBase,
 {
 public:
 	ChargeShotBoss(std::shared_ptr<Map> pMap,
-		std::shared_ptr<EffectFactory> effectfactory);
+		std::shared_ptr<EffectFactory> effectfactory,
+		);
 	~ChargeShotBoss();
 
 	void Init() override;

@@ -13,6 +13,7 @@ public:
 
 	TextScene(SceneController& controller,const std::vector<PageDesc>& pages);
 	~TextScene();//ロードした画像の破棄
+	void Init() override;
 	void Update(Input& input) override;
 	void Draw()override;
 
@@ -36,4 +37,3 @@ private:
 	std::vector<PageRuntime> m_pages;//ロード済みページ配列
 	int m_currentIndex = 0;//現在ページ番号
 };
-

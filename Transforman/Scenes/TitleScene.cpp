@@ -7,7 +7,7 @@
 #include <assert.h>
 #include "../../Dxlib_h/EffekseerForDXLib.h"
 #include "../SoundManager.h"
-#include "../SoundManager.h"
+#include "../StageType.h"
 
 namespace
 {
@@ -238,7 +238,7 @@ void TitleScene::UpdateFadeOut(Input&)
 	if (++m_frame >= fade_interval)
 	{
 		//ƒQ[ƒ€ƒV[ƒ“‚ÉØ‚è‘Ö‚¦‚é
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller,StageType::Stage1));
 		//‚¿‚á‚ñ‚Æreturn‚·‚é
 		return;//‘å–
 	}

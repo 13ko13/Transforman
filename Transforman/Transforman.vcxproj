@@ -153,6 +153,7 @@
     <ClCompile Include="DashEffect.cpp" />
     <ClCompile Include="DeathEffect.cpp" />
     <ClCompile Include="HitWallEffect.cpp" />
+    <ClCompile Include="ParryGageUI.cpp" />
     <ClCompile Include="RushEffect.cpp" />
     <ClCompile Include="Scenes\ClearScene.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="DashEffect.h" />
     <ClInclude Include="DeathEffect.h" />
     <ClInclude Include="HitWallEffect.h" />
+    <ClInclude Include="ParryGageUI.h" />
     <ClInclude Include="PosProvider.h" />
     <ClInclude Include="RushEffect.h" />
     <ClInclude Include="Scenes\ClearScene.h" />
@@ -229,6 +231,7 @@
     <ClInclude Include="General\GameConstants.h" />
     <ClInclude Include="Scenes\GameScene.h" />
     <ClInclude Include="Scenes\TextScene.h" />
+    <ClInclude Include="StageType.h" />
     <ClInclude Include="StanEffect.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UserInterface.h" />

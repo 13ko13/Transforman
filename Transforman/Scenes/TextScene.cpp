@@ -44,6 +44,11 @@ TextScene::~TextScene()
 	}
 }
 
+void TextScene::Init()
+{
+
+}
+
 //入力 : R1 = 次,L1 = 前,最後ページでB = 戻る
 void TextScene::Update(Input& input)
 {
