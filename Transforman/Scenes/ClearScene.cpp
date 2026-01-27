@@ -1,6 +1,6 @@
 #include "ClearScene.h"
 #include "../General/Input.h"
-#include "GameScene.h"
+#include "TitleScene.h"
 #include <memory>
 #include "../Main/Application.h"
 #include <DxLib.h>
@@ -131,7 +131,7 @@ void ClearScene::UpdateFadeOut(Input&)
 	if (m_frame >= fade_interval)
 	{
 		//ƒQ[ƒ€ƒV[ƒ“‚ÉØ‚è‘Ö‚¦‚é
-		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 		//‚¿‚á‚ñ‚Æreturn
 		return;//‘å–
 	}
