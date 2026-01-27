@@ -91,6 +91,7 @@ namespace
 	constexpr int knockback_speed = 20.0f;//ノックバック時のスピード
 	constexpr int knockback_jump = -10.0f;//ノックバック時のy軸へのベクトルの強さ
 
+	//スタン
 	constexpr int boss_shake_power = 3;//スタン時の揺らす力
 	constexpr int shake_frame = 60;//スタン時に揺らす時間
 	constexpr float shake_rate = 1.5f;//揺らすときの速さの割合
@@ -781,7 +782,7 @@ void ChargeShotBoss::DeathUpdate()
 			DeathCharactor::Enemy);
 	}
 	//20フレーム目を越えたら右上のエフェクトを生成
-	else if (m_nextEffectTimer == 20)
+	else if (m_nextEffectTimer == 10)
 	{
 		m_pEffectFactory->Create(
 			{ m_pos.x + size_width / 2, m_pos.y - death_effect_pos_y },
@@ -789,7 +790,7 @@ void ChargeShotBoss::DeathUpdate()
 			DeathCharactor::Enemy);
 	}
 	//40フレーム目を越えたら真ん中のエフェクトを生成
-	else if (m_nextEffectTimer == 40)
+	else if (m_nextEffectTimer == 20)
 	{
 		m_pEffectFactory->Create(
 			{ m_pos.x , m_pos.y  },
@@ -797,14 +798,14 @@ void ChargeShotBoss::DeathUpdate()
 			DeathCharactor::Enemy);
 	}
 	//60フレーム目を越えたら左下のエフェクトを生成
-	else if (m_nextEffectTimer == 60)
+	else if (m_nextEffectTimer == 30)
 	{
 		m_pEffectFactory->Create(
 			{ m_pos.x - size_width / 2, m_pos.y + death_effect_pos_y },
 			EffectType::enemyDeath,
 			DeathCharactor::Enemy);
 	}
-	else if (m_nextEffectTimer == 80)
+	else if (m_nextEffectTimer == 40)
 	{
 		m_pEffectFactory->Create(
 			{ m_pos.x + size_width / 2, m_pos.y + death_effect_pos_y },
