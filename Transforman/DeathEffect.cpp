@@ -15,7 +15,7 @@ namespace
 
 	constexpr int e_draw_scale = 4.0f;//敵の描画スケール
 	constexpr int e_max_anim_num = 4;//敵の最大アニメーション数
-	constexpr int e_one_anim_frame = 10;//敵のアニメーションの待機フレーム数
+	constexpr int e_one_anim_frame = 6;//敵のアニメーションの待機フレーム数
 	constexpr int e_src_y = 5;//敵の画像縦切り取り位置
 }
 
