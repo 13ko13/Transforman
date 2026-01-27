@@ -1,6 +1,8 @@
 #pragma once
 #include <memory>
 #include <list>
+#include "../StageType.h"
+#include <vector>
 
 //プロトタイプ宣言
 class Scene;	
@@ -48,8 +50,21 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 現在のステージレベルを返す
+	/// </summary>
+	/// <returns>現在のステージ数</returns>
+	const StageType& GetStageType() { return m_stageType; }
+
+	void OnClearStage1();
+
+	void OnCrearStage2();
+
+	void OnCrearStage3();
+
 private:
 	//スタックに積まれているシーンを管理
 	//一番最後に積まれたシーンのUpdateのみ実行される
 	std::list<std::shared_ptr<Scene>> m_scenes;
+	StageType m_stageType;
 };

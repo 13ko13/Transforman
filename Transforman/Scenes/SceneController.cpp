@@ -42,6 +42,8 @@ void SceneController::Init()
 {
 	//––”ö‚Ì—v‘f‚É‘Î‚µ‚ÄInit‚·‚é
 	m_scenes.back()->Init();
+
+	m_stageType = StageType::Stage1;
 }
 
 void SceneController::Update(Input& input)
@@ -58,4 +60,19 @@ void SceneController::Draw()
 	{
 		scene->Draw();
 	}
+}
+
+void SceneController::OnClearStage1()
+{
+	m_stageType = StageType::Stage2;
+}
+
+void SceneController::OnCrearStage2()
+{
+	m_stageType = StageType::Stage3;
+}
+
+void SceneController::OnCrearStage3()
+{
+	m_stageType = StageType::Clear;
 }
