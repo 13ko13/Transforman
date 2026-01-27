@@ -8,7 +8,7 @@ namespace
 	constexpr int graph_height = 30;//HPバーと高さ
 
 	//描画位置オフセット
-	constexpr int draw_frame_x = 800;//枠の位置
+	constexpr int draw_frame_x = 900;//枠の位置
 	constexpr int draw_frame_y = 10;//枠の位置
 	constexpr int draw_empty_offset_x = 75;//空HPのXオフセット
 	constexpr int draw_empty_offset_y = 75;//空HPのXオフセット
