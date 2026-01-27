@@ -5,6 +5,7 @@ class Player;
 class PlayerHpBar;
 class EnemyHpBar;
 class ChargeShotBoss;
+class ParryGageUI;
 class UIManager
 {
 public:
@@ -15,7 +16,8 @@ public:
 	void Draw();
 
 private:
-	std::shared_ptr<PlayerHpBar> playerHpBar;
-	std::shared_ptr<EnemyHpBar> enemyHpBar;	
+	std::shared_ptr<PlayerHpBar> m_playerHpBar;
+	std::shared_ptr<EnemyHpBar> m_enemyHpBar;	
+	std::shared_ptr<ParryGageUI> m_parryGageUI;
 };
 
