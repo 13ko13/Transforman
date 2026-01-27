@@ -3,14 +3,7 @@
 #include <memory>
 #include "Collider/Rect.h"
 
-enum class StageType
-{
-	Stage1,
-	Stage2,
-	Stage3,
-	Stage4,
-	Stage5,
-};
+
 
 class Stage;
 class Camera;
@@ -24,8 +17,6 @@ public:
 	void Update();
 	void Draw(Camera camera);
 	bool IsCollision(const Rect hitRect, Rect& chipRect);
-	bool IsCollision(const Circle bulletCircle, Rect& chipRect);
-	void SetStageType(StageType stageType) { m_stageType = stageType; };
 private:
 	std::shared_ptr<Stage> m_pStage;//ステージのポインタ
 	std::vector<int> m_handles;	//画像ハンドル
@@ -33,6 +24,15 @@ private:
 	int m_scrollX;//現在のスクロール度合い
 	int m_startChipX;//表示開始タイル
 	int m_offsetX;//スクロールの途中にチップを補正する
+
+	enum class StageType
+	{
+		Stage1,
+		Stage2,
+		Stage3,
+		Stage4,
+		Stage5,
+	};
 	StageType m_stageType;
 };
 
