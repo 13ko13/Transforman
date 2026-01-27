@@ -16,11 +16,14 @@ private:
 	enum class handleNumber
 	{
 		gameoverText,
-		gameoverBackground
+		gameoverBackground,
+		Abutton,//Press A Button
 	};
 
 	std::vector<int> m_handles;//ゲームオーバーのテキスト画像ハンドル
 	int m_frame;//フェード用のフレーム
+
+	Vector2 m_drawOffset;//描画だけずらす
 
 	//メンバ変数ポインタを使用して内部状態を書き換える
 	//update関数とdraw関数を、現在のGameoverSceneの状態に合わせて
