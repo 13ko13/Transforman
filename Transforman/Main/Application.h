@@ -1,5 +1,6 @@
 #pragma once
 #include "../Utility/Geometry.h"
+#include "../SoundManager.h"
 
 /// <summary>
 /// アプリケーション全体を管理する
@@ -13,6 +14,8 @@ private:
 	Application();//newも変数宣言もできなくなる
 	Application(const Application& app) = delete;//コピーコンストラクタを無効
 	void operator=(const Application& app) = delete;//代入を禁止
+
+	void SoundLoad(SoundManager& sm);
 
 public:
 	~Application();
@@ -43,4 +46,3 @@ public:
 
 	const Size& GetWindowSize() const;
 };
-

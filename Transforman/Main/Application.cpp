@@ -6,15 +6,18 @@
 #include "../Scenes/TitleScene.h"
 #include "../General/GameConstants.h"
 #include "EffekseerForDXLib.h"
-#include "../SoundManager.h"
 
 namespace
 {
 	constexpr int effect_num = 8000;
 	constexpr int desition_volume = 70;//決定音の音量
 	constexpr int normal_shot_vol = 70;//通常ショットの音量
-	constexpr int game_bgm_volume = 60;//ゲームシーンBGMの音量
+	constexpr int game_1_bgm_volume = 60;//ゲームシーンBGM1の音量
+	constexpr int game_2_bgm_volume = 60;//ゲームシーンBGM2の音量
+	constexpr int game_3_bgm_volume = 60;//ゲームシーンBGM3の音量
 	constexpr int title_bgm_volume = 60;//タイトルシーンBGMの音量
+	constexpr int clear_bgm_volume = 60;//クリアシーンBGMの音量
+	constexpr int gameover_bgm_volume = 60;//ゲームオーバーシーンBGMの音量
 	constexpr int charge_shot_vol = 50;//チャージショット時のSEの音量
 	constexpr int player_charge_vol = 50;//プレイヤーのチャージ音量
 	constexpr int player_charge_finished_vol = 60;//プレイヤーのチャージ完了音量
@@ -26,12 +29,42 @@ namespace
 	constexpr int player_damage_vol = 60;//プレイヤーが被弾したと音の音量
 	constexpr int player_death_vol = 130;//プレイヤーが死んだときの音の音量
 	constexpr int stan_volume = 60;//スタンの時の音量
+	constexpr int enemy_death_vol = 60;//敵の死亡音の音量
+	constexpr int parry_success_vol = 60;//パリィが成功したときの音の音量
+	constexpr int parry_volume = 60;//パリィを発動したときの音
 }
 
 Application::Application():
 	m_windowSize{Graphic::screen_width,Graphic::screen_height}
 {
 
+}
+
+void Application::SoundLoad(SoundManager& sm)
+{
+	sm.Load(SoundType::Decision, "Sound/SE/decision.wav", desition_volume, false);
+	sm.Load(SoundType::NormalShot, "Sound/SE/normal_shot.wav", normal_shot_vol, false);
+	sm.Load(SoundType::GameBgm1, "Sound/BGM/game1.mp3", game_1_bgm_volume, true);
+	sm.Load(SoundType::GameBgm2, "Sound/BGM/game2.mp3", game_2_bgm_volume, true);
+	sm.Load(SoundType::GameBgm3, "Sound/BGM/game3.mp3", game_3_bgm_volume, true);
+	sm.Load(SoundType::TitleBgm, "Sound/BGM/title.mp3", title_bgm_volume, true);
+	sm.Load(SoundType::ClearBgm, "Sound/BGM/clear.mp3", clear_bgm_volume, true);
+	sm.Load(SoundType::GameoverBgm, "Sound/BGM/gameover.mp3", gameover_bgm_volume, true);
+	sm.Load(SoundType::BossShot, "Sound/SE/charge_shot.wav", charge_shot_vol, false);
+	sm.Load(SoundType::PlayerCharge, "Sound/SE/player_charge.wav", player_charge_vol, false);
+	sm.Load(SoundType::PlayerChargeFinished, "Sound/SE/player_charge_finished.wav", player_charge_finished_vol, false);
+	sm.Load(SoundType::PlayerChargeShot, "Sound/SE/charge_shot.wav", charge_shot_vol, false);
+	sm.Load(SoundType::Jump, "Sound/SE/jump.mp3", jump_volume, false);
+	sm.Load(SoundType::HitShot, "Sound/SE/hit_shot.mp3", hit_shot_volume, false);
+	sm.Load(SoundType::Pinch, "Sound/SE/pinch.mp3", hit_shot_volume, false);
+	sm.Load(SoundType::Rush, "Sound/SE/rush.mp3", rush_volume, false);
+	sm.Load(SoundType::Thunder, "Sound/SE/thunder.wav", thunder_volume, false);
+	sm.Load(SoundType::PlayerDamage, "Sound/SE/player_damage.mp3", player_damage_vol, false);
+	sm.Load(SoundType::PlayerDeath, "Sound/SE/player_death.mp3", player_death_vol, false);
+	sm.Load(SoundType::Stan, "Sound/SE/stan.wav", stan_volume, false);
+	sm.Load(SoundType::EnemyDeath, "Sound/SE/enemy_death.wav", enemy_death_vol, false);
+	sm.Load(SoundType::ParrySuccess, "Sound/SE/parry_success.mp3", parry_success_vol, false);
+	sm.Load(SoundType::Parry, "Sound/SE/parry.wav", parry_volume, false);
 }
 
 Application::~Application()
@@ -50,7 +83,7 @@ bool Application::Init()
 {
 	SetGraphMode(m_windowSize.w, m_windowSize.h, Graphic::color_bit);
 	//ウィンドwモード設定
-	ChangeWindowMode(true);
+	ChangeWindowMode(false);
 	//ゲーム名
 	SetWindowText("TransforMan");
 
@@ -94,22 +127,7 @@ bool Application::Init()
 
 	//サウンドマネージャーの初期化
 	auto& sm = SoundManager::GetInstance();
-	sm.Load(SoundType::Decision, "Sound/SE/decision.wav", desition_volume, false);
-	sm.Load(SoundType::NormalShot, "Sound/SE/normal_shot.wav", normal_shot_vol, false);
-	sm.Load(SoundType::GameBgm, "Sound/BGM/game.mp3", game_bgm_volume, true);
-	sm.Load(SoundType::TitleBgm, "Sound/BGM/title.mp3", title_bgm_volume, true);
-	sm.Load(SoundType::BossShot , "Sound/SE/charge_shot.wav", charge_shot_vol, false);
-	sm.Load(SoundType::PlayerCharge, "Sound/SE/player_charge.wav", player_charge_vol, false);
-	sm.Load(SoundType::PlayerChargeFinished, "Sound/SE/player_charge_finished.wav", player_charge_finished_vol, false);
-	sm.Load(SoundType::PlayerChargeShot, "Sound/SE/charge_shot.wav", charge_shot_vol, false);
-	sm.Load(SoundType::Jump, "Sound/SE/jump.mp3", jump_volume, false);
-	sm.Load(SoundType::HitShot, "Sound/SE/hit_shot.mp3", hit_shot_volume, false);
-	sm.Load(SoundType::Pinch, "Sound/SE/pinch.mp3", hit_shot_volume, false);
-	sm.Load(SoundType::Rush, "Sound/SE/rush.mp3", rush_volume, false);
-	sm.Load(SoundType::Thunder, "Sound/SE/thunder.wav", thunder_volume, false);
-	sm.Load(SoundType::PlayerDamage, "Sound/SE/player_damage.mp3", player_damage_vol, false);
-	sm.Load(SoundType::PlayerDeath, "Sound/SE/player_death.mp3", player_death_vol, false);
-	sm.Load(SoundType::Stan, "Sound/SE/stan.wav", stan_volume, false);
+	SoundLoad(sm);
 	return true;
 }
 
