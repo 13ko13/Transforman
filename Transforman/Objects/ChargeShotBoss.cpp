@@ -799,6 +799,9 @@ void ChargeShotBoss::DeathUpdate()
 			{ m_pos.x  - size_width / 2, m_pos.y - death_effect_pos_y },
 			EffectType::enemyDeath,
 			DeathCharactor::Enemy);
+
+		//死亡音を再生
+		SoundManager::GetInstance().Play(SoundType::EnemyDeath);
 	}
 	//20フレーム目を越えたら右上のエフェクトを生成
 	else if (m_nextEffectTimer == 10)
@@ -807,6 +810,9 @@ void ChargeShotBoss::DeathUpdate()
 			{ m_pos.x + size_width / 2, m_pos.y - death_effect_pos_y },
 			EffectType::enemyDeath,
 			DeathCharactor::Enemy);
+
+		//死亡音を再生
+		SoundManager::GetInstance().Play(SoundType::EnemyDeath);
 	}
 	//40フレーム目を越えたら真ん中のエフェクトを生成
 	else if (m_nextEffectTimer == 20)
@@ -815,6 +821,9 @@ void ChargeShotBoss::DeathUpdate()
 			{ m_pos.x , m_pos.y  },
 			EffectType::enemyDeath,
 			DeathCharactor::Enemy);
+
+		//死亡音を再生
+		SoundManager::GetInstance().Play(SoundType::EnemyDeath);
 	}
 	//60フレーム目を越えたら左下のエフェクトを生成
 	else if (m_nextEffectTimer == 30)
@@ -823,6 +832,9 @@ void ChargeShotBoss::DeathUpdate()
 			{ m_pos.x - size_width / 2, m_pos.y + death_effect_pos_y },
 			EffectType::enemyDeath,
 			DeathCharactor::Enemy);
+
+		//死亡音を再生
+		SoundManager::GetInstance().Play(SoundType::EnemyDeath);
 	}
 	else if (m_nextEffectTimer == 40)
 	{
@@ -830,6 +842,9 @@ void ChargeShotBoss::DeathUpdate()
 			{ m_pos.x + size_width / 2, m_pos.y + death_effect_pos_y },
 			EffectType::enemyDeath,
 			DeathCharactor::Enemy);
+
+		//死亡音を再生
+		SoundManager::GetInstance().Play(SoundType::EnemyDeath);
 
 		//HPが0になっているなら死亡フラグを立てる
 		if (m_hitPoint <= 0)
