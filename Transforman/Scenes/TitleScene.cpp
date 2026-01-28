@@ -15,7 +15,7 @@ namespace
 	constexpr int fade_interval = 60;//フェードにかかるフレーム数
 	constexpr int a_button_offset_y = 200;//Aボタン画像のYオフセット
 	constexpr float title_logo_size = 0.8f;//タイトルロゴの表示サイズ
-	constexpr float a_button_size = 0.5f;//Aボタン画像の表示サイズ
+	constexpr float a_button_size = 0.8f;//Aボタン画像の表示サイズ
 	constexpr float effect_pos_x = 500.0f;
 	constexpr float effect_pos_y = 500.0f;
 
@@ -126,6 +126,9 @@ TitleScene::TitleScene(SceneController& controller) :
 		{ s_graph_width ,s_graph_height },
 		s_max_anim_num, s_one_anim_frame,
 		s_draw_scale, true);
+
+	//タイトルに来ると進捗をリセットする
+	m_controller.OnReset();
 }
 
 TitleScene::~TitleScene()
@@ -301,8 +304,10 @@ void TitleScene::DrawNormal()
 	int blinkingRate = blinking_min_alpha + blinking_rate * sinf(m_frame * 0.1f);// + 1.0f * 0.5f
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,blinkingRate);//aブレンド
 	//「Aボタンでスタート」を表示
-	DrawRotaGraph(wsize.w / 2, wsize.h / 2 + a_button_offset_y,
-		static_cast<double>(a_button_size), 0.0f, m_handles[static_cast<int>(TitleScene::HandleNumber::Abutton)], true);
+	DrawRotaGraph(
+		wsize.w / 2, wsize.h / 2,
+		static_cast<double>(a_button_size), 0.0f,
+		m_handles[static_cast<int>(TitleScene::HandleNumber::Abutton)], true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);//ブレンドしない
 }
 
