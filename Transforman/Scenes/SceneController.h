@@ -62,6 +62,8 @@ public:
 
 	void OnCrearStage3();
 
+	void OnReset();
+
 private:
 	//スタックに積まれているシーンを管理
 	//一番最後に積まれたシーンのUpdateのみ実行される

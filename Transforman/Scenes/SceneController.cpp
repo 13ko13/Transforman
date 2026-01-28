@@ -76,3 +76,9 @@ void SceneController::OnCrearStage3()
 {
 	m_stageType = StageType::Clear;
 }
+
+void SceneController::OnReset()
+{
+	//ステージタイプをリセットする
+	m_stageType = StageType::Stage1;
+}
