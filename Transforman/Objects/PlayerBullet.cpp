@@ -7,6 +7,7 @@
 #include "../Stages/Stage.h"
 #include "../EffectFactory.h"
 #include "../Map.h"
+#include "../SoundManager.h"
 #include <cassert>
 
 namespace
@@ -251,4 +252,7 @@ void PlayerBullet::OnDead()
 {
 	m_isAlive = false;
 	m_pEffectFactory->Create(m_pos, EffectType::hitPlayerBullet);
+
+	//‰¹‚ğÄ¶
+	SoundManager::GetInstance().Play(SoundType::HitShot);
 }
