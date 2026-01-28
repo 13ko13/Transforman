@@ -52,8 +52,7 @@ void SoundManager::Load(SoundType type, const std::string& path, int volume, boo
 
 void SoundManager::Play(SoundType soundType)
 {
-	//指定された種類のサウンドがすでに流れている、
-	//又はロードされていなかったら以降の処理をスキップ
+	//ロードされていなかったら以降の処理をスキップ
 	auto it = m_sounds.find(soundType);
 	if (it == m_sounds.end() || !it->second.loaded) return;
 
@@ -69,8 +68,7 @@ void SoundManager::Play(SoundType soundType)
 
 void SoundManager::Play(SoundType soundType, bool loop)
 {
-	//指定された種類のサウンドがすでに流れている、
-	//又はロードされていなかったら以降の処理をスキップ
+	//ロードされていなかったら以降の処理をスキップ
 	auto it = m_sounds.find(soundType);
 	if (it == m_sounds.end() || !it->second.loaded) return;
 

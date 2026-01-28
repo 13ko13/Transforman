@@ -8,8 +8,12 @@ enum class SoundType
 {
 	Decision,//決定
 	NormalShot,//通常ショット
-	GameBgm,//ゲームシーンBGM
+	GameBgm1,//ゲームシーンBGM1
+	GameBgm2,//ゲームシーンBGM2
+	GameBgm3,//ゲームシーンBGM3
 	TitleBgm,//タイトルシーンBGM
+	ClearBgm,//クリアシーンBGM
+	GameoverBgm,//ゲームオーバーシーンBGM
 	BossShot,//ボスのショット
 	PlayerCharge,//プレイヤーのチャージ
 	PlayerChargeFinished,//プレイヤーのチャージ完了音
@@ -22,6 +26,9 @@ enum class SoundType
 	PlayerDamage,//プレイヤーがダメージを食らった時の音
 	PlayerDeath,//プレイヤーが死んだときの音
 	Stan,//チャージショットボスの音
+	EnemyDeath,//敵が死んだときの音
+	ParrySuccess,//パリィが成功したときの音
+	Parry,//パリィを発動したときの音
 };
 
 struct SoundData
