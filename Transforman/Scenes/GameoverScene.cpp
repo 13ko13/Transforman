@@ -3,7 +3,9 @@
 #include "TitleScene.h"
 #include <memory>
 #include "../Main/Application.h"
+#include "../SoundManager.h"
 #include <DxLib.h>
+#include "GameScene.h"
 #include <cassert>
 #include <cmath>
 
@@ -55,6 +57,9 @@ GameoverScene::GameoverScene(SceneController& controller) :
 	m_drawOffset = { 0.0f,0.0f };
 
 	Init();
+
+	//BGMを再生
+	SoundManager::GetInstance().Play(SoundType::GameoverBgm, true);
 }
 
 GameoverScene::~GameoverScene()
@@ -64,7 +69,8 @@ GameoverScene::~GameoverScene()
 	{
 		DeleteGraph(handle);
 	}
-	
+	//BGMを停止
+	SoundManager::GetInstance().StopSound(SoundType::GameoverBgm);
 }
 
 void GameoverScene::Init()
@@ -96,7 +102,6 @@ void GameoverScene::UpdateFadeIn(Input&)
 	m_backgroundAnim.Update();
 
 	//sin波により揺れる間隔の早さと、振幅を描画オフセットに追加する
-	m_drawOffset.x = static_cast<float>(std::sin(static_cast<double>(m_frame * shake_rate)) * shake_range);
 	m_drawOffset.y = static_cast<float>(std::sin(static_cast<double>(m_frame * shake_rate)) * shake_range);
 
 	//フレームが0以下になったらUpdateとDrawをノーマル状態に切り替える
@@ -117,8 +122,7 @@ void GameoverScene::UpdateNormal(Input& input)
 
 	m_frame++;
 
-	//sin波により揺れる間隔の早さと、振幅を描画オフセットに追加する
-	m_drawOffset.x = static_cast<float>(std::sin(static_cast<double>(m_frame * shake_rate)) * shake_range);
+	//sin波により揺れる間隔の早さと、振幅を描画オフセットに追加する	
 	m_drawOffset.y = static_cast<float>(std::sin(static_cast<double>(m_frame * shake_rate)) * shake_range);
 
 	//OKボタンが押されたら関数を
@@ -129,6 +133,9 @@ void GameoverScene::UpdateNormal(Input& input)
 		m_draw = &GameoverScene::DrawFade;
 		//フェードアウトの最初
 		m_frame = 0;//念のため
+
+		//決定音を再生
+		SoundManager::GetInstance().Play(SoundType::Decision);
 
 		//絶対return
 		return;
@@ -145,7 +152,18 @@ void GameoverScene::UpdateFadeOut(Input&)
 	if (m_frame >= fade_interval)
 	{
 		//ゲームシーンに切り替える
-		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+		if (m_controller.GetStageType() == StageType::Stage1)
+		{
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_controller.GetStageType()));
+		}
+		else if (m_controller.GetStageType() == StageType::Stage2)
+		{
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_controller.GetStageType()));
+		}
+		else if (m_controller.GetStageType() == StageType::Stage3)
+		{
+			m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_controller.GetStageType()));
+		}
 		//ちゃんとreturn
 		return;//大事
 	}
