@@ -4,6 +4,7 @@
 #include <memory>
 #include "../Main/Application.h"
 #include <DxLib.h>
+#include "../SoundManager.h"
 #include <cassert>
 
 namespace
@@ -46,6 +47,9 @@ ClearScene::ClearScene(SceneController& controller) :
 	//frameにfade中にかかる秒数を代入
 	m_frame = fade_interval;//初期化関数呼び出し
 	Init();
+
+	//BGMを再生
+	SoundManager::GetInstance().Play(SoundType::ClearBgm, true);
 }
 
 ClearScene::~ClearScene()
@@ -55,6 +59,8 @@ ClearScene::~ClearScene()
 	{
 		DeleteGraph(handle);
 	}
+	//BGMを停止
+	SoundManager::GetInstance().StopSound(SoundType::ClearBgm);
 }
 
 void ClearScene::Init()
@@ -112,6 +118,8 @@ void ClearScene::UpdateNormal(Input& input)
 	{
 		m_update = &ClearScene::UpdateFadeOut;
 		m_draw = &ClearScene::DrawFade;
+		//決定音を再生
+		SoundManager::GetInstance().Play(SoundType::Decision);
 		//フェードアウトの最初
 		m_frame = 0;//念のため
 
