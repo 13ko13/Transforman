@@ -31,7 +31,7 @@ namespace
 
 	constexpr int shot_cooltime = 13;						//ショットのクールタイム
 	constexpr int judg_charge_frame = 15;					//チャージ中と判定するまでの入力フレーム数
-	constexpr int prev_charge_time = 120;					//ショットからチャージショットになるまでの猶予フレーム
+	constexpr int prev_charge_time = 80;					//ショットからチャージショットになるまでの猶予フレーム
 	constexpr int max_blink_time = 60;						//点滅するフレーム数
 	constexpr int flame_motion_frame = 30;					//火炎放射中の時間
 
@@ -163,8 +163,6 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 Player::~Player()
 {
 	DeleteGraph(m_handle);
-	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
-	DeleteEffekseerEffect(m_effectResourceHandle);
 }
 
 void Player::Init()
@@ -810,6 +808,9 @@ void Player::OnParry()
 		manager.Get()->SendTrigger(m_playingEffectHandle, 0);
 		assert(m_playingEffectHandle > -1);
 	}
+
+	//音を再生する
+	SoundManager::GetInstance().Play(SoundType::Parry);
 }
 
 void Player::ChangeState(PlayerState state)
@@ -860,6 +861,9 @@ void Player::Debug(Input& input)
 
 void Player::OnDamage(int dir)
 {
+	//パリィ中なら処理をスキップする
+	if (m_state == PlayerState::Parry) return;
+
 	//チャージ完了をfalseにする
 	m_isCharged = false;
 	m_isCharging = false;
