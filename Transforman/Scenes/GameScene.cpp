@@ -120,8 +120,19 @@ GameScene::GameScene(SceneController& controller, StageType stageType) :
 
 	Init();
 
-	//BGMを再生
-	SoundManager::GetInstance().Play(SoundType::GameBgm, true);
+	//ステージによって違うBGMを再生
+	if (m_controller.GetStageType() == StageType::Stage1)
+	{
+		SoundManager::GetInstance().Play(SoundType::GameBgm1, true);
+	}
+	else if (m_controller.GetStageType() == StageType::Stage2)
+	{
+		SoundManager::GetInstance().Play(SoundType::GameBgm2, true);
+	}
+	else if (m_controller.GetStageType() == StageType::Stage3)
+	{
+		SoundManager::GetInstance().Play(SoundType::GameBgm3, true);
+	}
 
 	m_fontHandle = CreateFontToHandle("Melonano", font_size, 0, DX_FONTTYPE_NORMAL);
 
@@ -137,7 +148,19 @@ GameScene::GameScene(SceneController& controller, StageType stageType) :
 
 GameScene::~GameScene()
 {
-	SoundManager::GetInstance().StopSound(SoundType::GameBgm);
+	//BGMを止める
+	if (m_controller.GetStageType() == StageType::Stage2)
+	{
+		SoundManager::GetInstance().StopSound(SoundType::GameBgm1);
+	}
+	else if (m_controller.GetStageType() == StageType::Stage3)
+	{
+		SoundManager::GetInstance().StopSound(SoundType::GameBgm2);
+	}
+	else if (m_controller.GetStageType() == StageType::Clear)
+	{
+		SoundManager::GetInstance().StopSound(SoundType::GameBgm3);
+	}
 }
 
 void GameScene::Init()
@@ -265,6 +288,21 @@ void GameScene::UpdateFadeOut(Input& input)
 	{
 		if (m_frame >= fade_interval)
 		{
+			//BGMをストップさせる
+			if (m_controller.GetStageType() == StageType::Stage1)
+			{
+				SoundManager::GetInstance().StopSound(SoundType::GameBgm1);
+			}
+			else if (m_controller.GetStageType() == StageType::Stage2)
+			{
+				SoundManager::GetInstance().StopSound(SoundType::GameBgm2);
+			}
+			else if (m_controller.GetStageType() == StageType::Stage3)
+			{
+				SoundManager::GetInstance().StopSound(SoundType::GameBgm3);
+			}
+
+			//ゲームオーバーシーンに遷移
 			m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller));
 
 			//絶対にreturnする
@@ -369,14 +407,42 @@ void GameScene::DrawNormal()
 	auto rate = static_cast<float>(m_textFadeFrame) / static_cast<float>(text_fade_interval);
 	//aブレンド
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));//DxLibのAlphaブレンドが0～255
-	//ステージ数の描画
-	DrawStringToHandle(
-		m_stageTypeTextPos.x,
-		m_stageTypeTextPos.y,
-		"STAGE 1",
-		0xff00ff, 
-		m_fontHandle);
+
+	switch (m_controller.GetStageType())
+	{
+	case StageType::Stage1:
+		//ステージ数の描画
+		DrawStringToHandle(
+			m_stageTypeTextPos.x,
+			m_stageTypeTextPos.y,
+			"STAGE 1",
+			0xff00ff,
+			m_fontHandle);
+
+		break;
+	case StageType::Stage2:
+		//ステージ数の描画
+		DrawStringToHandle(
+			m_stageTypeTextPos.x,
+			m_stageTypeTextPos.y,
+			"STAGE 2",
+			0xff00ff,
+			m_fontHandle);
+
+		break;
+	case StageType::Stage3:
+		//ステージ数の描画
+		DrawStringToHandle(
+			m_stageTypeTextPos.x,
+			m_stageTypeTextPos.y,
+			"STAGE 3",
+			0xff00ff,
+			m_fontHandle);
+		break;
+	}
+
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	
 
 	if (rate >= 1)
 	{
