@@ -9,6 +9,7 @@
 #include "../Objects/ParryBoss.h"
 #include "../Graphics/Camera.h"
 #include "../Charactor.h"
+#include "../SoundManager.h"
 
 namespace
 {
@@ -216,6 +217,9 @@ void CollisionManager::CheckCollisions(
 
 			//画面を揺らす
 			pCamera->OnImpact(shake_power);
+
+			//パリィ成功の音
+			SoundManager::GetInstance().Play(SoundType::ParrySuccess);
 		}
 	}
 
@@ -243,6 +247,8 @@ void CollisionManager::CheckCollisions(
 			}
 			enemy->OnParried(dir);
 			pCamera->OnImpact(parry_shake_power);
+			//パリィ成功の音
+			SoundManager::GetInstance().Play(SoundType::ParrySuccess);
 		}
 	}
 
