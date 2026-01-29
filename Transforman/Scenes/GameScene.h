@@ -32,6 +32,16 @@ public:
 	void Update(Input& input) override;
 	void Draw()override;
 private:
+	enum class HandleNomber
+	{
+		Jump,//ジャンプ
+		Move,//移動
+		Shot,//弾
+		Parry,//パリィ
+	};
+
+	std::vector<int> m_handles;//画像ハンドル
+
 	std::shared_ptr<Player> m_pPlayer;//プレイヤー
 	std::vector<std::shared_ptr<PlayerBullet>> m_pPlayerBullets;//プレイヤー弾
 	std::vector<std::shared_ptr<EnemyBullet>> m_pEnemyBullets;//敵の弾

@@ -252,6 +252,18 @@ void CollisionManager::CheckCollisions(
 		}
 	}
 
+	//“G‚ªŽ€‚ñ‚¾‚ç’e‚àÁ‚·
+	for (auto& enemy : pEnemies)
+	{
+		if (enemy->GetIsDead())
+		{
+			for (auto& bullet : pEnemyBullets)
+			{
+				bullet->OnDead();
+			}
+		}
+	}
+
 	RemoveDeadEnemies(pEnemies);
 }
 

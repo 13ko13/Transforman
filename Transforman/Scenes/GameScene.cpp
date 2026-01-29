@@ -16,7 +16,6 @@
 #include "ClearScene.h"
 #include "../Main/Application.h"
 #include "../EffectFactory.h"
-#include "../../Dxlib_h/EffekseerForDXLib.h"
 #include "../SoundManager.h"
 #include "TextScene.h"
 #include "EffekseerForDXLib.h"
@@ -33,6 +32,15 @@ namespace
 
 	//テキスト
 	constexpr int text_fade_interval = 50;//テキストのフェードにかかる時間
+
+	//移動操作画像を出す位置
+	const Vector2 move_graph_pos = { 400.0f,500.0f };
+	//ジャンプ操作画像を出す位置
+	const Vector2 jump_graph_pos = { 900.0f,500.0f };
+	//ショット操作画像を出す位置
+	const Vector2 shot_graph_pos = { 1800.0f,500.0f };
+	//パリィ操作画像を出す位置
+	const Vector2 parry_graph_pos = {2000.0f,500.0f };
 }
 
 GameScene::GameScene(SceneController& controller, StageType stageType) :
@@ -145,6 +153,24 @@ GameScene::GameScene(SceneController& controller, StageType stageType) :
 	int drawPosY = wsize.h / 2 - font_size / 2;
 	//文字の位置を初期化
 	m_stageTypeTextPos = { static_cast<float>(drawPosX),static_cast<float>(drawPosY) };
+
+	int handle = -1;
+	
+	handle = LoadGraph("img/how_to_use/a_jump.png");
+	m_handles.push_back(handle);
+	assert(handle > -1);
+
+	handle = LoadGraph("img/how_to_use/stick_move.png");
+	m_handles.push_back(handle);
+	assert(handle > -1);
+
+	handle = LoadGraph("img/how_to_use/x_shot.png");
+	m_handles.push_back(handle);
+	assert(handle > -1);
+
+	handle = LoadGraph("img/how_to_use/y_parry.png");
+	m_handles.push_back(handle);
+	assert(handle > -1);
 }
 
 GameScene::~GameScene()
@@ -224,7 +250,6 @@ void GameScene::UpdateNormal(Input& input)
 
 	//エフェクトファクトリー更新
 	m_pEffectFactory->Update();
-
 
 	if (!m_isFade)
 	{
@@ -389,6 +414,54 @@ void GameScene::DrawFade()
 	//UIマネージャーの描画
 	m_pUIManager->Draw();
 
+	//最初のステージのみ表示する
+	if (m_controller.GetStageType() == StageType::Stage1)
+	{
+		int drawPosX = move_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		int drawPosY = move_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//移動操作画像を描画
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Move)],
+			true);
+
+		drawPosX = jump_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		drawPosY = jump_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//ジャンプ操作画像を出す位置
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Jump)],
+			true);
+
+		drawPosX = shot_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		drawPosY = shot_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//ショット操作画像を出す位置
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Shot)],
+			true);
+
+		drawPosX = parry_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		drawPosY = parry_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//パリィ操作画像を出す位置
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Parry)],
+			true);
+	}
+	
 	//ウィンドウサイズを変数に保存
 	//ウィンドウサイズを変数に保存
 	const auto& wsize = Application::GetInstance().GetWindowSize();
@@ -409,6 +482,55 @@ void GameScene::DrawNormal()
 
 	//背景の描画
 	m_pBackground->Draw();
+
+	//最初のステージのみ表示する
+	if(m_controller.GetStageType() == StageType::Stage1)
+	{
+		int drawPosX = move_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		int drawPosY = move_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//移動操作画像を描画
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Move)],
+			true);
+
+		drawPosX = jump_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		drawPosY = jump_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//ジャンプ操作画像を出す位置
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Jump)],
+			true);
+
+		drawPosX = shot_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		drawPosY = shot_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//ショット操作画像を出す位置
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Shot)],
+			true);
+
+		drawPosX = parry_graph_pos.x + m_pCamera->GetDrawOffset().x;
+		drawPosY = parry_graph_pos.y + m_pCamera->GetDrawOffset().y;
+
+		//パリィ操作画像を出す位置
+		DrawRotaGraph(
+			drawPosX,
+			drawPosY,
+			0.5, 0.0,
+			m_handles[static_cast<int>(HandleNomber::Parry)],
+			true);
+	}
+
 	//マップチップの描画
 	m_pMap->Draw(*m_pCamera);
 	// 各オブジェクトの描画
