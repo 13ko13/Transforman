@@ -138,6 +138,9 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 	m_hitPoint = max_hit_point;//HPを設定した
 	m_isRight = true;//右を向かせておく
 
+	StopEffekseer2DEffect(m_playingEffectHandle);
+	m_playingEffectHandle = -1;
+
 	// エフェクトリソースを読み込む
 	// ループで無限再生されるエフェクトは、パーティクル自体の生成数が無限だったり、
 	// パーティクルの寿命が無限だったりする
@@ -163,6 +166,9 @@ Player::Player(std::shared_ptr<Map> pMap, std::shared_ptr<EffectFactory> effectf
 Player::~Player()
 {
 	DeleteGraph(m_handle);
+
+	StopEffekseer2DEffect(m_playingEffectHandle);
+	m_playingEffectHandle = -1;
 }
 
 void Player::Init()
@@ -935,4 +941,22 @@ void Player::OnSuccessParry()
 const int Player::GetMaxParryCooltime()
 {
 	return parry_cooltime;
+}
+
+void Player::StopParryEffect(bool kill)
+{
+	//エフェクシアのエフェクトがプレイされてたら
+	if (m_playingEffectHandle >= 0)
+	{
+		if (kill)
+		{
+			//エフェクトをストップする
+			StopEffekseer2DEffect(m_playingEffectHandle);
+		}
+		else
+		{
+			StopEffekseer2DEffect(m_playingEffectHandle);
+		}
+		m_playingEffectHandle = -1;
+	}
 }

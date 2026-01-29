@@ -19,6 +19,7 @@
 #include "../../Dxlib_h/EffekseerForDXLib.h"
 #include "../SoundManager.h"
 #include "TextScene.h"
+#include "EffekseerForDXLib.h"
 #include <DxLib.h>
 
 namespace
@@ -302,6 +303,13 @@ void GameScene::UpdateFadeOut(Input& input)
 				SoundManager::GetInstance().StopSound(SoundType::GameBgm3);
 			}
 
+			// 念のため、プレイヤー側の再生中エフェクトを完全停止
+			if (m_pPlayer) {
+				m_pPlayer->StopParryEffect(/*kill=*/true);
+			}
+
+			UpdateEffekseer2D();
+
 			//ゲームオーバーシーンに遷移
 			m_controller.ChangeScene(std::make_shared<GameoverScene>(m_controller));
 
@@ -333,11 +341,25 @@ void GameScene::UpdateFadeOut(Input& input)
 			//ステージタイプがゲームクリアじゃなければ
 			if (m_controller.GetStageType() != StageType::Clear)
 			{
+				// 念のため、プレイヤー側の再生中エフェクトを完全停止
+				if (m_pPlayer) {
+					m_pPlayer->StopParryEffect(/*kill=*/true);
+				}
+
+				UpdateEffekseer2D();
+
 				//次のステージレベルへ
 				m_controller.ChangeScene(std::make_shared<GameScene>(m_controller, m_controller.GetStageType()));
 			}
 			else
 			{
+				// 念のため、プレイヤー側の再生中エフェクトを完全停止
+				if (m_pPlayer) {
+					m_pPlayer->StopParryEffect(/*kill=*/true);
+				}
+
+				UpdateEffekseer2D();
+
 				//ゲームクリアになっていたら
 				//クリアシーンへ
 				m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));

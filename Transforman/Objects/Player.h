@@ -94,6 +94,9 @@ public:
 	/// </summary>
 	/// <returns>パリィのクールタイムの最大値</returns>
 	const int GetMaxParryCooltime();
+
+	void StopParryEffect(bool kill);
+
 private:
 	enum class HandleNomber
 	{
