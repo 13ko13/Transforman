@@ -10,28 +10,28 @@
 namespace
 {
 	constexpr int effect_num = 8000;
-	constexpr int desition_volume = 70;//決定音の音量
-	constexpr int normal_shot_vol = 70;//通常ショットの音量
-	constexpr int game_1_bgm_volume = 60;//ゲームシーンBGM1の音量
-	constexpr int game_2_bgm_volume = 60;//ゲームシーンBGM2の音量
-	constexpr int game_3_bgm_volume = 60;//ゲームシーンBGM3の音量
-	constexpr int title_bgm_volume = 60;//タイトルシーンBGMの音量
-	constexpr int clear_bgm_volume = 60;//クリアシーンBGMの音量
-	constexpr int gameover_bgm_volume = 60;//ゲームオーバーシーンBGMの音量
-	constexpr int charge_shot_vol = 50;//チャージショット時のSEの音量
-	constexpr int player_charge_vol = 50;//プレイヤーのチャージ音量
-	constexpr int player_charge_finished_vol = 60;//プレイヤーのチャージ完了音量
-	constexpr int jump_volume = 50;//ジャンプの音量
-	constexpr int hit_shot_volume = 60;//弾が当たった時の音量
-	constexpr int pinch_volume = 60;//プレイヤーがピンチになった時の音の音量
-	constexpr int rush_volume = 60;//敵の突進時の音の音量
-	constexpr int thunder_volume = 60;//雷の音量
-	constexpr int player_damage_vol = 60;//プレイヤーが被弾したと音の音量
-	constexpr int player_death_vol = 130;//プレイヤーが死んだときの音の音量
-	constexpr int stan_volume = 60;//スタンの時の音量
-	constexpr int enemy_death_vol = 60;//敵の死亡音の音量
-	constexpr int parry_success_vol = 60;//パリィが成功したときの音の音量
-	constexpr int parry_volume = 60;//パリィを発動したときの音
+	constexpr int desition_volume = 170;//決定音の音量
+	constexpr int normal_shot_vol = 170;//通常ショットの音量
+	constexpr int game_1_bgm_volume = 230;//ゲームシーンBGM1の音量
+	constexpr int game_2_bgm_volume = 230;//ゲームシーンBGM2の音量
+	constexpr int game_3_bgm_volume = 230;//ゲームシーンBGM3の音量
+	constexpr int title_bgm_volume = 230;//タイトルシーンBGMの音量
+	constexpr int clear_bgm_volume = 230;//クリアシーンBGMの音量
+	constexpr int gameover_bgm_volume = 230;//ゲームオーバーシーンBGMの音量
+	constexpr int charge_shot_vol = 170;//チャージショット時のSEの音量
+	constexpr int player_charge_vol = 170;//プレイヤーのチャージ音量
+	constexpr int player_charge_finished_vol = 170;//プレイヤーのチャージ完了音量
+	constexpr int jump_volume = 170;//ジャンプの音量
+	constexpr int hit_shot_volume = 170;//弾が当たった時の音量
+	constexpr int pinch_volume = 170;//プレイヤーがピンチになった時の音の音量
+	constexpr int rush_volume = 170;//敵の突進時の音の音量
+	constexpr int thunder_volume = 170;//雷の音量
+	constexpr int player_damage_vol = 170;//プレイヤーが被弾したと音の音量
+	constexpr int player_death_vol = 170;//プレイヤーが死んだときの音の音量
+	constexpr int stan_volume = 170;//スタンの時の音量
+	constexpr int enemy_death_vol = 170;//敵の死亡音の音量
+	constexpr int parry_success_vol = 170;//パリィが成功したときの音の音量
+	constexpr int parry_volume = 255;//パリィを発動したときの音
 }
 
 Application::Application():
